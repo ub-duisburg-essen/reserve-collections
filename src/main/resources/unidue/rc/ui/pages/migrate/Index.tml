@@ -1,0 +1,72 @@
+<html t:type="layout" title="${message:migrate-title}"
+      actionBarBlock="migrationBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+<t:block t:id="migrationBlock">
+    <t:secureblock action="CREATE_RESERVE_COLLECTION">
+        <t:reservecollectionactionslinklist/>
+    </t:secureblock>
+</t:block>
+
+<div class="row">
+    <div class="col-md-12">
+        <div t:type="paper">
+            <div class="paper-content">
+
+                <h4>${message:migration.header.label}</h4>
+                <t:if test="!finished">
+
+                    <div class="alert alert-info">
+                        <p>${message:migration.info.message}</p>
+                    </div>
+                    <p:else>
+                        <t:if test="infoMessage">
+                            <div class="alert alert-info">${infoMessage}</div>
+                            <t:delegate to="collectionLink"/>
+                        </t:if>
+                    </p:else>
+                </t:if>
+
+            </div>
+
+            <t:if test="!finished">
+
+                <form t:type="Form" class="form-horizontal" t:id="migrationForm" t:clientValidation="none">
+                    <t:errors class="literal:alert alert-danger" banner="message:error.banner.migration.failed"/>
+                    <fieldset>
+                        <div class="form-group">
+                            <t:label for="documentID" class="col-md-3 control-label">${message:document.id}</t:label>
+
+                            <div class="col-md-9">
+                                <t:textfield class="form-control" t:id="documentID" t:value="documentID"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <t:label for="migrationCode" class="col-md-3 control-label">${message:migration.code}</t:label>
+
+                            <div class="col-md-9">
+                                <t:textfield class="form-control" t:id="migrationCode" t:value="migrationCode"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-9 col-md-offset-3">
+                                <input type="submit" value="${message:migrate.update}"/>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </t:if>
+        </div>
+    </div>
+</div>
+
+<t:block t:id="collectionLink">
+    <div>
+        <h3>
+            <t:pagelink page="collection/viewcollection" context="collection.id">${collection.title}</t:pagelink>
+        </h3>
+    </div>
+</t:block>
+
+</html>

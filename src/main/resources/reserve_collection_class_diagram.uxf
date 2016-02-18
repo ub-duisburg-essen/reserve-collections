@@ -1,0 +1,941 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.5.1">
+  <help_text>// Uncomment the following line to change the fontsize and font:
+fontsize=12
+fontfamily=Monospaced //possible: SansSerif,Serif,Monospaced
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+// Welcome to UMLet!
+//
+// Double-click on elements to add them to the diagram, or to copy them
+// Edit elements by modifying the text in this panel
+// Hold Ctrl to select multiple elements
+// Use Ctrl+mouse to select via lasso
+//
+// Use +/- or Ctrl+mouse wheel to zoom
+// Drag a whole relation at its central square icon
+//
+// Press Ctrl+C to copy the whole diagram to the system clipboard (then just paste it to, eg, Word)
+// Edit the files in the "palettes" directory to create your own element palettes
+//
+// Select "Custom Elements &gt; New..." to create new element types
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// This text will be stored with each diagram;  use it for notes.</help_text>
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>2530</x>
+      <y>690</y>
+      <w>210</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>Headline
+--
+- text: String
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>960</x>
+      <y>290</y>
+      <w>280</w>
+      <h>310</h>
+    </coordinates>
+    <panel_attributes>ReserveCollection
+--
+- id: Long
+- number: ReserveCollectionNumber
+- libraryLocation: LibraryLocation
+- permaLink: String
+- author: User
+- readKey: String
+- writeKey: String
+- title: String
+- comment: String
+- alephUserID: String
+- alephSystemID: String
+- status: RCStatus
+- onlineOnly: Boolean
+- doWarning: Boolean
+- validTo: Date
+- origin: MCRCategory
+- collection: MCRCategory
+- entries: List&lt;Entry&gt;
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1390</x>
+      <y>480</y>
+      <w>190</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>/Entry/
+--
+- id: Integer
+- rcID: Integer
+- rcIndex: Integer
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>920</x>
+      <y>690</y>
+      <w>230</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>Book
+--
+- authors: String
+- comment: String
+- isbn: String
+- placeOfPublication: String
+- publisher: String
+- referenceBook: Boolean
+- signature: String
+- title: String
+- url: String
+- volume: String
+- yearOfPublication: Integer
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1650</x>
+      <y>690</y>
+      <w>190</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>HTML
+--
+- text: String
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1030</x>
+      <y>550</y>
+      <w>470</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>450;30;450;120;30;120;30;140</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1210</x>
+      <y>510</y>
+      <w>200</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=0..n
+m1=1</panel_attributes>
+    <additional_attributes>30;30;180;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1390</x>
+      <y>380</y>
+      <w>190</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>/Cloneable/
+--
+--
++ clone: Object</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1450</x>
+      <y>400</y>
+      <w>50</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30;30;30;80</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1850</x>
+      <y>690</y>
+      <w>200</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>File
+--
+- description: String
+- path: String
+- referenceNumber: String
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1170</x>
+      <y>690</y>
+      <w>230</w>
+      <h>290</h>
+    </coordinates>
+    <panel_attributes>JournalArticle
+--
+- articleTitle: String
+- authors: String
+- comment: String
+- filePath: String
+- fullTextURL: String
+- issn: String
+- issue: String
+- journalTitle: String
+- pageEnd: Integer
+- pageStart: Integer
+- placeOfPublication: String
+- publisher: String
+- referenceNumber: String
+- signature: String
+- volume: String
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1420</x>
+      <y>690</y>
+      <w>210</w>
+      <h>310</h>
+    </coordinates>
+    <panel_attributes>BookChapter
+--
+- bookAuthors: String
+- bookTitle: String
+- chapterAuthors: String
+- chapterTitle: String
+- comment: String
+- edition: String
+- filePath: String
+- fullTextURL: String
+- isbn: String
+- pageEnd: Integer
+- pageStart: Integer
+- placeOfPublication: String
+- publisher: String
+- referenceNumber: String
+- signature: String
+- yearOfPublication: Integer
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>2300</x>
+      <y>690</y>
+      <w>190</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>WebLink
+--
+- name: String
+- url: URL
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>2060</x>
+      <y>690</y>
+      <w>190</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>DocumentLink
+--
+- comment: String
+- documentId: Integer
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>630</x>
+      <y>340</y>
+      <w>190</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>bg=#CECECE
+User
+--
+- userid: Integer
+- username: String
+...
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>290</x>
+      <y>340</y>
+      <w>190</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>bg=#CECECE
+Permission
+--
+- id: Integer
+- sID: Integer
+- tID: Integer
+- sType: Character
+- tType: Character
+- action: Character
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>450</x>
+      <y>350</y>
+      <w>200</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1..n
+m2=0..n</panel_attributes>
+    <additional_attributes>180;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1260</x>
+      <y>550</y>
+      <w>240</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>220;30;220;120;30;120;30;140</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1450</x>
+      <y>550</y>
+      <w>50</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;30;140</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1450</x>
+      <y>550</y>
+      <w>340</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;30;120;320;120;320;140</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1450</x>
+      <y>550</y>
+      <w>520</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;30;120;500;120;500;140</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1450</x>
+      <y>550</y>
+      <w>730</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;30;120;710;120;710;140</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1450</x>
+      <y>550</y>
+      <w>980</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;30;120;960;120;960;140</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1450</x>
+      <y>550</y>
+      <w>1210</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;30;120;1190;120;1190;140</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>790</x>
+      <y>360</y>
+      <w>190</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>170;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>630</x>
+      <y>650</y>
+      <w>190</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>LibraryLocation
+--
+- id: Integer
+- name: String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>790</x>
+      <y>540</y>
+      <w>190</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>170;30;110;30;110;150;30;150</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>770</x>
+      <y>140</y>
+      <w>290</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>Participation
+--
+- reserveCollection: ReserveCollection
+- participant: User
+- role: Role
+- startDate: Date
+- endDate: Date
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>670</x>
+      <y>150</y>
+      <w>120</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..n
+m2=1</panel_attributes>
+    <additional_attributes>100;30;30;30;30;190</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1030</x>
+      <y>160</y>
+      <w>90</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..n
+m2=1</panel_attributes>
+    <additional_attributes>30;30;70;30;70;130</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>770</x>
+      <y>0</y>
+      <w>240</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Role
+--
+- name: String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>410</x>
+      <y>0</y>
+      <w>240</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Action
+--
+- description: String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>620</x>
+      <y>10</y>
+      <w>170</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..n
+m2=0..n</panel_attributes>
+    <additional_attributes>30;30;150;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>860</x>
+      <y>30</y>
+      <w>50</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..n
+m2=1</panel_attributes>
+    <additional_attributes>30;110;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>500</x>
+      <y>30</y>
+      <w>350</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..n
+m2=1</panel_attributes>
+    <additional_attributes>30;120;30;80;330;80;330;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>410</x>
+      <y>150</y>
+      <w>240</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>GlobalRole
+--
+- role: Role
+- user: User
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>500</x>
+      <y>190</y>
+      <w>150</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..n
+m2=1</panel_attributes>
+    <additional_attributes>30;30;30;160;130;160</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>290</x>
+      <y>510</y>
+      <w>190</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>bg=#CECECE
+LegalEntity
+--
+- id: Integer
+- type: String
+- pid: Integer
+- title: String
+- placeOfBirth: String
+- dayOfBirth: DateTime
+- names: List&lt;String&gt;
+- origin: String
+- comment: String
+- contacts: List&lt;Contact&gt;
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>450</x>
+      <y>390</y>
+      <w>200</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m2=0..1</panel_attributes>
+    <additional_attributes>180;30;110;30;30;150</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>0</x>
+      <y>510</y>
+      <w>190</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>bg=#CECECE
+Contact
+--
+- type: String
+- publish: Boolean
+- institution: String
+- comment: String
+- adresses: List&lt;String&gt;
+- phoneNumbers: List&lt;String&gt;
+- faxNumbers: List&lt;String&gt;
+- emails: List&lt;String&gt;
+- webSites: List&lt;String&gt;
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>160</x>
+      <y>550</y>
+      <w>150</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=1..n</panel_attributes>
+    <additional_attributes>130;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>580</x>
+      <y>510</y>
+      <w>270</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>ReserveCollectionNumber
+--
+- id: Integer
+- number: Integer
+- location: LibraryLocation
+- user: User
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>820</x>
+      <y>490</y>
+      <w>160</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>140;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>700</x>
+      <y>410</y>
+      <w>50</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..n
+m2=0..1</panel_attributes>
+    <additional_attributes>30;100;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>410</x>
+      <y>780</y>
+      <w>270</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>NumberReservation
+--
+- number: ReserveCollectionNumber
+- location: LibraryLocation
+- user: User
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>500</x>
+      <y>400</y>
+      <w>150</w>
+      <h>400</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..n
+m2=1</panel_attributes>
+    <additional_attributes>30;380;30;90;130;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>540</x>
+      <y>570</y>
+      <w>100</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..n
+m2=1</panel_attributes>
+    <additional_attributes>30;210;80;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>600</x>
+      <y>690</y>
+      <w>80</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..n
+m2=1</panel_attributes>
+    <additional_attributes>30;90;60;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>920</x>
+      <y>1050</y>
+      <w>230</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>BookJob
+--
+- book: Book
+- status: BookJobStatus 
+- comments: List&lt;JobComment&gt;
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>370</x>
+      <y>1050</y>
+      <w>230</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>JobComment
+--
+- comment: String
+- user: User
+- date: Date
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>570</x>
+      <y>1050</y>
+      <w>190</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=0..n
+m1=1</panel_attributes>
+    <additional_attributes>170;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1000</x>
+      <y>880</y>
+      <w>50</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=0..1</panel_attributes>
+    <additional_attributes>30;30;30;170</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1270</x>
+      <y>1210</y>
+      <w>230</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>ScanJob
+--
+- scanable: Scanable
+- status: ScanOrderStatus 
+- comments: List&lt;JobComment&gt;
+- location: LibraryLocation
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1280</x>
+      <y>1080</y>
+      <w>190</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>/Scanable/
+--
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1380</x>
+      <y>970</y>
+      <w>140</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;110;120;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1300</x>
+      <y>950</y>
+      <w>80</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>60;130;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1350</x>
+      <y>1080</y>
+      <w>50</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=0..1</panel_attributes>
+    <additional_attributes>30;30;30;130</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>740</x>
+      <y>1060</y>
+      <w>120</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>/Job/
+--
+- id: Integer
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>830</x>
+      <y>1060</y>
+      <w>110</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;90;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>770</x>
+      <y>1070</y>
+      <w>520</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;30;180;500;180</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>680</x>
+      <y>690</y>
+      <w>610</w>
+      <h>610</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1</panel_attributes>
+    <additional_attributes>30;30;30;590;590;590</additional_attributes>
+  </element>
+</diagram>

@@ -1,0 +1,7 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+             xmlns="http://www.w3.org/1999/xhtml"
+        >
+
+    <script src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"></script>
+    <div class="g-recaptcha" data-sitekey="${publicKey}"/>
+</t:container>

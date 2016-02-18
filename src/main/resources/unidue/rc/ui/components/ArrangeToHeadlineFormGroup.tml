@@ -1,0 +1,17 @@
+<t:container xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+    <div class="form-group">
+        <label class="control-label col-md-3" for="headline">${message:arrange.to}</label>
+
+        <div class="col-md-6">
+
+            <select t:type="Select" t:id="headline" t:value="headline"
+                    t:model="headlineSelectModel" t:encoder="entryEncoder"
+                    data-placeholder="${message:chosen-placeholder-label}"
+                    t:blankOption="ALWAYS" class="form-control"
+                    t:blankLabel="message:headline.blank.label"/>
+            <t:error for="headline"/>
+        </div>
+    </div>
+</t:container>

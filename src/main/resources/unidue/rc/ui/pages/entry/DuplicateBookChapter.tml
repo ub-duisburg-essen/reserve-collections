@@ -1,0 +1,21 @@
+<html t:type="layout" title="${collection.title} #${collection.id}"
+      actionBarBlock="createBookChapterBlock"
+
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+        >
+
+<t:block t:id="createBookChapterBlock">
+    <t:reservecollectionactionslinklist collection="collection"/>
+    <t:createentrylinklist collection="collection"/>
+</t:block>
+
+<div t:type="paper">
+
+    <!-- base form style from bootstrap. see http://twitter.github.io/bootstrap/base-css.html#forms -->
+
+    <form t:type="Form" class="form-horizontal" t:id="chapterForm" t:clientValidation="none">
+
+        <t:bookchapterformfragment chapter="duplicate" collection="collection" form="chapterForm" isVisible="true" t:id="chapterMeta"/>
+    </form>
+</div>
+</html>

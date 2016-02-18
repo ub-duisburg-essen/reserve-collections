@@ -1,0 +1,32 @@
+<html t:type="layout" title="${message:generalstatistic}"
+      actionBarBlock="statsBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+        >
+
+<t:block t:id="statsBlock">
+    <t:secureblock action="CREATE_RESERVE_COLLECTION">
+        <t:reservecollectionactionslinklist/>
+    </t:secureblock>
+
+</t:block>
+
+<div t:type="paper">
+    <section class="folder-tab" id="reserve-collection-meta">
+        <div class="row">
+            <div class="col-md-9">
+                <header>
+                    <h2>${message:generalstatistic}</h2>
+                </header>
+            </div>
+        </div>
+    </section>
+
+    <div class="row">
+        <div class="col-md-12">
+            <t:highchartsgraph datasources="datasources" xtype="'datetime'" xZoom="'28 * 24 * 3600 * 1000'" xTitle="${message:stats.graph.label.timespan}"
+                               yTitle="${message:stats.graph.label.hitcount}" ></t:highchartsgraph>
+        </div>
+    </div>
+
+</div>
+</html>

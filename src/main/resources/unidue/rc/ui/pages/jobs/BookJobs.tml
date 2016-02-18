@@ -1,0 +1,165 @@
+<html t:type="layout" title="${message:book.jobs.page.title}"
+      actionBarBlock="bookJobsActionBlock" actionBarBlock2="bookJobsActionBlock2"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+<t:block t:id="bookJobsActionBlock">
+    <t:reservecollectionactionslinklist/>
+    <ul class="nav navbar-nav">
+
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <b class="glyphicon glyphicon-filter"></b><span class="dropdown-text"> ${message:filter} </span><b
+                    class="caret"></b>
+            </a>
+            <ul class="dropdown-menu" t:type="zone" t:id="filterSelectZone" id="filterSelectZone" t:update="none">
+                <t:loop source="availableFilter" value="filter">
+                    <li>
+                        <t:eventlink event="addFilter" zone="filterZone"
+                                     context="filter">${prop:nameForFilter}</t:eventlink>
+                    </li>
+                </t:loop>
+            </ul>
+        </li>
+    </ul>
+</t:block>
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div t:type="paper">
+            <t:zone t:id="filterZone" id="filterZone" update="none">
+                <form role="form" class="form-horizontal filter" t:type="form" t:id="appliedFilterForm"
+                      zone="^">
+                    <fieldset class="collapsible">
+                        <legend>${message:filter}</legend>
+
+                        <div class="collapsedContent">
+
+                            <t:loop source="appliedFilter" value="filter">
+                                <t:delegate to="blockForFilter"/>
+                            </t:loop>
+
+                            <div class="form-group hide-on-js">
+                                <div class="col-md-9 col-md-offset-3">
+                                    <input type="submit" value="${message:apply.filter}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <hr/>
+                    </fieldset>
+                </form>
+            </t:zone>
+            <t:zone t:id="bookJobsZone" id="bookJobsZone" update="none">
+                <table class="table">
+                    <caption>${openBookJobs} ${message:open.book.jobs}</caption>
+                    <thead>
+                    <tr>
+                        <th class="hideformobile">${message:reserve.collection.abbr}
+                            <t:eventlink event="sort" t:context="SORT_FIELD_NUMBER" t:id="sortByNumber" class="sort-icon ${classForSortByNumber}"
+                                         zone="bookJobsZone"/>
+                        </th>
+                        <th>${message:entry}
+                            <t:eventlink event="sort" t:context="SORT_FIELD_JOB_ID" t:id="sortByJobId" class="sort-icon ${classForSortByJobID}"
+                                         zone="bookJobsZone"/>
+                        </th>
+                        <th class="hideformobile">${message:modified}
+                            <t:eventlink event="sort" t:context="SORT_FIELD_MODIFIED" t:id="sortByModified" class="sort-icon ${classForSortByModified}"
+                                         zone="bookJobsZone"/>
+                        </th>
+                        <th>${message:signature}
+                            <t:eventlink event="sort" t:context="SORT_FIELD_SIGNATURE" t:id="sortBySignature" class="sort-icon ${classForSortBySignature}"
+                                         zone="bookJobsZone"/>
+                        </th>
+                        <th>${message:title-label}
+                            <t:eventlink event="sort" t:context="SORT_FIELD_TITLE" t:id="sortByTitle" class="sort-icon ${classForSortByTitle}"
+                                         zone="bookJobsZone"/>
+                        </th>
+                        <th>${message:status}
+                            <t:eventlink event="sort" t:context="SORT_FIELD_STATUS" t:id="sortByStatus" class="sort-icon ${classForSortByStatus}"
+                                         zone="bookJobsZone"/>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <t:loop source="bookJobs.items" value="bookJob">
+                        <tr>
+                            <td class="hideformobile">
+                                <t:pagelink page="collection/viewcollection" context="bookJob.collectionID">
+                                    ${bookJob.collectionNumber}</t:pagelink>
+                            </td>
+                            <td>
+                                <t:pagelink page="collection/viewcollection" context="bookJob.collectionID"
+                                            anchor="${bookJob.jobID}">
+                                    ${bookJob.jobID}</t:pagelink>
+                            </td>
+                            <td class="hideformobile">
+                                <t:output t:value="bookJob.modified" format="modifiedOutputFormat"/>
+                            </td>
+                            <td><a href="${sys:primo.sig.search.url}${bookJob.signature}">${bookJob.signature}</a></td>
+                            <td> <span title="${bookJob.title}" class="shortentext">${bookJob.title}</span></td>
+                            <td><t:pagelink page="jobs/viewbookjob" context="bookJob.jobID">${statusLabel}</t:pagelink></td>
+                        </tr>
+                    </t:loop>
+                    </tbody>
+                </table>
+                <t:pagination t:id="pagination" maxRowsPerPage="sys:pagination.max.rows" range="sys:pagination.range" itemCount="bookJobs.count"></t:pagination>
+            </t:zone>
+        </div>
+    </div>
+</div>
+
+
+<t:block t:id="queryFilterFormGroup">
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="query">${message:search-label}</label>
+
+        <div class="col-md-5">
+            <t:textfield value="query" id="query" class="form-control input-sm" t:mixins="zoneUpdater"
+                         t:clientEvent="keyup" t:event="queryChanged" t:zone="bookJobsZone"/>
+        </div>
+        <div class="col-md-4">
+            <t:eventlink event="removeFilter" context="filter" class="glyphicon glyphicon-remove" zone="^"
+                         title="${message:remove}"/>
+        </div>
+    </div>
+</t:block>
+
+<t:block t:id="locationFilterFormGroup">
+
+    <div class="form-group">
+        <label class="col-md-3 control-label"
+               for="libraryLocation">${message:location}</label>
+
+        <div class="col-md-5">
+            <t:select value="locationFilter" model="libraryLocationSelectModel"
+                      t:id="locationFilter"
+                      id="libraryLocation" zone="bookJobsZone"
+                      class="form-control input-sm" encoder="libraryLocationEncoder"
+                      blankLabel="message:blank-label"/>
+        </div>
+        <div class="col-md-4">
+            <t:eventlink event="removeFilter" context="filter" class="glyphicon glyphicon-remove" zone="^"
+                         title="${message:remove}"/>
+        </div>
+    </div>
+</t:block>
+<t:block t:id="statusFilterFormGroup">
+
+    <div class="form-group">
+        <label class="col-md-3 control-label"
+               for="bookJobStatus">${message:status}</label>
+
+        <div class="col-md-5">
+            <select t:id="bookJobStatusFilter" t:type="select"
+                    id="bookJobStatus" t:zone="bookJobsZone"
+                    class="form-control input-sm"
+                    t:blankLabel="message:blank-label"/>
+        </div>
+        <div class="col-md-4">
+            <t:eventlink event="removeFilter" context="filter" class="glyphicon glyphicon-remove" zone="^"
+                         title="${message:remove}"/>
+        </div>
+    </div>
+</t:block>
+
+</html>

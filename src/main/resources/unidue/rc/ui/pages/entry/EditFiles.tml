@@ -1,0 +1,40 @@
+<html t:type="layout" title="${collection.title} #${collection.id}"
+      actionBarBlock="editFilesBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+<t:block t:id="editFilesBlock">
+    <t:reservecollectionactionslinklist collection="collection"/>
+    <t:createentrylinklist collection="collection"/>
+</t:block>
+
+<div t:type="paper">
+    <!-- base form style from bootstrap. see http://twitter.github.io/bootstrap/base-css.html#forms -->
+    <form t:type="Form" class="form-horizontal" t:id="files_form" t:clientValidation="none">
+        <fieldset>
+            <div class="form-group">
+
+                <div class="col-md-5 text-right"><h5>${message:filename}</h5></div>
+                <div class="col-md-7"><h5>${message:description}</h5></div>
+            </div>
+            <t:loop source="files" value="file" encoder="entryValueEncoder">
+                <div class="form-group">
+                    <label for="file" class="col-md-5 control-label">${file.resource.filename}</label>
+
+                    <div class="col-md-7">
+                        <input t:type="TextField" t:id="file" id="file" t:value="file.description"
+                               class="form-control"/>
+                        <t:error for="file"/>
+                    </div>
+                </div>
+            </t:loop>
+
+            <div class="form-group">
+                <div class="col-md-offset-5 col-md-7">
+                    <input type="submit" value="${message:form-submit-label}"/>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+</div>
+</html>

@@ -1,0 +1,68 @@
+<t:container xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+    <div class="row">
+        <div class="col-md-2">
+
+            <div class="book-thumbnail">
+                <img src="${context:/img/chapter_thumbnail.png}"/>
+            </div>
+        </div>
+        <div class="col-md-10">
+
+            <section>
+                <p>
+                    <t:if test="journalArticle.articleTitle">${journalArticle.articleTitle}</t:if>
+                    <t:if test="journalArticle.authors"> / ${journalArticle.authors}</t:if>
+                </p>
+                <p>
+                    <t:if test="journalArticle.journalTitle">${message:journal-in-label}
+                        : ${journalArticle.journalTitle} </t:if>
+                    <t:if test="journalArticle.placeOfPublication">. - ${journalArticle.placeOfPublication}</t:if>
+                    <t:if test="journalArticle.publisher">: ${journalArticle.publisher}</t:if>
+                    <t:if test="journalArticle.issn">. - ${message:journal-issn-label}: ${journalArticle.issn}</t:if>
+
+                </p>
+                <t:if test="journalArticle.signature"><p>
+                    ${message:article-signature-label}: <a
+                    href="${sys:primo.sig.search.url}${journalArticle.signature}"> ${journalArticle.signature}
+                    (${message:primo.sig.show.in.catalogue})</a>
+                </p>
+                </t:if>
+                <p>
+                    <t:if test="journalArticle.volume">${journalArticle.volume}</t:if>
+                    <t:if test="journalArticle.issue">${journalArticle.issue}</t:if>
+                </p>
+                <p>
+                    <t:if
+                        test="journalArticle.pageStart">${message:journal-page-label} ${journalArticle.pageStart}</t:if>
+                    <t:if test="journalArticle.pageEnd">- ${journalArticle.pageEnd}</t:if>
+                </p>
+
+                <t:if test="journalArticle.comment">
+                    <p>
+                        ${journalArticle.comment}
+                    </p>
+                </t:if>
+                <t:if test="journalArticle.fileAvailable">
+                    <t:if test="journalArticle.resource.fileName">
+                        <p>
+                            <t:eventlink event="download" title="message:download"
+                                         context="journalArticle.resource.id" class="piwik_download">
+                                ${journalArticle.resource.fileName}
+                            </t:eventlink>
+                            <t:pagelink page="entry/download"
+                                        context="[journalArticle.resource.id, 'attachment']"
+                                        class="glyphicon glyphicon-download piwik_download"/>
+                        </p>
+                    </t:if>
+                </t:if>
+                <t:if test="journalArticle.resource?.fullTextURL">
+                    <p>
+                        <a href="${journalArticle.resource.fullTextURL}"
+                           target="_blank">${journalArticle.resource.fullTextURL}</a>
+                    </p>
+                </t:if>
+            </section>
+        </div>
+    </div>
+</t:container>

@@ -1,0 +1,15 @@
+<html>
+<head>
+    <title></title>
+    #include("mail.style.vm")
+</head>
+<body>
+#parse('collection.status.message.vm')
+<h3>
+    <a href="$collectionListURL">Alle Semesterapparate</a>
+</h3>
+#parse('editor.vm')
+#parse('collection.vm')
+#parse('user.vm')
+</body>
+</html>

@@ -1,0 +1,16 @@
+<html t:type="layout" title="${message:error404.page.title}"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+<div t:type="paper">
+
+    <div class="stacked-paper-container">
+        <div class="stacked-paper">
+            <h3>${message:not.found}</h3>
+        </div>
+    </div>
+
+    <t:if test="! productionMode">
+        <t:renderobject object="request"/>
+    </t:if>
+</div>
+</html>

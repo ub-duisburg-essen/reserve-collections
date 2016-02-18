@@ -1,0 +1,43 @@
+<html>
+<head>
+    <title></title>
+    #include("mail.style.vm")
+</head>
+<body>
+<!-- on successful migration -->
+    #if($collection)
+    <h4 class="alert alert-success">Semesterapparat migriert</h4>
+    <table>
+        <tr>
+            <td>Semesterapparat</td>
+            <td><a href="https://semapp.uni-due.de/collection/view/$collection.id">$collection.title</a></td>
+        </tr>
+        <tr>
+            <td>Nummer</td>
+            <td>$collection.number.number</td>
+        </tr>
+        <tr>
+            <td>Status</td>
+            <td>$status</td>
+        </tr>
+    </table>
+        #if($oldNumber)
+            <div class="alert alert-info">Die Nummer des Apparates hat sich geändert von <strong>$oldNumber</strong> zu <strong>$newNumber</strong></div>
+        #end
+    #end
+
+<!-- on error -->
+    #if($errorMessage)
+    <h4 class="alert alert-error">Migration fehlgeschlagen</h4>
+    <h3>Semesterapparat: $slotID</h3>
+    <h4>Dokument: $documentID</h4>
+
+    <div>
+        <pre>$errorMessage</pre>
+    </div>
+    <div>
+        <pre>$errorStacktrace</pre>
+    </div>
+    #end
+</body>
+</html>

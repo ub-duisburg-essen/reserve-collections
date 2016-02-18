@@ -1,0 +1,131 @@
+<t:container xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+    <div t:type="paper">
+        <form t:type="Form" class="form-horizontal" t:id="registerForm" id="registerForm"
+              t:clientValidation="none" t:autofocus="true">
+            <fieldset>
+                <div class="form-group">
+                    <label class="col-md-3 control-label required" for="newUsername">${message:username.label}</label>
+
+                    <div class="col-md-6">
+                        <input t:type="TextField" t:id="newUsername" id="newUsername" value="newUsername"
+                               class="firstTab form-control"/>
+                        <t:error for="newUsername"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label required" for="newPassword">${message:password.label}</label>
+
+                    <div class="col-md-6">
+                        <input t:type="PasswordField" t:id="newPassword" id="newPassword" value="newPassword"
+                               class="form-control"/>
+                        <t:error for="newPassword"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label required"
+                           for="passwordRepetition">${message:password.repetition.label}</label>
+
+                    <div class="col-md-6">
+                        <input t:type="PasswordField" t:id="passwordRepetition" id="passwordRepetition"
+                               value="passwordRepetition"
+                               class="form-control"/>
+                        <t:error for="passwordRepetition"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h4 class="col-md-3 control-label">${message:user.data.label}</h4>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label"
+                           for="academicTitle">${message:academic.title.label}</label>
+
+                    <div class="col-md-6">
+                        <input t:type="TextField" t:id="academicTitle" id="academicTitle" value="academicTitle"
+                               class="form-control"/>
+                        <t:error for="academicTitle"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label required" for="forename">${message:forename.label}</label>
+
+                    <div class="col-md-6">
+                        <input t:type="TextField" t:id="forename" id="forename" value="forename" class="form-control"/>
+                        <t:error for="forename"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label required" for="surname">${message:surname.label}</label>
+
+                    <div class="col-md-6">
+                        <input t:type="TextField" t:id="surname" id="surname" value="surname" class="form-control"/>
+                        <t:error for="surname"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label required" for="origin">${message:origin-label}</label>
+
+                    <div class="col-md-6">
+                        <select data-placeholder="${message:chosen-placeholder-label}" t:mixins="chosenSelect"
+                                t:type="Select" t:id="origin" id="origin" t:value="origin" t:model="originSelectModel"
+                                t:encoder="originEncoder" class="form-control autocomplete"
+                                t:blankOption="ALWAYS"/>
+                        <t:error for="origin"/>
+                    </div>
+                </div>
+                <script>applyChosen();</script>
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="address">${message:address.label}</label>
+
+                    <div class="col-md-6">
+                        <input t:type="TextArea" t:id="address" id="address" value="address" class="form-control"/>
+                        <t:error for="address"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="phone">${message:phone.label}</label>
+
+                    <div class="col-md-6">
+                        <input t:type="TextField" t:id="phone" id="phone" value="phone" class="form-control"/>
+                        <t:error for="phone"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label required" for="mail">${message:mail.label}</label>
+
+                    <div class="col-md-6">
+                        <input t:type="TextField" t:id="mail" id="mail" value="mail" class="form-control"/>
+                        <t:error for="mail"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-9">
+                        <div t:type="recaptcha" publicKey="sys:recaptcha.public.key" t:id="captcha"
+                             privateKey="sys:recaptcha.private.key" valid="isCaptchaValid"></div>
+                        <t:error for="captcha"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-9">
+                        <span class="required-label">${message:required-label}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="submit" value="${message:form-submit-label}" id="register"/>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</t:container>

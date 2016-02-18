@@ -1,0 +1,26 @@
+<html t:type="layout" title="${message:copyright.title}"
+      actionBarBlock="copyrightBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+<t:block t:id="copyrightBlock">
+    <t:secureblock action="CREATE_RESERVE_COLLECTION">
+        <t:reservecollectionactionslinklist/>
+    </t:secureblock>
+</t:block>
+
+<div class="row">
+    <div class="col-md-12">
+        <div t:type="paper">
+            <div class="paper-content">
+                <t:outputraw value="${copyright}"/>
+                <hr/>
+                <h3>
+                    <a href="${leafletAsset}">${message:leaflet}</a>
+                </h3>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</html>

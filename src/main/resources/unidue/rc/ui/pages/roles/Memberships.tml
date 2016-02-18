@@ -1,0 +1,122 @@
+<html t:type="layout" title="${message:memberships.page.title}"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      actionBarBlock="roleBarBlock"
+      xmlns:p="tapestry:parameter">
+
+<t:block t:id="roleBarBlock">
+    <t:reservecollectionactionslinklist/>
+    <ul class="nav navbar-nav">
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <b class="glyphicon glyphicon-user"></b>
+                <span class="dropdown-text"> ${message:role} </span><b
+                    class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <t:secureblock action="EDIT_ROLES">
+                    <li>
+                        <t:pagelink page="roles/createrole">${message:new}</t:pagelink>
+                    </li>
+                    <li>
+                        <t:actionlink t:id="deleteRole">${message:delete}</t:actionlink>
+                    </li>
+                </t:secureblock>
+            </ul>
+        </li>
+    </ul>
+</t:block>
+
+
+<div t:type="paper">
+    <t:if test="addedMessage">
+        <p class="message">${prop:addedMessage}</p>
+    </t:if>
+    <t:if test="removedMessage">
+        <p class="message">${prop:removedMessage}</p>
+    </t:if>
+
+    <t:zone t:id="userSearchZone" id="userSearchZone" t:update="none">
+
+        <!-- base form style from bootstrap. see http://twitter.github.io/bootstrap/base-css.html#forms -->
+        <form t:type="Form" class="form-horizontal" zone="^" t:id="userSearchForm" id="userSearchForm"
+              t:clientValidation="none">
+            <fieldset>
+
+                <div class="form-group focused">
+                    <label class="control-label col-md-3" for="userSearch">${message:search.user.label}</label>
+                    <div class="col-md-6">
+                        <input t:type="TextField" t:id="userSearch" id="userSearch" class="form-control"
+                               t:value="userSearch"/>
+                        <t:error for="userSearch"/>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="submit" value="${message:search}"/>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+
+        <div class="loader"></div>
+    </t:zone>
+</div>
+
+<t:zone t:id="chooseUserZone" id="chooseUserZone" visible="false" update="none">
+
+    <div t:type="paper">
+        <t:if test="prop:isSearchEmpty">
+            <p:else>
+                <form t:type="Form" t:id="chooseUserForm" t:clientValidation="none" class="form-horizontal">
+                    <t:errors/>
+                    <table class="table">
+                        <caption>${message:search-result}</caption>
+                        <thead>
+                        <tr>
+                            <th>${message:username.label}</th>
+                            <th>${message:name-label}</th>
+                            <th>${message:mail.label}</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <t:loop source="users" value="user" encoder="userEncoder">
+                            <tr>
+                                <td>${user.username}</td>
+                                <td>${user.realname}</td>
+                                <td>${user.email}</td>
+                                <td>
+                                    <t:actionlink t:id="choose" t:context="user" class="glyphicon glyphicon-edit" zone="^"/>
+                                </td>
+                            </tr>
+                        </t:loop>
+                        </tbody>
+                    </table>
+                </form>
+            </p:else>
+        </t:if>
+    </div>
+</t:zone>
+
+<t:zone t:id="membershipZone" id="membershipZone" visible="false" update="none">
+
+    <div t:type="paper">
+        <form t:type="Form" t:id="membershipForm" t:clientValidation="none" class="form-horizontal">
+            <t:hidden value="chosenUser" encoder="userEncoder"/>
+            <t:errors/>
+            <div class="form-group">
+                <t:palette t:id="userGlobalRoleRelationship" label="name"
+                           encoder="roleEncoder" model="roleSelectModel"
+                           selected="selectedRoles" selectedLabel="message:is.member"
+                           availableLabel="message:is.no.member" class="form-control"
+                           select="context:img/icons/arrow_right_32x32.png"
+                           deselect="context:img/icons/arrow_left_32x32.png"/>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-3 col-md-9">
+                    <input type="submit" value="${message:save-label}"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</t:zone>
+
+</html>

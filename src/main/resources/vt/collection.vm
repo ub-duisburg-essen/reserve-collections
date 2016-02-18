@@ -1,0 +1,32 @@
+<table>
+    <caption>Semesterapparat</caption>
+    <tr>
+        <td>Semesterapparats-ID:</td>
+        <td>$collection.Id</td>
+    </tr>
+    <tr>
+        <td>Nummer:</td>
+        <td>$collection.Number.Number</td>
+    </tr>
+    <tr>
+        <td>Standort:</td>
+        <td>$collection.LibraryLocation.Name</td>
+    </tr>
+    <tr>
+        <td>Semesterapparat:</td>
+        <td><a href="$collectionLink">$collectionLink</a></td>
+    </tr>
+
+    <tr>
+        <td>Titel:</td>
+        <td>$collection.Title</td>
+    </tr>
+    <tr>
+        <td>Autor(Innen):</td>
+        <td>$authors</td>
+    </tr>
+    <tr>
+        <td>Fakult&auml;t:</td>
+        <td>$origin</td>
+    </tr>
+</table>

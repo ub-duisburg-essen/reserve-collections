@@ -1,0 +1,31 @@
+<html t:type="layout" title="${video.fileName}"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      actionBarBlock="videoBlock"
+       >
+
+<t:block t:id="videoBlock">
+    <t:reservecollectionactionslinklist/>
+    <t:if test="downloadAllowed">
+        <ul class="nav navbar-nav">
+            <li>
+                <t:pagelink page="entry/download" context="[video.id,'attachment']">
+                    <b class="glyphicon glyphicon-download"></b>
+                    <span> ${message:download}</span>
+                </t:pagelink>
+            </li>
+        </ul>
+    </t:if>
+</t:block>
+
+<div class="last-column">
+    <section>
+        <div class="row">
+            <div class="col-md-12">
+                <div id="jwcontainer">
+                    <p>${message:info.msg.flash.required}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</html>

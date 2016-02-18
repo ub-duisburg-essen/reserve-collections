@@ -1,0 +1,1094 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-map xmlns="http://cayenne.apache.org/schema/3.0/modelMap"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://cayenne.apache.org/schema/3.0/modelMap http://cayenne.apache.org/schema/3.0/modelMap.xsd"
+	 project-version="6">
+	<property name="defaultPackage" value="unidue.rc.model"/>
+	<db-entity name="ACCESS_LOG">
+		<db-attribute name="action" type="VARCHAR" length="128"/>
+		<db-attribute name="id" type="BIGINT" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="remoteHost" type="VARCHAR" length="128"/>
+		<db-attribute name="resource" type="VARCHAR" length="128"/>
+		<db-attribute name="resourceID" type="INTEGER"/>
+		<db-attribute name="timestamp" type="BIGINT"/>
+		<db-attribute name="userAgent" type="VARCHAR" length="256"/>
+	</db-entity>
+	<db-entity name="ACTION">
+		<db-attribute name="attribute" type="VARCHAR" length="256"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="name" type="VARCHAR" length="256"/>
+		<db-attribute name="resource" type="VARCHAR" isMandatory="true" length="256"/>
+		<db-key-generator>
+			<db-generator-type>ORACLE</db-generator-type>
+			<db-generator-name>pk_action</db-generator-name>
+			<db-key-cache-size>1</db-key-cache-size>
+		</db-key-generator>
+	</db-entity>
+	<db-entity name="BOOK">
+		<db-attribute name="authors" type="VARCHAR" length="2048"/>
+		<db-attribute name="bookingStatus" type="INTEGER"/>
+		<db-attribute name="collectionNumber" type="VARCHAR" length="64"/>
+		<db-attribute name="comment" type="VARCHAR" length="2048"/>
+		<db-attribute name="edition" type="VARCHAR" length="256"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="isbn" type="VARCHAR" length="256"/>
+		<db-attribute name="placeOfPublication" type="VARCHAR" length="512"/>
+		<db-attribute name="publisher" type="VARCHAR" length="512"/>
+		<db-attribute name="resourceID" type="INTEGER"/>
+		<db-attribute name="resourceType" type="VARCHAR" length="256"/>
+		<db-attribute name="signature" type="VARCHAR" length="64"/>
+		<db-attribute name="thumbnailURL" type="VARCHAR" length="256"/>
+		<db-attribute name="title" type="VARCHAR" isMandatory="true" length="1024"/>
+		<db-attribute name="volume" type="VARCHAR" length="256"/>
+		<db-attribute name="yearOfPublication" type="INTEGER"/>
+	</db-entity>
+	<db-entity name="BOOK_CHAPTER">
+		<db-attribute name="bookAuthors" type="VARCHAR" length="2048"/>
+		<db-attribute name="bookTitle" type="VARCHAR" isMandatory="true" length="1024"/>
+		<db-attribute name="chapterAuthors" type="VARCHAR" length="2048"/>
+		<db-attribute name="chapterTitle" type="VARCHAR" isMandatory="true" length="1024"/>
+		<db-attribute name="comment" type="VARCHAR" length="2048"/>
+		<db-attribute name="edition" type="VARCHAR" length="512"/>
+		<db-attribute name="editor" type="VARCHAR" length="512"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="isbn" type="VARCHAR" length="24"/>
+		<db-attribute name="pageEnd" type="VARCHAR" isMandatory="true" length="16"/>
+		<db-attribute name="pageStart" type="VARCHAR" isMandatory="true" length="16"/>
+		<db-attribute name="placeOfPublication" type="VARCHAR" length="512"/>
+		<db-attribute name="publisher" type="VARCHAR" length="512"/>
+		<db-attribute name="referenceNumber" type="VARCHAR" length="128"/>
+		<db-attribute name="resourceID" type="INTEGER"/>
+		<db-attribute name="signature" type="VARCHAR" length="64"/>
+		<db-attribute name="yearOfPublication" type="INTEGER"/>
+	</db-entity>
+	<db-entity name="BOOK_JOB">
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="modified" type="TIMESTAMP"/>
+		<db-attribute name="status" type="INTEGER"/>
+	</db-entity>
+	<db-entity name="BOOK_JOB_COMMENT">
+		<db-attribute name="bookJobId" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="jobCommentId" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+	</db-entity>
+	<db-entity name="ENTRY">
+		<db-attribute name="created" type="TIMESTAMP"/>
+		<db-attribute name="deleted" type="TIMESTAMP"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="modified" type="TIMESTAMP"/>
+		<db-attribute name="position" type="INTEGER"/>
+		<db-attribute name="reserveCollectionId" type="INTEGER"/>
+		<db-key-generator>
+			<db-generator-type>ORACLE</db-generator-type>
+			<db-generator-name>pk_entry</db-generator-name>
+			<db-key-cache-size>1</db-key-cache-size>
+		</db-key-generator>
+	</db-entity>
+	<db-entity name="FILE">
+		<db-attribute name="description" type="VARCHAR" length="1024"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="resourceID" type="INTEGER"/>
+	</db-entity>
+	<db-entity name="FILE_ACCESS">
+		<db-attribute name="accessDate" type="TIMESTAMP"/>
+		<db-attribute name="id" type="BIGINT" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="realmhash" type="VARCHAR" length="64"/>
+		<db-attribute name="resourceID" type="INTEGER"/>
+		<db-attribute name="userhash" type="VARCHAR" length="64"/>
+		<db-key-generator>
+			<db-generator-type>ORACLE</db-generator-type>
+			<db-generator-name>pk_fileaccess</db-generator-name>
+			<db-key-cache-size>1</db-key-cache-size>
+		</db-key-generator>
+	</db-entity>
+	<db-entity name="HEADLINE">
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="text" type="VARCHAR" isMandatory="true" length="512"/>
+	</db-entity>
+	<db-entity name="HTML">
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="text" type="CLOB" isMandatory="true"/>
+	</db-entity>
+	<db-entity name="JOB_COMMENT">
+		<db-attribute name="authorId" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="comment" type="VARCHAR" length="2048"/>
+		<db-attribute name="date" type="TIMESTAMP"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-key-generator>
+			<db-generator-type>ORACLE</db-generator-type>
+			<db-generator-name>pk_job_comment</db-generator-name>
+			<db-key-cache-size>1</db-key-cache-size>
+		</db-key-generator>
+	</db-entity>
+	<db-entity name="JOURNAL_ARTICLE">
+		<db-attribute name="articleTitle" type="VARCHAR" isMandatory="true" length="1024"/>
+		<db-attribute name="authors" type="VARCHAR" length="2048"/>
+		<db-attribute name="comment" type="VARCHAR" length="2048"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="issn" type="VARCHAR" length="64"/>
+		<db-attribute name="issue" type="VARCHAR" length="512"/>
+		<db-attribute name="journalTitle" type="VARCHAR" isMandatory="true" length="1024"/>
+		<db-attribute name="pageEnd" type="VARCHAR" isMandatory="true" length="16"/>
+		<db-attribute name="pageStart" type="VARCHAR" isMandatory="true" length="16"/>
+		<db-attribute name="placeOfPublication" type="VARCHAR" length="512"/>
+		<db-attribute name="publisher" type="VARCHAR" length="512"/>
+		<db-attribute name="referenceNumber" type="VARCHAR" length="128"/>
+		<db-attribute name="resourceID" type="INTEGER"/>
+		<db-attribute name="signature" type="VARCHAR" length="64"/>
+		<db-attribute name="volume" type="VARCHAR" length="256"/>
+	</db-entity>
+	<db-entity name="LIBRARY_LOCATION">
+		<db-attribute name="deleted" type="BOOLEAN"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="name" type="VARCHAR" length="512"/>
+		<db-attribute name="parentId" type="INTEGER"/>
+		<db-attribute name="physical" type="BOOLEAN"/>
+		<db-key-generator>
+			<db-generator-type>ORACLE</db-generator-type>
+			<db-generator-name>pk_library_location</db-generator-name>
+			<db-key-cache-size>1</db-key-cache-size>
+		</db-key-generator>
+	</db-entity>
+	<db-entity name="MAIL">
+		<db-attribute name="fromAddress" type="VARCHAR" length="512"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="mailBody" type="VARCHAR" length="131072"/>
+		<db-attribute name="numTries" type="INTEGER"/>
+		<db-attribute name="send" type="BOOLEAN"/>
+		<db-attribute name="sendDate" type="TIMESTAMP"/>
+		<db-attribute name="subject" type="VARCHAR" length="1024"/>
+		<db-attribute name="textMailBody" type="VARCHAR" length="131072"/>
+		<db-key-generator>
+			<db-generator-type>ORACLE</db-generator-type>
+			<db-generator-name>pk_mail</db-generator-name>
+			<db-key-cache-size>1</db-key-cache-size>
+		</db-key-generator>
+	</db-entity>
+	<db-entity name="MAIL_NODE">
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="mailID" type="INTEGER"/>
+		<db-attribute name="type" type="INTEGER"/>
+		<db-attribute name="value" type="VARCHAR" length="256"/>
+		<db-key-generator>
+			<db-generator-type>ORACLE</db-generator-type>
+			<db-generator-name>pk_mail_node</db-generator-name>
+			<db-key-cache-size>1</db-key-cache-size>
+		</db-key-generator>
+	</db-entity>
+	<db-entity name="MEMBERSHIP">
+		<db-attribute name="roleId" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="userId" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+	</db-entity>
+	<db-entity name="MIGRATION">
+		<db-attribute name="codeUsedDate" type="TIMESTAMP"/>
+		<db-attribute name="collectionID" type="INTEGER"/>
+		<db-attribute name="documentID" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="finished" type="BOOLEAN"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="migrationCode" type="VARCHAR" isMandatory="true" length="64"/>
+		<db-key-generator>
+			<db-generator-type>ORACLE</db-generator-type>
+			<db-generator-name>pk_migration</db-generator-name>
+			<db-key-cache-size>1</db-key-cache-size>
+		</db-key-generator>
+	</db-entity>
+	<db-entity name="MIGRATION_MAIL">
+		<db-attribute name="mailID" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="migrationID" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+	</db-entity>
+	<db-entity name="PARTICIPATION">
+		<db-attribute name="accesskey" type="VARCHAR" length="8"/>
+		<db-attribute name="endDate" type="TIMESTAMP"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="reserveCollectionId" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="roleId" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="startDate" type="TIMESTAMP"/>
+		<db-attribute name="userId" type="INTEGER" isMandatory="true"/>
+		<db-key-generator>
+			<db-generator-type>ORACLE</db-generator-type>
+			<db-generator-name>pk_participation</db-generator-name>
+			<db-key-cache-size>1</db-key-cache-size>
+		</db-key-generator>
+	</db-entity>
+	<db-entity name="PERMISSION">
+		<db-attribute name="actionID" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="instanceClass" type="VARCHAR" length="256"/>
+		<db-attribute name="instanceID" type="INTEGER"/>
+		<db-attribute name="userID" type="INTEGER" isMandatory="true"/>
+		<db-key-generator>
+			<db-generator-type>ORACLE</db-generator-type>
+			<db-generator-name>pk_permission</db-generator-name>
+			<db-key-cache-size>1</db-key-cache-size>
+		</db-key-generator>
+	</db-entity>
+	<db-entity name="PERMISSION_DEFINITION">
+		<db-attribute name="actionID" type="INTEGER"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="isInstanceBound" type="BOOLEAN"/>
+		<db-attribute name="roleID" type="INTEGER"/>
+		<db-key-generator>
+			<db-generator-type>ORACLE</db-generator-type>
+			<db-generator-name>pk_permission_definition</db-generator-name>
+			<db-key-cache-size>1</db-key-cache-size>
+		</db-key-generator>
+	</db-entity>
+	<db-entity name="REFERENCE">
+		<db-attribute name="authors" type="VARCHAR" length="2048"/>
+		<db-attribute name="collectionNumber" type="VARCHAR" length="64"/>
+		<db-attribute name="comment" type="VARCHAR" length="2048"/>
+		<db-attribute name="edition" type="VARCHAR" length="256"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="isbn" type="VARCHAR" length="256"/>
+		<db-attribute name="placeOfPublication" type="VARCHAR" length="512"/>
+		<db-attribute name="publisher" type="VARCHAR" length="512"/>
+		<db-attribute name="resourceID" type="INTEGER"/>
+		<db-attribute name="signature" type="VARCHAR" length="64"/>
+		<db-attribute name="thumbnailURL" type="VARCHAR" length="256"/>
+		<db-attribute name="title" type="VARCHAR" length="1024"/>
+		<db-attribute name="volume" type="VARCHAR" length="256"/>
+		<db-attribute name="yearOfPublication" type="INTEGER"/>
+	</db-entity>
+	<db-entity name="RESERVE_COLLECTION">
+		<db-attribute name="alephSystemId" type="VARCHAR" length="64"/>
+		<db-attribute name="alephUserId" type="VARCHAR" length="64"/>
+		<db-attribute name="comment" type="VARCHAR" length="512"/>
+		<db-attribute name="created" type="TIMESTAMP"/>
+		<db-attribute name="dissolveAt" type="TIMESTAMP"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="libraryLocationId" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="mediaDownloadAllowed" type="BOOLEAN"/>
+		<db-attribute name="modified" type="TIMESTAMP"/>
+		<db-attribute name="originId" type="INTEGER"/>
+		<db-attribute name="permalink" type="VARCHAR" length="1024"/>
+		<db-attribute name="piwikId" type="INTEGER"/>
+		<db-attribute name="prolongCode" type="VARCHAR" length="6"/>
+		<db-attribute name="prolongUsed" type="TIMESTAMP"/>
+		<db-attribute name="rcNumberId" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="readKey" type="VARCHAR" length="256"/>
+		<db-attribute name="status" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="title" type="VARCHAR" isMandatory="true" length="512"/>
+		<db-attribute name="validTo" type="TIMESTAMP"/>
+		<db-attribute name="writeKey" type="VARCHAR" length="256"/>
+		<db-key-generator>
+			<db-generator-type>ORACLE</db-generator-type>
+			<db-generator-name>pk_reserve_collection</db-generator-name>
+			<db-key-cache-size>1</db-key-cache-size>
+		</db-key-generator>
+	</db-entity>
+	<db-entity name="RESERVE_COLLECTION_NUMBER">
+		<db-attribute name="number" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-key-generator>
+			<db-generator-type>ORACLE</db-generator-type>
+			<db-generator-name>pk_reserve_collection_number</db-generator-name>
+			<db-key-cache-size>1</db-key-cache-size>
+		</db-key-generator>
+	</db-entity>
+	<db-entity name="RESOURCE">
+		<db-attribute name="copyrightReviewStatus" type="INTEGER"/>
+		<db-attribute name="fileDeleted" type="TIMESTAMP"/>
+		<db-attribute name="filePath" type="VARCHAR" length="512"/>
+		<db-attribute name="fullTextURL" type="VARCHAR" length="1024"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="mimeType" type="VARCHAR" length="128"/>
+		<db-key-generator>
+			<db-generator-type>ORACLE</db-generator-type>
+			<db-generator-name>pk_resource</db-generator-name>
+			<db-key-cache-size>1</db-key-cache-size>
+		</db-key-generator>
+	</db-entity>
+	<db-entity name="ROLE">
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="isDefault" type="SMALLINT"/>
+		<db-attribute name="name" type="VARCHAR" length="256"/>
+		<db-key-generator>
+			<db-generator-type>ORACLE</db-generator-type>
+			<db-generator-name>pk_role</db-generator-name>
+			<db-key-cache-size>1</db-key-cache-size>
+		</db-key-generator>
+	</db-entity>
+	<db-entity name="SCAN_JOB">
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="locationId" type="INTEGER"/>
+		<db-attribute name="modified" type="TIMESTAMP"/>
+		<db-attribute name="status" type="INTEGER"/>
+		<db-key-generator>
+			<db-generator-type>ORACLE</db-generator-type>
+			<db-generator-name>pk_scan_job</db-generator-name>
+			<db-key-cache-size>1</db-key-cache-size>
+		</db-key-generator>
+	</db-entity>
+	<db-entity name="SCAN_JOB_BOOK_CHAPTER">
+		<db-attribute name="bookChapterID" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="scanJobID" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+	</db-entity>
+	<db-entity name="SCAN_JOB_COMMENT">
+		<db-attribute name="jobCommentId" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="scanJobId" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+	</db-entity>
+	<db-entity name="SCAN_JOB_JOURNAL_ARTICLE">
+		<db-attribute name="journalArticleID" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="scanJobID" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+	</db-entity>
+	<db-entity name="SETTING">
+		<db-attribute name="format" type="VARCHAR" length="256"/>
+		<db-attribute name="key" type="VARCHAR" isPrimaryKey="true" isMandatory="true" length="1024"/>
+		<db-attribute name="label" type="VARCHAR" length="512"/>
+		<db-attribute name="type" type="INTEGER"/>
+		<db-attribute name="value" type="VARCHAR" length="2048"/>
+	</db-entity>
+	<db-entity name="STATISTIC">
+		<db-attribute name="articleCount" type="INTEGER"/>
+		<db-attribute name="bookCount" type="INTEGER"/>
+		<db-attribute name="chapterCount" type="INTEGER"/>
+		<db-attribute name="date" type="DATE"/>
+		<db-attribute name="entryCount" type="INTEGER"/>
+		<db-attribute name="fileCount" type="INTEGER"/>
+		<db-attribute name="headlineCount" type="INTEGER"/>
+		<db-attribute name="htmlCount" type="INTEGER"/>
+		<db-attribute name="id" type="BIGINT" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="reservecollectionCount" type="INTEGER"/>
+		<db-attribute name="totalFilesCount" type="INTEGER"/>
+		<db-attribute name="weblinkCount" type="INTEGER"/>
+	</db-entity>
+	<db-entity name="WARNING_MAIL">
+		<db-attribute name="calculatedFor" type="TIMESTAMP"/>
+		<db-attribute name="collectionID" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="mailID" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="userID" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+	</db-entity>
+	<db-entity name="WEB_LINK">
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="name" type="VARCHAR" length="1024"/>
+		<db-attribute name="url" type="VARCHAR" isMandatory="true" length="1024"/>
+	</db-entity>
+	<obj-entity name="AccessLog" className="unidue.rc.model.AccessLog" dbEntityName="ACCESS_LOG">
+		<obj-attribute name="action" type="java.lang.String" db-attribute-path="action"/>
+		<obj-attribute name="remoteHost" type="java.lang.String" db-attribute-path="remoteHost"/>
+		<obj-attribute name="resource" type="java.lang.String" db-attribute-path="resource"/>
+		<obj-attribute name="resourceID" type="java.lang.Integer" db-attribute-path="resourceID"/>
+		<obj-attribute name="timestamp" type="java.lang.Long" db-attribute-path="timestamp"/>
+		<obj-attribute name="userAgent" type="java.lang.String" db-attribute-path="userAgent"/>
+	</obj-entity>
+	<obj-entity name="Action" className="unidue.rc.model.Action" dbEntityName="ACTION">
+		<obj-attribute name="attribute" type="java.lang.String" db-attribute-path="attribute"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+		<obj-attribute name="resource" type="java.lang.String" db-attribute-path="resource"/>
+	</obj-entity>
+	<obj-entity name="Book" className="unidue.rc.model.Book" dbEntityName="BOOK">
+		<obj-attribute name="authors" type="java.lang.String" db-attribute-path="authors"/>
+		<obj-attribute name="bookingStatus" type="unidue.rc.model.BookingStatus" db-attribute-path="bookingStatus"/>
+		<obj-attribute name="collectionNumber" type="java.lang.String" db-attribute-path="collectionNumber"/>
+		<obj-attribute name="comment" type="java.lang.String" db-attribute-path="comment"/>
+		<obj-attribute name="edition" type="java.lang.String" db-attribute-path="edition"/>
+		<obj-attribute name="isbn" type="java.lang.String" db-attribute-path="isbn"/>
+		<obj-attribute name="placeOfPublication" type="java.lang.String" db-attribute-path="placeOfPublication"/>
+		<obj-attribute name="publisher" type="java.lang.String" db-attribute-path="publisher"/>
+		<obj-attribute name="resourceType" type="java.lang.String" db-attribute-path="resourceType"/>
+		<obj-attribute name="signature" type="java.lang.String" db-attribute-path="signature"/>
+		<obj-attribute name="thumbnailURL" type="java.lang.String" db-attribute-path="thumbnailURL"/>
+		<obj-attribute name="title" type="java.lang.String" db-attribute-path="title"/>
+		<obj-attribute name="volume" type="java.lang.String" db-attribute-path="volume"/>
+		<obj-attribute name="yearOfPublication" type="java.lang.Integer" db-attribute-path="yearOfPublication"/>
+		<attribute-override name="created" db-attribute-path="created"/>
+		<attribute-override name="id" db-attribute-path="id"/>
+		<attribute-override name="index" db-attribute-path="rcIndex"/>
+		<attribute-override name="modified" db-attribute-path="modified"/>
+		<attribute-override name="rcIndex" db-attribute-path="rcIndex"/>
+		<attribute-override name="type" db-attribute-path="type"/>
+	</obj-entity>
+	<obj-entity name="BookChapter" className="unidue.rc.model.BookChapter" dbEntityName="BOOK_CHAPTER">
+		<obj-attribute name="bookAuthors" type="java.lang.String" db-attribute-path="bookAuthors"/>
+		<obj-attribute name="bookTitle" type="java.lang.String" db-attribute-path="bookTitle"/>
+		<obj-attribute name="chapterAuthors" type="java.lang.String" db-attribute-path="chapterAuthors"/>
+		<obj-attribute name="chapterTitle" type="java.lang.String" db-attribute-path="chapterTitle"/>
+		<obj-attribute name="comment" type="java.lang.String" db-attribute-path="comment"/>
+		<obj-attribute name="edition" type="java.lang.String" db-attribute-path="edition"/>
+		<obj-attribute name="editor" type="java.lang.String" db-attribute-path="editor"/>
+		<obj-attribute name="isbn" type="java.lang.String" db-attribute-path="isbn"/>
+		<obj-attribute name="pageEnd" type="java.lang.String" db-attribute-path="pageEnd"/>
+		<obj-attribute name="pageStart" type="java.lang.String" db-attribute-path="pageStart"/>
+		<obj-attribute name="placeOfPublication" type="java.lang.String" db-attribute-path="placeOfPublication"/>
+		<obj-attribute name="publisher" type="java.lang.String" db-attribute-path="publisher"/>
+		<obj-attribute name="referenceNumber" type="java.lang.String" db-attribute-path="referenceNumber"/>
+		<obj-attribute name="signature" type="java.lang.String" db-attribute-path="signature"/>
+		<obj-attribute name="yearOfPublication" type="java.lang.Integer" db-attribute-path="yearOfPublication"/>
+		<attribute-override name="index" db-attribute-path="rcIndex"/>
+	</obj-entity>
+	<obj-entity name="BookJob" className="unidue.rc.model.BookJob" dbEntityName="BOOK_JOB">
+		<obj-attribute name="id" type="java.lang.Integer" db-attribute-path="id"/>
+		<obj-attribute name="modified" type="java.util.Date" db-attribute-path="modified"/>
+		<obj-attribute name="status" type="unidue.rc.model.BookJobStatus" db-attribute-path="status"/>
+	</obj-entity>
+	<obj-entity name="Entry" className="unidue.rc.model.Entry" dbEntityName="ENTRY">
+		<obj-attribute name="created" type="java.util.Date" db-attribute-path="created"/>
+		<obj-attribute name="deleted" type="java.util.Date" db-attribute-path="deleted"/>
+		<obj-attribute name="modified" type="java.util.Date" db-attribute-path="modified"/>
+		<obj-attribute name="position" type="java.lang.Integer" db-attribute-path="position"/>
+	</obj-entity>
+	<obj-entity name="File" className="unidue.rc.model.File" dbEntityName="FILE">
+		<obj-attribute name="description" type="java.lang.String" db-attribute-path="description"/>
+	</obj-entity>
+	<obj-entity name="FileAccess" className="unidue.rc.model.FileAccess" dbEntityName="FILE_ACCESS">
+		<obj-attribute name="accessDate" type="java.util.Date" db-attribute-path="accessDate"/>
+		<obj-attribute name="realmhash" type="java.lang.String" db-attribute-path="realmhash"/>
+		<obj-attribute name="userhash" type="java.lang.String" db-attribute-path="userhash"/>
+	</obj-entity>
+	<obj-entity name="Headline" className="unidue.rc.model.Headline" dbEntityName="HEADLINE">
+		<obj-attribute name="text" type="java.lang.String" db-attribute-path="text"/>
+	</obj-entity>
+	<obj-entity name="Html" className="unidue.rc.model.Html" dbEntityName="HTML">
+		<obj-attribute name="text" type="java.lang.String" db-attribute-path="text"/>
+	</obj-entity>
+	<obj-entity name="JobComment" className="unidue.rc.model.JobComment" dbEntityName="JOB_COMMENT">
+		<obj-attribute name="authorId" type="java.lang.Integer" db-attribute-path="authorId"/>
+		<obj-attribute name="comment" type="java.lang.String" db-attribute-path="comment"/>
+		<obj-attribute name="date" type="java.util.Date" db-attribute-path="date"/>
+	</obj-entity>
+	<obj-entity name="JournalArticle" className="unidue.rc.model.JournalArticle" dbEntityName="JOURNAL_ARTICLE">
+		<obj-attribute name="articleTitle" type="java.lang.String" db-attribute-path="articleTitle"/>
+		<obj-attribute name="authors" type="java.lang.String" db-attribute-path="authors"/>
+		<obj-attribute name="comment" type="java.lang.String" db-attribute-path="comment"/>
+		<obj-attribute name="issn" type="java.lang.String" db-attribute-path="issn"/>
+		<obj-attribute name="issue" type="java.lang.String" db-attribute-path="issue"/>
+		<obj-attribute name="journalTitle" type="java.lang.String" db-attribute-path="journalTitle"/>
+		<obj-attribute name="pageEnd" type="java.lang.String" db-attribute-path="pageEnd"/>
+		<obj-attribute name="pageStart" type="java.lang.String" db-attribute-path="pageStart"/>
+		<obj-attribute name="placeOfPublication" type="java.lang.String" db-attribute-path="placeOfPublication"/>
+		<obj-attribute name="publisher" type="java.lang.String" db-attribute-path="publisher"/>
+		<obj-attribute name="referenceNumber" type="java.lang.String" db-attribute-path="referenceNumber"/>
+		<obj-attribute name="signature" type="java.lang.String" db-attribute-path="signature"/>
+		<obj-attribute name="volume" type="java.lang.String" db-attribute-path="volume"/>
+	</obj-entity>
+	<obj-entity name="LibraryLocation" className="unidue.rc.model.LibraryLocation" dbEntityName="LIBRARY_LOCATION">
+		<obj-attribute name="deleted" type="boolean" db-attribute-path="deleted"/>
+		<obj-attribute name="id" type="java.lang.Integer" db-attribute-path="id"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+		<obj-attribute name="physical" type="boolean" db-attribute-path="physical"/>
+	</obj-entity>
+	<obj-entity name="Mail" className="unidue.rc.model.Mail" dbEntityName="MAIL">
+		<obj-attribute name="from" type="java.lang.String" db-attribute-path="fromAddress"/>
+		<obj-attribute name="mailBody" type="java.lang.String" db-attribute-path="mailBody"/>
+		<obj-attribute name="numTries" type="int" db-attribute-path="numTries"/>
+		<obj-attribute name="send" type="boolean" db-attribute-path="send"/>
+		<obj-attribute name="sendDate" type="java.util.Date" db-attribute-path="sendDate"/>
+		<obj-attribute name="subject" type="java.lang.String" db-attribute-path="subject"/>
+		<obj-attribute name="textMailBody" type="java.lang.String" db-attribute-path="textMailBody"/>
+	</obj-entity>
+	<obj-entity name="MailNode" className="unidue.rc.model.MailNode" dbEntityName="MAIL_NODE">
+		<obj-attribute name="type" type="unidue.rc.model.MailNodeType" db-attribute-path="type"/>
+		<obj-attribute name="value" type="java.lang.String" db-attribute-path="value"/>
+	</obj-entity>
+	<obj-entity name="Membership" className="unidue.rc.model.Membership" dbEntityName="MEMBERSHIP">
+		<obj-attribute name="userID" type="java.lang.Integer" db-attribute-path="userId"/>
+	</obj-entity>
+	<obj-entity name="Migration" className="unidue.rc.model.Migration" dbEntityName="MIGRATION">
+		<obj-attribute name="codeUsedDate" type="java.util.Date" db-attribute-path="codeUsedDate"/>
+		<obj-attribute name="documentID" type="java.lang.Integer" db-attribute-path="documentID"/>
+		<obj-attribute name="finished" type="boolean" db-attribute-path="finished"/>
+		<obj-attribute name="migrationCode" type="java.lang.String" db-attribute-path="migrationCode"/>
+	</obj-entity>
+	<obj-entity name="Participation" className="unidue.rc.model.Participation" dbEntityName="PARTICIPATION">
+		<obj-attribute name="accessKey" type="String" db-attribute-path="accesskey"/>
+		<obj-attribute name="endDate" type="java.util.Date" db-attribute-path="endDate"/>
+		<obj-attribute name="startDate" type="java.util.Date" db-attribute-path="startDate"/>
+		<obj-attribute name="userId" type="java.lang.Integer" db-attribute-path="userId"/>
+	</obj-entity>
+	<obj-entity name="Permission" className="unidue.rc.model.Permission" dbEntityName="PERMISSION">
+		<obj-attribute name="instanceClass" type="java.lang.String" db-attribute-path="instanceClass"/>
+		<obj-attribute name="instanceID" type="java.lang.Integer" db-attribute-path="instanceID"/>
+		<obj-attribute name="userID" type="java.lang.Integer" db-attribute-path="userID"/>
+	</obj-entity>
+	<obj-entity name="PermissionDefinition" className="unidue.rc.model.PermissionDefinition" dbEntityName="PERMISSION_DEFINITION">
+		<obj-attribute name="isInstanceBound" type="boolean" db-attribute-path="isInstanceBound"/>
+	</obj-entity>
+	<obj-entity name="Reference" className="unidue.rc.model.Reference" dbEntityName="REFERENCE">
+		<obj-attribute name="authors" type="java.lang.String" db-attribute-path="authors"/>
+		<obj-attribute name="collectionNumber" type="java.lang.String" db-attribute-path="collectionNumber"/>
+		<obj-attribute name="comment" type="java.lang.String" db-attribute-path="comment"/>
+		<obj-attribute name="edition" type="java.lang.String" db-attribute-path="edition"/>
+		<obj-attribute name="isbn" type="java.lang.String" db-attribute-path="isbn"/>
+		<obj-attribute name="placeOfPublication" type="java.lang.String" db-attribute-path="placeOfPublication"/>
+		<obj-attribute name="publisher" type="java.lang.String" db-attribute-path="publisher"/>
+		<obj-attribute name="signature" type="java.lang.String" db-attribute-path="signature"/>
+		<obj-attribute name="thumbnailURL" type="java.lang.String" db-attribute-path="thumbnailURL"/>
+		<obj-attribute name="title" type="java.lang.String" db-attribute-path="title"/>
+		<obj-attribute name="volume" type="java.lang.String" db-attribute-path="volume"/>
+		<obj-attribute name="yearOfPublication" type="java.lang.Integer" db-attribute-path="yearOfPublication"/>
+	</obj-entity>
+	<obj-entity name="ReserveCollection" className="unidue.rc.model.ReserveCollection" dbEntityName="RESERVE_COLLECTION">
+		<obj-attribute name="alephSystemId" type="java.lang.String" db-attribute-path="alephSystemId"/>
+		<obj-attribute name="alephUserId" type="java.lang.String" db-attribute-path="alephUserId"/>
+		<obj-attribute name="comment" type="java.lang.String" db-attribute-path="comment"/>
+		<obj-attribute name="created" type="java.util.Date" db-attribute-path="created"/>
+		<obj-attribute name="dissolveAt" type="java.util.Date" db-attribute-path="dissolveAt"/>
+		<obj-attribute name="id" type="java.lang.Integer" db-attribute-path="id"/>
+		<obj-attribute name="mediaDownloadAllowed" type="boolean" db-attribute-path="mediaDownloadAllowed"/>
+		<obj-attribute name="modified" type="java.util.Date" db-attribute-path="modified"/>
+		<obj-attribute name="originId" type="java.lang.Integer" db-attribute-path="originId"/>
+		<obj-attribute name="permalink" type="java.lang.String" db-attribute-path="permalink"/>
+		<obj-attribute name="piwikId" type="java.lang.Integer" db-attribute-path="piwikId"/>
+		<obj-attribute name="prolongCode" type="java.lang.String" db-attribute-path="prolongCode"/>
+		<obj-attribute name="prolongUsed" type="java.util.Date" db-attribute-path="prolongUsed"/>
+		<obj-attribute name="readKey" type="java.lang.String" db-attribute-path="readKey"/>
+		<obj-attribute name="status" type="unidue.rc.model.ReserveCollectionStatus" db-attribute-path="status"/>
+		<obj-attribute name="title" type="java.lang.String" db-attribute-path="title"/>
+		<obj-attribute name="validTo" type="java.util.Date" db-attribute-path="validTo"/>
+		<obj-attribute name="writeKey" type="java.lang.String" db-attribute-path="writeKey"/>
+	</obj-entity>
+	<obj-entity name="ReserveCollectionNumber" className="unidue.rc.model.ReserveCollectionNumber" dbEntityName="RESERVE_COLLECTION_NUMBER">
+		<obj-attribute name="number" type="java.lang.Integer" db-attribute-path="number"/>
+	</obj-entity>
+	<obj-entity name="Resource" className="unidue.rc.model.Resource" dbEntityName="RESOURCE">
+		<obj-attribute name="copyrightReviewStatus" type="unidue.rc.model.CopyrightReviewStatus" db-attribute-path="copyrightReviewStatus"/>
+		<obj-attribute name="fileDeleted" type="java.util.Date" db-attribute-path="fileDeleted"/>
+		<obj-attribute name="filePath" type="java.lang.String" db-attribute-path="filePath"/>
+		<obj-attribute name="fullTextURL" type="java.lang.String" db-attribute-path="fullTextURL"/>
+		<obj-attribute name="mimeType" type="java.lang.String" db-attribute-path="mimeType"/>
+	</obj-entity>
+	<obj-entity name="Role" className="unidue.rc.model.Role" dbEntityName="ROLE">
+		<obj-attribute name="isDefault" type="java.lang.Boolean" db-attribute-path="isDefault"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+	</obj-entity>
+	<obj-entity name="ScanJob" className="unidue.rc.model.ScanJob" dbEntityName="SCAN_JOB">
+		<obj-attribute name="modified" type="java.util.Date" db-attribute-path="modified"/>
+		<obj-attribute name="status" type="unidue.rc.model.ScanJobStatus" db-attribute-path="status"/>
+	</obj-entity>
+	<obj-entity name="Setting" className="unidue.rc.model.Setting" dbEntityName="SETTING">
+		<obj-attribute name="format" type="java.lang.String" db-attribute-path="format"/>
+		<obj-attribute name="key" type="java.lang.String" db-attribute-path="key"/>
+		<obj-attribute name="label" type="java.lang.String" db-attribute-path="label"/>
+		<obj-attribute name="type" type="unidue.rc.model.SettingType" db-attribute-path="type"/>
+		<obj-attribute name="value" type="java.lang.String" db-attribute-path="value"/>
+	</obj-entity>
+	<obj-entity name="Statistic" className="unidue.rc.model.Statistic" dbEntityName="STATISTIC">
+		<obj-attribute name="articleCount" type="java.lang.Integer" db-attribute-path="articleCount"/>
+		<obj-attribute name="bookCount" type="java.lang.Integer" db-attribute-path="bookCount"/>
+		<obj-attribute name="chapterCount" type="java.lang.Integer" db-attribute-path="chapterCount"/>
+		<obj-attribute name="date" type="java.lang.String" db-attribute-path="date"/>
+		<obj-attribute name="entryCount" type="java.lang.Integer" db-attribute-path="entryCount"/>
+		<obj-attribute name="fileCount" type="java.lang.Integer" db-attribute-path="fileCount"/>
+		<obj-attribute name="headlineCount" type="java.lang.Integer" db-attribute-path="headlineCount"/>
+		<obj-attribute name="htmlCount" type="java.lang.Integer" db-attribute-path="htmlCount"/>
+		<obj-attribute name="reservecollectionCount" type="java.lang.Integer" db-attribute-path="reservecollectionCount"/>
+		<obj-attribute name="totalFilesCount" type="java.lang.Integer" db-attribute-path="totalFilesCount"/>
+		<obj-attribute name="weblinkCount" type="java.lang.Integer" db-attribute-path="weblinkCount"/>
+	</obj-entity>
+	<obj-entity name="WebLink" className="unidue.rc.model.WebLink" dbEntityName="WEB_LINK">
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+		<obj-attribute name="url" type="java.lang.String" db-attribute-path="url"/>
+	</obj-entity>
+	<db-relationship name="permissionDefinitionFk" source="ACTION" target="PERMISSION_DEFINITION" toMany="true">
+		<db-attribute-pair source="id" target="actionID"/>
+	</db-relationship>
+	<db-relationship name="permissionFK" source="ACTION" target="PERMISSION" toMany="true">
+		<db-attribute-pair source="id" target="actionID"/>
+	</db-relationship>
+	<db-relationship name="bookJobFk" source="BOOK" target="BOOK_JOB" toDependentPK="true" toMany="false">
+		<db-attribute-pair source="id" target="id"/>
+	</db-relationship>
+	<db-relationship name="entryFk" source="BOOK" target="ENTRY" toMany="false">
+		<db-attribute-pair source="id" target="id"/>
+	</db-relationship>
+	<db-relationship name="resourceFk" source="BOOK" target="RESOURCE" toMany="false">
+		<db-attribute-pair source="resourceID" target="id"/>
+	</db-relationship>
+	<db-relationship name="entryFk" source="BOOK_CHAPTER" target="ENTRY" toMany="false">
+		<db-attribute-pair source="id" target="id"/>
+	</db-relationship>
+	<db-relationship name="resourceFk" source="BOOK_CHAPTER" target="RESOURCE" toMany="false">
+		<db-attribute-pair source="resourceID" target="id"/>
+	</db-relationship>
+	<db-relationship name="scanJobFk" source="BOOK_CHAPTER" target="SCAN_JOB_BOOK_CHAPTER" toDependentPK="true" toMany="false">
+		<db-attribute-pair source="id" target="bookChapterID"/>
+	</db-relationship>
+	<db-relationship name="bookFk" source="BOOK_JOB" target="BOOK" toMany="false">
+		<db-attribute-pair source="id" target="id"/>
+	</db-relationship>
+	<db-relationship name="bookJobCommentFk" source="BOOK_JOB" target="BOOK_JOB_COMMENT" toDependentPK="true" toMany="true">
+		<db-attribute-pair source="id" target="bookJobId"/>
+	</db-relationship>
+	<db-relationship name="bookJobFk" source="BOOK_JOB_COMMENT" target="BOOK_JOB" toMany="false">
+		<db-attribute-pair source="bookJobId" target="id"/>
+	</db-relationship>
+	<db-relationship name="commentFk" source="BOOK_JOB_COMMENT" target="JOB_COMMENT" toMany="false">
+		<db-attribute-pair source="jobCommentId" target="id"/>
+	</db-relationship>
+	<db-relationship name="bookChapterFk" source="ENTRY" target="BOOK_CHAPTER" toDependentPK="true" toMany="false">
+		<db-attribute-pair source="id" target="id"/>
+	</db-relationship>
+	<db-relationship name="bookFk" source="ENTRY" target="BOOK" toDependentPK="true" toMany="false">
+		<db-attribute-pair source="id" target="id"/>
+	</db-relationship>
+	<db-relationship name="fileFk" source="ENTRY" target="FILE" toDependentPK="true" toMany="false">
+		<db-attribute-pair source="id" target="id"/>
+	</db-relationship>
+	<db-relationship name="headlineFk" source="ENTRY" target="HEADLINE" toDependentPK="true" toMany="false">
+		<db-attribute-pair source="id" target="id"/>
+	</db-relationship>
+	<db-relationship name="htmlFk" source="ENTRY" target="HTML" toDependentPK="true" toMany="false">
+		<db-attribute-pair source="id" target="id"/>
+	</db-relationship>
+	<db-relationship name="journalArticleFk" source="ENTRY" target="JOURNAL_ARTICLE" toDependentPK="true" toMany="false">
+		<db-attribute-pair source="id" target="id"/>
+	</db-relationship>
+	<db-relationship name="referenceFk" source="ENTRY" target="REFERENCE" toDependentPK="true" toMany="false">
+		<db-attribute-pair source="id" target="id"/>
+	</db-relationship>
+	<db-relationship name="reserveCollectionFk" source="ENTRY" target="RESERVE_COLLECTION" toMany="false">
+		<db-attribute-pair source="reserveCollectionId" target="id"/>
+	</db-relationship>
+	<db-relationship name="webLinkFk" source="ENTRY" target="WEB_LINK" toDependentPK="true" toMany="false">
+		<db-attribute-pair source="id" target="id"/>
+	</db-relationship>
+	<db-relationship name="entryFk" source="FILE" target="ENTRY" toMany="false">
+		<db-attribute-pair source="id" target="id"/>
+	</db-relationship>
+	<db-relationship name="resourceFk" source="FILE" target="RESOURCE" toMany="false">
+		<db-attribute-pair source="resourceID" target="id"/>
+	</db-relationship>
+	<db-relationship name="resourceFk" source="FILE_ACCESS" target="RESOURCE" toMany="false">
+		<db-attribute-pair source="resourceID" target="id"/>
+	</db-relationship>
+	<db-relationship name="entryFk" source="HEADLINE" target="ENTRY" toMany="false">
+		<db-attribute-pair source="id" target="id"/>
+	</db-relationship>
+	<db-relationship name="entryFk" source="HTML" target="ENTRY" toMany="false">
+		<db-attribute-pair source="id" target="id"/>
+	</db-relationship>
+	<db-relationship name="bookJobCommentFk" source="JOB_COMMENT" target="BOOK_JOB_COMMENT" toDependentPK="true" toMany="true">
+		<db-attribute-pair source="id" target="jobCommentId"/>
+	</db-relationship>
+	<db-relationship name="scanJobCommentFk" source="JOB_COMMENT" target="SCAN_JOB_COMMENT" toDependentPK="true" toMany="true">
+		<db-attribute-pair source="id" target="jobCommentId"/>
+	</db-relationship>
+	<db-relationship name="entryFk" source="JOURNAL_ARTICLE" target="ENTRY" toMany="false">
+		<db-attribute-pair source="id" target="id"/>
+	</db-relationship>
+	<db-relationship name="resourceFk" source="JOURNAL_ARTICLE" target="RESOURCE" toMany="false">
+		<db-attribute-pair source="resourceID" target="id"/>
+	</db-relationship>
+	<db-relationship name="scanJobFk" source="JOURNAL_ARTICLE" target="SCAN_JOB_JOURNAL_ARTICLE" toDependentPK="true" toMany="false">
+		<db-attribute-pair source="id" target="journalArticleID"/>
+	</db-relationship>
+	<db-relationship name="childLocationsFk" source="LIBRARY_LOCATION" target="LIBRARY_LOCATION" toMany="true">
+		<db-attribute-pair source="id" target="parentId"/>
+	</db-relationship>
+	<db-relationship name="parentLocationFk" source="LIBRARY_LOCATION" target="LIBRARY_LOCATION" toMany="false">
+		<db-attribute-pair source="parentId" target="id"/>
+	</db-relationship>
+	<db-relationship name="reserveCollectionFk" source="LIBRARY_LOCATION" target="RESERVE_COLLECTION" toMany="true">
+		<db-attribute-pair source="id" target="libraryLocationId"/>
+	</db-relationship>
+	<db-relationship name="scanJobArray" source="LIBRARY_LOCATION" target="SCAN_JOB" toMany="true">
+		<db-attribute-pair source="id" target="locationId"/>
+	</db-relationship>
+	<db-relationship name="mailNodeFk" source="MAIL" target="MAIL_NODE" toMany="true">
+		<db-attribute-pair source="id" target="mailID"/>
+	</db-relationship>
+	<db-relationship name="migrationFk" source="MAIL" target="MIGRATION_MAIL" toMany="true">
+		<db-attribute-pair source="id" target="mailID"/>
+	</db-relationship>
+	<db-relationship name="mailFk" source="MAIL_NODE" target="MAIL" toMany="false">
+		<db-attribute-pair source="mailID" target="id"/>
+	</db-relationship>
+	<db-relationship name="roleFk" source="MEMBERSHIP" target="ROLE" toMany="false">
+		<db-attribute-pair source="roleId" target="id"/>
+	</db-relationship>
+	<db-relationship name="mailFk" source="MIGRATION" target="MIGRATION_MAIL" toMany="true">
+		<db-attribute-pair source="id" target="migrationID"/>
+	</db-relationship>
+	<db-relationship name="reserveCollectionFk" source="MIGRATION" target="RESERVE_COLLECTION" toMany="false">
+		<db-attribute-pair source="collectionID" target="id"/>
+	</db-relationship>
+	<db-relationship name="mailFk" source="MIGRATION_MAIL" target="MAIL" toMany="false">
+		<db-attribute-pair source="mailID" target="id"/>
+	</db-relationship>
+	<db-relationship name="migrationFk" source="MIGRATION_MAIL" target="MIGRATION" toMany="false">
+		<db-attribute-pair source="migrationID" target="id"/>
+	</db-relationship>
+	<db-relationship name="reserveCollectionFk" source="PARTICIPATION" target="RESERVE_COLLECTION" toMany="false">
+		<db-attribute-pair source="reserveCollectionId" target="id"/>
+	</db-relationship>
+	<db-relationship name="roleFk" source="PARTICIPATION" target="ROLE" toMany="false">
+		<db-attribute-pair source="roleId" target="id"/>
+	</db-relationship>
+	<db-relationship name="actionFk" source="PERMISSION" target="ACTION" toMany="false">
+		<db-attribute-pair source="actionID" target="id"/>
+	</db-relationship>
+	<db-relationship name="actionFk" source="PERMISSION_DEFINITION" target="ACTION" toMany="false">
+		<db-attribute-pair source="actionID" target="id"/>
+	</db-relationship>
+	<db-relationship name="roleFk" source="PERMISSION_DEFINITION" target="ROLE" toMany="false">
+		<db-attribute-pair source="roleID" target="id"/>
+	</db-relationship>
+	<db-relationship name="entryFk" source="REFERENCE" target="ENTRY" toMany="false">
+		<db-attribute-pair source="id" target="id"/>
+	</db-relationship>
+	<db-relationship name="resourceFk" source="REFERENCE" target="RESOURCE" toMany="false">
+		<db-attribute-pair source="resourceID" target="id"/>
+	</db-relationship>
+	<db-relationship name="entryFk" source="RESERVE_COLLECTION" target="ENTRY" toMany="true">
+		<db-attribute-pair source="id" target="reserveCollectionId"/>
+	</db-relationship>
+	<db-relationship name="libraryLocationFk" source="RESERVE_COLLECTION" target="LIBRARY_LOCATION" toMany="false">
+		<db-attribute-pair source="libraryLocationId" target="id"/>
+	</db-relationship>
+	<db-relationship name="migrationFk" source="RESERVE_COLLECTION" target="MIGRATION" toMany="false">
+		<db-attribute-pair source="id" target="collectionID"/>
+	</db-relationship>
+	<db-relationship name="numberFk" source="RESERVE_COLLECTION" target="RESERVE_COLLECTION_NUMBER" toMany="false">
+		<db-attribute-pair source="rcNumberId" target="number"/>
+	</db-relationship>
+	<db-relationship name="participationFk" source="RESERVE_COLLECTION" target="PARTICIPATION" toMany="true">
+		<db-attribute-pair source="id" target="reserveCollectionId"/>
+	</db-relationship>
+	<db-relationship name="reserveCollectionFk" source="RESERVE_COLLECTION_NUMBER" target="RESERVE_COLLECTION" toMany="true">
+		<db-attribute-pair source="number" target="rcNumberId"/>
+	</db-relationship>
+	<db-relationship name="bookChapterFk" source="RESOURCE" target="BOOK_CHAPTER" toMany="false">
+		<db-attribute-pair source="id" target="resourceID"/>
+	</db-relationship>
+	<db-relationship name="bookFk" source="RESOURCE" target="BOOK" toMany="false">
+		<db-attribute-pair source="id" target="resourceID"/>
+	</db-relationship>
+	<db-relationship name="fileAccessFk" source="RESOURCE" target="FILE_ACCESS" toMany="true">
+		<db-attribute-pair source="id" target="resourceID"/>
+	</db-relationship>
+	<db-relationship name="fileFk" source="RESOURCE" target="FILE" toMany="false">
+		<db-attribute-pair source="id" target="resourceID"/>
+	</db-relationship>
+	<db-relationship name="journalArticleFk" source="RESOURCE" target="JOURNAL_ARTICLE" toMany="false">
+		<db-attribute-pair source="id" target="resourceID"/>
+	</db-relationship>
+	<db-relationship name="referenceFk" source="RESOURCE" target="REFERENCE" toMany="false">
+		<db-attribute-pair source="id" target="resourceID"/>
+	</db-relationship>
+	<db-relationship name="participationFk" source="ROLE" target="PARTICIPATION" toMany="true">
+		<db-attribute-pair source="id" target="roleId"/>
+	</db-relationship>
+	<db-relationship name="permissionDefinitionFk" source="ROLE" target="PERMISSION_DEFINITION" toMany="true">
+		<db-attribute-pair source="id" target="roleID"/>
+	</db-relationship>
+	<db-relationship name="userRoleFk" source="ROLE" target="MEMBERSHIP" toDependentPK="true" toMany="true">
+		<db-attribute-pair source="id" target="roleId"/>
+	</db-relationship>
+	<db-relationship name="bookChapterFk" source="SCAN_JOB" target="SCAN_JOB_BOOK_CHAPTER" toDependentPK="true" toMany="false">
+		<db-attribute-pair source="id" target="scanJobID"/>
+	</db-relationship>
+	<db-relationship name="journalArticleFk" source="SCAN_JOB" target="SCAN_JOB_JOURNAL_ARTICLE" toDependentPK="true" toMany="false">
+		<db-attribute-pair source="id" target="scanJobID"/>
+	</db-relationship>
+	<db-relationship name="locationFk" source="SCAN_JOB" target="LIBRARY_LOCATION" toMany="false">
+		<db-attribute-pair source="locationId" target="id"/>
+	</db-relationship>
+	<db-relationship name="scanJobCommentFk" source="SCAN_JOB" target="SCAN_JOB_COMMENT" toMany="true">
+		<db-attribute-pair source="id" target="scanJobId"/>
+	</db-relationship>
+	<db-relationship name="bookChapterFk" source="SCAN_JOB_BOOK_CHAPTER" target="BOOK_CHAPTER" toMany="false">
+		<db-attribute-pair source="bookChapterID" target="id"/>
+	</db-relationship>
+	<db-relationship name="scanJobFk" source="SCAN_JOB_BOOK_CHAPTER" target="SCAN_JOB" toMany="false">
+		<db-attribute-pair source="scanJobID" target="id"/>
+	</db-relationship>
+	<db-relationship name="commentFk" source="SCAN_JOB_COMMENT" target="JOB_COMMENT" toMany="false">
+		<db-attribute-pair source="jobCommentId" target="id"/>
+	</db-relationship>
+	<db-relationship name="scanJobFk" source="SCAN_JOB_COMMENT" target="SCAN_JOB" toDependentPK="true" toMany="false">
+		<db-attribute-pair source="scanJobId" target="id"/>
+	</db-relationship>
+	<db-relationship name="journalArticleFk" source="SCAN_JOB_JOURNAL_ARTICLE" target="JOURNAL_ARTICLE" toMany="false">
+		<db-attribute-pair source="journalArticleID" target="id"/>
+	</db-relationship>
+	<db-relationship name="scanJobFk" source="SCAN_JOB_JOURNAL_ARTICLE" target="SCAN_JOB" toMany="false">
+		<db-attribute-pair source="scanJobID" target="id"/>
+	</db-relationship>
+	<db-relationship name="entryFk" source="WEB_LINK" target="ENTRY" toMany="false">
+		<db-attribute-pair source="id" target="id"/>
+	</db-relationship>
+	<obj-relationship name="permissionDefinitions" source="Action" target="PermissionDefinition" deleteRule="Deny" db-relationship-path="permissionDefinitionFk"/>
+	<obj-relationship name="roles" source="Action" target="Role" deleteRule="Deny" db-relationship-path="permissionDefinitionFk.roleFk"/>
+	<obj-relationship name="bookJob" source="Book" target="BookJob" deleteRule="Cascade" db-relationship-path="bookJobFk"/>
+	<obj-relationship name="entry" source="Book" target="Entry" deleteRule="Nullify" db-relationship-path="entryFk"/>
+	<obj-relationship name="resource" source="Book" target="Resource" deleteRule="Cascade" db-relationship-path="resourceFk"/>
+	<obj-relationship name="entry" source="BookChapter" target="Entry" deleteRule="Nullify" db-relationship-path="entryFk"/>
+	<obj-relationship name="resource" source="BookChapter" target="Resource" deleteRule="Cascade" db-relationship-path="resourceFk"/>
+	<obj-relationship name="scanJob" source="BookChapter" target="ScanJob" deleteRule="Cascade" db-relationship-path="scanJobFk.scanJobFk"/>
+	<obj-relationship name="book" source="BookJob" target="Book" deleteRule="Nullify" db-relationship-path="bookFk"/>
+	<obj-relationship name="comments" source="BookJob" target="JobComment" deleteRule="Cascade" db-relationship-path="bookJobCommentFk.commentFk"/>
+	<obj-relationship name="book" source="Entry" target="Book" deleteRule="Cascade" db-relationship-path="bookFk"/>
+	<obj-relationship name="bookChapter" source="Entry" target="BookChapter" deleteRule="Cascade" db-relationship-path="bookChapterFk"/>
+	<obj-relationship name="file" source="Entry" target="File" deleteRule="Cascade" db-relationship-path="fileFk"/>
+	<obj-relationship name="headline" source="Entry" target="Headline" deleteRule="Cascade" db-relationship-path="headlineFk"/>
+	<obj-relationship name="html" source="Entry" target="Html" deleteRule="Cascade" db-relationship-path="htmlFk"/>
+	<obj-relationship name="journalArticle" source="Entry" target="JournalArticle" deleteRule="Cascade" db-relationship-path="journalArticleFk"/>
+	<obj-relationship name="reference" source="Entry" target="Reference" deleteRule="Cascade" db-relationship-path="referenceFk"/>
+	<obj-relationship name="reserveCollection" source="Entry" target="ReserveCollection" deleteRule="Nullify" db-relationship-path="reserveCollectionFk"/>
+	<obj-relationship name="webLink" source="Entry" target="WebLink" deleteRule="Cascade" db-relationship-path="webLinkFk"/>
+	<obj-relationship name="entry" source="File" target="Entry" deleteRule="Nullify" db-relationship-path="entryFk"/>
+	<obj-relationship name="resource" source="File" target="Resource" deleteRule="Cascade" db-relationship-path="resourceFk"/>
+	<obj-relationship name="resource" source="FileAccess" target="Resource" deleteRule="Nullify" db-relationship-path="resourceFk"/>
+	<obj-relationship name="entry" source="Headline" target="Entry" deleteRule="Nullify" db-relationship-path="entryFk"/>
+	<obj-relationship name="entry" source="Html" target="Entry" deleteRule="Nullify" db-relationship-path="entryFk"/>
+	<obj-relationship name="entry" source="JournalArticle" target="Entry" deleteRule="Nullify" db-relationship-path="entryFk"/>
+	<obj-relationship name="resource" source="JournalArticle" target="Resource" deleteRule="Cascade" db-relationship-path="resourceFk"/>
+	<obj-relationship name="scanJob" source="JournalArticle" target="ScanJob" deleteRule="Cascade" db-relationship-path="scanJobFk.scanJobFk"/>
+	<obj-relationship name="childLocations" source="LibraryLocation" target="LibraryLocation" deleteRule="Deny" db-relationship-path="childLocationsFk"/>
+	<obj-relationship name="parentLocation" source="LibraryLocation" target="LibraryLocation" deleteRule="Nullify" db-relationship-path="parentLocationFk"/>
+	<obj-relationship name="reserveCollections" source="LibraryLocation" target="ReserveCollection" deleteRule="Deny" db-relationship-path="reserveCollectionFk"/>
+	<obj-relationship name="nodes" source="Mail" target="MailNode" deleteRule="Cascade" db-relationship-path="mailNodeFk"/>
+	<obj-relationship name="mail" source="MailNode" target="Mail" deleteRule="Nullify" db-relationship-path="mailFk"/>
+	<obj-relationship name="role" source="Membership" target="Role" deleteRule="Nullify" db-relationship-path="roleFk"/>
+	<obj-relationship name="mails" source="Migration" target="Mail" deleteRule="Cascade" db-relationship-path="mailFk.mailFk"/>
+	<obj-relationship name="reserveCollection" source="Migration" target="ReserveCollection" deleteRule="Nullify" db-relationship-path="reserveCollectionFk"/>
+	<obj-relationship name="reserveCollection" source="Participation" target="ReserveCollection" deleteRule="Nullify" db-relationship-path="reserveCollectionFk"/>
+	<obj-relationship name="role" source="Participation" target="Role" deleteRule="Nullify" db-relationship-path="roleFk"/>
+	<obj-relationship name="action" source="Permission" target="Action" deleteRule="Nullify" db-relationship-path="actionFk"/>
+	<obj-relationship name="action" source="PermissionDefinition" target="Action" deleteRule="Nullify" db-relationship-path="actionFk"/>
+	<obj-relationship name="role" source="PermissionDefinition" target="Role" deleteRule="Nullify" db-relationship-path="roleFk"/>
+	<obj-relationship name="entry" source="Reference" target="Entry" deleteRule="Nullify" db-relationship-path="entryFk"/>
+	<obj-relationship name="resource" source="Reference" target="Resource" deleteRule="Cascade" db-relationship-path="resourceFk"/>
+	<obj-relationship name="entries" source="ReserveCollection" target="Entry" deleteRule="Cascade" db-relationship-path="entryFk"/>
+	<obj-relationship name="libraryLocation" source="ReserveCollection" target="LibraryLocation" deleteRule="Nullify" db-relationship-path="libraryLocationFk"/>
+	<obj-relationship name="migration" source="ReserveCollection" target="Migration" deleteRule="Nullify" db-relationship-path="migrationFk"/>
+	<obj-relationship name="number" source="ReserveCollection" target="ReserveCollectionNumber" deleteRule="Nullify" db-relationship-path="numberFk"/>
+	<obj-relationship name="participations" source="ReserveCollection" target="Participation" deleteRule="Cascade" db-relationship-path="participationFk"/>
+	<obj-relationship name="collections" source="ReserveCollectionNumber" target="ReserveCollection" deleteRule="Deny" db-relationship-path="reserveCollectionFk"/>
+	<obj-relationship name="book" source="Resource" target="Book" deleteRule="Nullify" db-relationship-path="bookFk"/>
+	<obj-relationship name="bookChapter" source="Resource" target="BookChapter" deleteRule="Nullify" db-relationship-path="bookChapterFk"/>
+	<obj-relationship name="file" source="Resource" target="File" deleteRule="Nullify" db-relationship-path="fileFk"/>
+	<obj-relationship name="fileAccess" source="Resource" target="FileAccess" deleteRule="Cascade" db-relationship-path="fileAccessFk"/>
+	<obj-relationship name="journalArticle" source="Resource" target="JournalArticle" deleteRule="Nullify" db-relationship-path="journalArticleFk"/>
+	<obj-relationship name="reference" source="Resource" target="Reference" deleteRule="Nullify" db-relationship-path="referenceFk"/>
+	<obj-relationship name="actions" source="Role" target="Action" deleteRule="Deny" db-relationship-path="permissionDefinitionFk.actionFk"/>
+	<obj-relationship name="permissionDefinitions" source="Role" target="PermissionDefinition" deleteRule="Deny" db-relationship-path="permissionDefinitionFk"/>
+	<obj-relationship name="userRole" source="Role" target="Membership" deleteRule="Deny" db-relationship-path="userRoleFk"/>
+	<obj-relationship name="bookChapter" source="ScanJob" target="BookChapter" deleteRule="Nullify" db-relationship-path="bookChapterFk.bookChapterFk"/>
+	<obj-relationship name="comments" source="ScanJob" target="JobComment" deleteRule="Cascade" db-relationship-path="scanJobCommentFk.commentFk"/>
+	<obj-relationship name="journalArticle" source="ScanJob" target="JournalArticle" deleteRule="Nullify" db-relationship-path="journalArticleFk.journalArticleFk"/>
+	<obj-relationship name="location" source="ScanJob" target="LibraryLocation" db-relationship-path="locationFk"/>
+	<obj-relationship name="entry" source="WebLink" target="Entry" deleteRule="Nullify" db-relationship-path="entryFk"/>
+	<query name="check_if_daily_stat_already_exists" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="obj-entity" root-name="Statistic">
+		<sql><![CDATA[Select * from statistic s 
+where s.date = #bind($date 'TIMESTAMP')]]></sql>
+	</query>
+	<query name="count_books" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="data-map" root-name="reserve_collections_datamap">
+		<property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
+		<sql><![CDATA[Select count(*) as count from book b 
+LEFT JOIN entry e 
+ON (b.id = e.id) 
+where e.deleted IS NULL]]></sql>
+	</query>
+	<query name="count_chapters" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="data-map" root-name="reserve_collections_datamap">
+		<property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
+		<sql><![CDATA[Select count(*) as count from book_chapter b
+LEFT JOIN entry e 
+ON (b.id = e.id) 
+where e.deleted IS NULL]]></sql>
+	</query>
+	<query name="count_entries" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="data-map" root-name="reserve_collections_datamap">
+		<property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
+		<sql><![CDATA[Select count(*) as count from entry e
+WHERE e.deleted IS NULL]]></sql>
+	</query>
+	<query name="count_fileentries" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="data-map" root-name="reserve_collections_datamap">
+		<property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
+		<sql><![CDATA[Select count(*) as count from file f 
+LEFT JOIN entry e 
+ON (f.id = e.id) 
+where e.deleted IS NULL]]></sql>
+	</query>
+	<query name="count_headlines" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="data-map" root-name="reserve_collections_datamap">
+		<property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
+		<sql><![CDATA[Select count(*) as count from headline h 
+LEFT JOIN entry e 
+ON (h.id = e.id) 
+where e.deleted IS NULL]]></sql>
+	</query>
+	<query name="count_html" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="data-map" root-name="reserve_collections_datamap">
+		<property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
+		<sql><![CDATA[Select count(*) as count from html h
+LEFT JOIN entry e 
+ON (h.id = e.id) 
+where e.deleted IS NULL]]></sql>
+	</query>
+	<query name="count_journals" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="data-map" root-name="reserve_collections_datamap">
+		<property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
+		<sql><![CDATA[Select count(*) as count from journal_article a 
+LEFT JOIN entry e 
+ON (a.id = e.id) 
+where e.deleted IS NULL]]></sql>
+	</query>
+	<query name="count_reservecollections_for_status" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="data-map" root-name="reserve_collections_datamap">
+		<property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
+		<sql><![CDATA[Select count(*) from reserve_collection rc 
+WHERE rc.status = $status]]></sql>
+	</query>
+	<query name="count_totalfiles" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="data-map" root-name="reserve_collections_datamap">
+		<property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
+		<sql><![CDATA[Select count(*) as count from resource r
+LEFT JOIN entry e 
+ON (r.id = e.id) 
+where e.deleted IS NULL AND r.filepath IS NOT NULL]]></sql>
+	</query>
+	<query name="count_weblinks" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="data-map" root-name="reserve_collections_datamap">
+		<property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
+		<sql><![CDATA[Select count(*) as count from web_link w
+LEFT JOIN entry e 
+ON (w.id = e.id) 
+where e.deleted IS NULL]]></sql>
+	</query>
+	<query name="delete_permissions_by_instanceid" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="data-map" root-name="reserve_collections_datamap">
+		<property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
+		<sql><![CDATA[delete
+from permission
+where instanceid = $instanceID]]></sql>
+	</query>
+	<query name="delete_permissions_by_role" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="data-map" root-name="reserve_collections_datamap">
+		<property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
+		<sql><![CDATA[DELETE
+FROM permission p
+WHERE p.instanceid = $objectID AND p.userid IN (
+  SELECT part.userid
+  FROM participation part
+  WHERE part.roleid = $roleID
+)]]></sql>
+	</query>
+	<query name="end_participations" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="data-map" root-name="reserve_collections_datamap">
+		<property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
+		<sql><![CDATA[delete
+from participation p
+where p.reserveCollectionId = $collectionID]]></sql>
+	</query>
+	<query name="end_participations_by_role" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="data-map" root-name="reserve_collections_datamap">
+		<property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
+		<sql><![CDATA[delete
+from participation p
+where p.roleId = $roleID
+and p.reserveCollectionId = $collectionID]]></sql>
+	</query>
+	<query name="select_access_log_count" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="data-map" root-name="reserve_collections_datamap">
+		<property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
+		<property name="cayenne.GenericSelectQuery.fetchLimit" value="1"/>
+		<sql><![CDATA[SELECT count(*)
+FROM ACCESS_LOG
+WHERE resource = $resource
+AND resourceID = $resourceID
+AND action = $action
+AND timestamp >= $start
+AND timestamp <= $end]]></sql>
+	</query>
+	<query name="select_book_jobs_by_collection" factory="org.apache.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="BookJob">
+		<prefetch>book.entry.reserveCollection</prefetch>
+		<qualifier><![CDATA[book.entry.reserveCollection.id = $collectionID]]></qualifier>
+	</query>
+	<query name="select_book_jobs_by_location" factory="org.apache.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="BookJob">
+		<prefetch>book.entry.reserveCollection.libraryLocation</prefetch>
+		<qualifier><![CDATA[book.entry.reserveCollection.libraryLocation.id = $locationID]]></qualifier>
+	</query>
+	<query name="select_books_by_collection" factory="org.apache.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="Book">
+		<prefetch>entry.reserveCollection</prefetch>
+		<qualifier><![CDATA[entry.reserveCollection.id = $collectionID]]></qualifier>
+	</query>
+	<query name="select_collections_by_permission" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="obj-entity" root-name="ReserveCollection">
+		<sql><![CDATA[SELECT DISTINCT r.*
+FROM reserve_collection r
+  LEFT JOIN participation part ON part.reservecollectionid = r.id
+  LEFT JOIN permission p ON r.id = p.instanceid
+  INNER JOIN action a ON p.actionid = a.id
+WHERE a.resource = '$resource'
+      AND a.name = '$name'
+      AND p.userid = $userID
+      AND part.enddate IS NULL]]></sql>
+	</query>
+	<query name="select_collections_by_role" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="obj-entity" root-name="ReserveCollection">
+		<sql><![CDATA[SELECT r.*
+FROM reserve_collection r
+LEFT JOIN participation p on r.id = p.reservecollectionid
+WHERE (r.status = 1 OR r.status = 2) 
+  AND (p.roleid = $roleID and p.userid = $userID)
+  AND p.endDate IS NULL]]></sql>
+	</query>
+	<query name="select_collections_by_user" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="obj-entity" root-name="ReserveCollection">
+		<sql><![CDATA[SELECT r.*
+FROM reserve_collection r
+LEFT JOIN participation p on r.id = p.reservecollectionid
+WHERE p.userid = $userID and p.endDate IS NULL]]></sql>
+	</query>
+	<query name="select_free_numbers_by_location_ordered_by_number_asc" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="obj-entity" root-name="ReserveCollectionNumber">
+		<sql><![CDATA[SELECT #result('number' 'java.lang.Integer')
+FROM RESERVE_COLLECTION_NUMBER n
+WHERE 
+    NOT EXISTS(SELECT *
+               FROM RESERVE_COLLECTION c
+               LEFT JOIN LIBRARY_LOCATION l ON c.libraryLocationId = l.id 
+               WHERE n.number = c.rcNumberId
+                   AND l.id = $locationId
+                   AND c.status = 2)
+ORDER BY n.number ASC;]]></sql>
+	</query>
+	<query name="select_global_roles_by_user" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="obj-entity" root-name="Role">
+		<sql><![CDATA[select r.*
+from role r
+left join global_role gr on r.id = gr.roleId
+where gr.userId = $userID]]></sql>
+	</query>
+	<query name="select_larger_than_max_numbers_by_location" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="obj-entity" root-name="ReserveCollectionNumber">
+		<sql><![CDATA[SELECT #result('number' 'java.lang.Integer')
+FROM RESERVE_COLLECTION_NUMBER
+WHERE number > ALL (SELECT n.number
+		FROM RESERVE_COLLECTION_NUMBER n
+		LEFT JOIN RESERVE_COLLECTION c ON n.number = c.rcnumberid
+		LEFT JOIN LIBRARY_LOCATION l ON c.librarylocationid = l.id
+		WHERE l.id = $locationId)
+ORDER BY number ASC]]></sql>
+	</query>
+	<query name="select_permission_by_user_action" factory="org.apache.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="Permission">
+		<prefetch>action</prefetch>
+		<qualifier><![CDATA[(userID = $userID) and (action.resource = $resource) and (action.name = $name)]]></qualifier>
+	</query>
+	<query name="select_resources_by_collection" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="obj-entity" root-name="Resource">
+		<sql><![CDATA[SELECT t0.copyrightReviewStatus, t0.filePath, t0.fullTextURL, t0.mimeType, t0.id
+FROM RESOURCE t0
+  LEFT JOIN BOOK_CHAPTER t1 ON (t0.id = t1.resourceID)
+  LEFT JOIN ENTRY t2 ON (t1.id = t2.id)
+  LEFT JOIN RESERVE_COLLECTION t3 ON (t2.reserveCollectionId = t3.id)
+  LEFT JOIN JOURNAL_ARTICLE t4 ON (t0.id = t4.resourceID)
+  LEFT JOIN ENTRY t5 ON (t4.id = t5.id)
+  LEFT JOIN RESERVE_COLLECTION t6 ON (t5.reserveCollectionId = t6.id)
+  LEFT JOIN FILE t7 ON (t0.id = t7.resourceID)
+  LEFT JOIN ENTRY t8 ON (t7.id = t8.id)
+  LEFT JOIN RESERVE_COLLECTION t9 ON (t8.reserveCollectionId = t9.id)
+WHERE (((t2.deleted IS NULL) AND t3.id = $collectionID)
+       OR ((t5.deleted IS NULL) AND t6.id = $collectionID)
+       OR ((t8.deleted IS NULL) AND t9.id = $collectionID));]]></sql>
+	</query>
+	<query name="select_scan_jobs_by_collection" factory="org.apache.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="ScanJob">
+		<prefetch>bookChapter.entry.reserveCollection</prefetch>
+		<prefetch>journalArticle.entry.reserveCollection</prefetch>
+		<qualifier><![CDATA[(bookChapter.entry.reserveCollection.id = $collectionID) or (journalArticle.entry.reserveCollection.id = $collectionID)]]></qualifier>
+	</query>
+	<query name="select_scan_jobs_by_location" factory="org.apache.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="ScanJob">
+		<prefetch>bookChapter.entry.reserveCollection</prefetch>
+		<prefetch>journalArticle.entry.reserveCollection</prefetch>
+		<qualifier><![CDATA[(bookChapter.entry.reserveCollection.libraryLocation.id = $locationID) or (journalArticle.entry.reserveCollection.libraryLocation.id = $locationID) or (location.id = $locationID)]]></qualifier>
+	</query>
+	<query name="select_statistics_for_range" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="obj-entity" root-name="Statistic">
+		<sql><![CDATA[Select * from statistic s 
+where s.date >= #bind($from 'TIMESTAMP') 
+and s.date <= #bind($to 'TIMESTAMP')
+order by s.date ASC]]></sql>
+	</query>
+	<query name="select_unrelated_actions_of_role" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="obj-entity" root-name="Action">
+		<sql><![CDATA[select a.*
+from action a
+where a.id not in (
+  select pd.actionid
+  from permission_definition pd
+  where pd.roleid = $roleID
+)]]></sql>
+	</query>
+	<query name="select_whole_statistics" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="obj-entity" root-name="Statistic">
+		<sql><![CDATA[Select * from statistic s 
+order by s.date ASC]]></sql>
+	</query>
+</data-map>

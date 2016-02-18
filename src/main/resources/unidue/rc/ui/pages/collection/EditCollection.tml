@@ -1,0 +1,194 @@
+<html t:type="layout" title="${collection.title} #${collection.id}"
+      actionBarBlock="editCollectionBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+        xmlns:p="tapestry:parameter">
+
+<t:block t:id="editCollectionBlock">
+    <t:reservecollectionactionslinklist collection="collection"/>
+    <t:createentrylinklist collection="collection"/>
+</t:block>
+<div t:type="paper">
+
+    <!-- base form style from bootstrap. see http://twitter.github.io/bootstrap/base-css.html#forms -->
+    <form t:type="Form" class="form-horizontal" t:id="reserve_collection_form" t:clientValidation="none">
+        <fieldset>
+
+            <!-- number -->
+
+            <div class="form-group">
+                <label class="col-md-3 control-label">${message:number-label}</label>
+
+                <div class="col-md-6">
+                    <t:secureblock action="EDIT_RESERVE_COLLECTION_NUMBER" objectID="collection.id">
+                        <input class="form-control" type="number" t:type="TextField" t:id="number"
+                               value="newNumberValue"/>
+                        <p:else>
+                            <input class="form-control" type="text"
+                                   disabled="disabled"
+                                   value="${collection.number.number}"/>
+                        </p:else>
+                    </t:secureblock>
+                    <t:error for="number"/>
+                </div>
+            </div>
+
+            <!-- docents -->
+            <div class="form-group">
+                <label class="col-md-3 control-label">${message:lecturer-label}</label>
+
+                <div class="col-md-6">
+
+                    <t:loop source="docents" value="docent"><div>${docent}</div></t:loop>
+                </div>
+            </div>
+
+            <!-- title of reserve collection -->
+            <div class="form-group focused">
+                <label class="col-md-3 control-label required" for="title">${message:title-label}</label>
+
+                <div class="col-md-6">
+                    <input class="form-control" t:type="TextField" t:id="title" value="collection.title"/>
+                    <t:error for="title"/>
+                </div>
+            </div>
+
+
+            <!-- expiration of collection -->
+            <div class="form-group">
+                <label class="col-md-3 control-label required" for="expiry">${message:expiration-label}</label>
+
+                <div class="col-md-6">
+                    <t:secureblock action="EDIT_RESERVE_COLLECTION_EXPIRATION" objectID="collection.id">
+                        <input t:type="textfield" value="expiry" t:id="expiry" class="form-control datepicker"/>
+                        <t:error for="expiry"/>
+                        <p:else>
+                            <input class="form-control" type="text" readonly="readonly" value="${expiry}"/>
+                        </p:else>
+                    </t:secureblock>
+                </div>
+            </div>
+
+            <!-- dissolve at collection -->
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="dissolveAt">${message:dissolve-at-label}</label>
+
+                <div class="col-md-6">
+                    <t:secureblock action="EDIT_RESERVE_COLLECTION_EXPIRATION" objectID="collection.id">
+                        <input t:type="textfield" value="dissolveAt" t:id="dissolveAt" class="form-control datepicker"/>
+                        <t:error for="dissolveAt"/>
+                        <p:else>
+                            <input class="form-control" type="text" readonly="readonly" value="${dissolveAt}"/>
+                        </p:else>
+                    </t:secureblock>
+                </div>
+            </div>
+
+            <!-- download media content -->
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="mediaDownloadAllowed">${message:media-download-allowed-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="checkbox" t:id="mediaDownloadAllowed" id="mediaDownloadAllowed"
+                           value="collection.mediaDownloadAllowed"/>
+                    <t:error for="mediaDownloadAllowed"/>
+                </div>
+            </div>
+
+            <!-- select location of collection -->
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="libraryLocation">${message:location}</label>
+
+                <div class="col-md-6">
+                    <t:secureblock action="EDIT_RESERVE_COLLECTION_LOCATION" objectID="collection.id">
+
+                        <select t:type="Select" t:id="libraryLocation" t:value="libraryLocation" t:mixins="chosenSelect"
+                                t:model="libraryLocationSelectModel" t:encoder="libraryLocationEncoder"
+                                data-placeholder="${message:chosen-placeholder-label}"
+                                t:blankOption="NEVER" class="form-control"/>
+                        <p:else>
+                            <input class="form-control" type="text" readonly="readonly" value="${libraryLocation.name}"/>
+                        </p:else>
+                    </t:secureblock>
+                </div>
+            </div>
+
+            <!-- admin data -->
+            <t:secureblock action="EDIT_RESERVE_COLLECTION_ADMIN_DATA" objectID="collection.id">
+
+                <div class="form-group">
+                    <h4 class="col-md-3 control-label">${message:admin-data-label}</h4>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label"
+                           for="alephSystemID">${message:alephSystemId-label}</label>
+
+                    <div class="col-md-6">
+                        <input t:type="TextField" class="form-control" value="collection.alephSystemId" t:id="alephSystemID"
+                               id="alephSystemID"/>
+                        <t:error for="alephSystemID"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="alephUserID">${message:alephUserId-label}</label>
+
+                    <div class="col-md-6">
+                        <input t:type="TextField" class="form-control" value="collection.alephUserId" t:id="alephUserID"
+                               id="alephUserID"/>
+                        <t:error for="alephUserID"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="comment">${message:comment-label}</label>
+
+                    <div class="col-md-6">
+                        <input t:type="TextField" class="form-control" value="collection.comment" t:id="comment" id="comment"/>
+                        <t:error for="comment"/>
+                    </div>
+                </div>
+            </t:secureblock>
+
+
+            <!-- access keys to gain rights to collection -->
+            <div class="form-group">
+                <h4 class="col-md-3 control-label">${message:accessKey-label}</h4>
+            </div>
+
+            <!-- read key -->
+            <t:secureblock action="EDIT_STUDENT_ROLE_KEY" objectID="collection.id">
+                <div class="form-group">
+                    <label class="col-md-3 control-label required" for="readKey">${message:readKey-label}</label>
+
+                    <div class="col-md-6">
+                        <input t:type="TextField" class="form-control" value="collection.readKey" t:id="readKey"/>
+                        <t:error for="readKey"/>
+                    </div>
+                </div>
+            </t:secureblock>
+
+            <!-- write key -->
+            <t:secureblock action="EDIT_ASSISTANT_ROLE_KEY" objectID="collection.id">
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="writeKey">${message:writeKey-label}</label>
+
+                    <div class="col-md-6">
+                        <input type="text" t:type="TextField" class="form-control" value="collection.writeKey" t:id="writeKey"/>
+                    </div>
+                </div>
+            </t:secureblock>
+
+            <div class="form-group">
+                <div class="col-md-offset-3 col-md-9">
+                    <span class="required-label">${message:required-label}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-3 col-md-9">
+                    <input type="submit" value="${message:form-submit-label}"/>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+</div>
+</html>

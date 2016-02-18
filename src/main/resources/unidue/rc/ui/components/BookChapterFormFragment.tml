@@ -1,0 +1,142 @@
+<t:container xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+    <t:formfragment visible="isVisible" t:id="chapterMetaFragment">
+        <fieldset>
+            <h4>${message:chapter-chapterinfo-label}:</h4>
+
+            <div class="form-group">
+
+                <label class="col-md-3 control-label required"
+                       for="chaptertitle">${message:chapter-title-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="chaptertitle" id="chaptertitle" class="form-control"
+                           value="chapter.chapterTitle" placeholder="${message:chapter-title-placeholder}"/>
+                    <t:error for="chaptertitle"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="chapterauthors">${message:chapter-authors-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="chapterauthors" id="chapterauthors" class="form-control"
+                           value="chapter.chapterAuthors" placeholder="${message:chapter-authors-placeholder}"/>
+                    <t:error for="chapterauthors"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label " for="chaptercomment">${message:chapter-comment-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="chaptercomment" id="chaptercomment" class="form-control"
+                           value="chapter.comment" placeholder="${message:chapter-comment-placeholder}"/>
+                    <t:error for="chaptercomment"/>
+                </div>
+            </div>
+            <h4>${message:chapter-bookinfo-label}:</h4>
+
+            <div class="form-group">
+
+                <label class="col-md-3 control-label required" for="booktitle">${message:book-title-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="booktitle" id="booktitle" class="form-control"
+                           value="chapter.booktitle" placeholder="${message:book-title-placeholder}"/>
+                    <t:error for="booktitle"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label " for="bookauthors">${message:book-authors-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="bookauthors" id="bookauthors" class="form-control"
+                           value="chapter.bookauthors" placeholder="${message:book-authors-placeholder}"/>
+                    <t:error for="bookauthors"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="edition">${message:book-edition-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="edition" id="edition" class="form-control"
+                           value="chapter.edition" placeholder="${message:book-edition-placeholder}"/>
+                    <t:error for="edition"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="bookplace">${message:book-place-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="bookplace" id="bookplace" class="form-control"
+                           value="chapter.placeOfPublication" placeholder="${message:book-place-placeholder}"/>
+                    <t:error for="bookplace"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label " for="bookpublisher">${message:book-publisher-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="bookpublisher" id="bookpublisher" class="form-control"
+                           value="chapter.publisher" placeholder="${message:book-publisher-placeholder}"/>
+                    <t:error for="bookpublisher"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label " for="bookyearofpublication">${message:book-year-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="bookyearofpublication" id="bookyearofpublication" class="form-control"
+                           value="chapter.yearOfPublication" placeholder="${message:book-year-placeholder}"/>
+                    <t:error for="bookyearofpublication"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label " for="isbn">${message:book-isbn-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="isbn" id="isbn" class="form-control"
+                           value="chapter.isbn" placeholder="${message:book-isbn-placeholder}"/>
+                    <t:error for="isbn"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label " for="booksignature">${message:book-signature-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="booksignature" id="booksignature" class="form-control"
+                           value="chapter.signature" placeholder="${message:book-signature-placeholder}"/>
+                    <t:error for="booksignature"/>
+                </div>
+            </div>
+            <h4>${message:chapter-pageinfo-label}</h4>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label required"
+                       for="bookpagesfrom">${message:book-pagesfrom-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="bookpagesfrom" id="bookpagesfrom" class="form-control"
+                           value="chapter.pagestart" placeholder="${message:book-pagesfrom-placeholder}"/>
+                    <t:error for="bookpagesfrom"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label required" for="bookpagesto">${message:book-pagesto-label}</label>
+
+                <div class="col-md-6">
+
+                    <input t:type="TextField" t:id="bookpagesto" id="bookpagesto" class="form-control"
+                           value="chapter.pageend" placeholder="${message:book-pagesto-placeholder}"/>
+                    <t:error for="bookpagesto"/>
+                </div>
+            </div>
+            <t:arrangetoheadlineformgroup t:value="headline" t:collection="collection"/>
+            <div class="form-group">
+                <div class="col-md-offset-3 col-md-9">
+
+                    <input type="submit" value="${message:next-label}"/>
+                </div>
+            </div>
+        </fieldset>
+    </t:formfragment>
+</t:container>

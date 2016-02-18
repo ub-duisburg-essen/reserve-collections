@@ -1,0 +1,75 @@
+<html t:type="layout"
+      title="${message:privacy.title}"
+      actionBarBlock="privacyBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+<t:block t:id="privacyBlock">
+    <t:secureblock action="CREATE_RESERVE_COLLECTION">
+        <t:reservecollectionactionslinklist/>
+    </t:secureblock>
+</t:block>
+<div class="row">
+    <div class="col-md-12">
+        <div t:type="paper">
+            <div class="paper-content">
+            <h1>${message:privacy.main.headline}</h1>
+
+            <h3>${message:privacy.hints}</h3>
+
+            <p>${message:privacy.paragraph.1}</p>
+
+            <p>${message:privacy.paragraph.2}</p>
+
+            <p>${message:privacy.paragraph.3}</p>
+            <h5>${message:privacy.consent}</h5>
+
+            <p>${message:privacy.consent.paragraph.1}</p>
+
+            <p>${message:privacy.consent.paragraph.2}</p>
+            <h5>${message:privacy.consent.paragraph.3}</h5>
+
+            <h3>${message:privacy.analysis}</h3>
+
+            <p>${message:privacy.analysis.paragraph.1}</p>
+            <h5>${message:privacy.analysis.paragraph.2}</h5>
+
+            <p>${message:privacy.analysis.paragraph.3}</p>
+
+            <p> ${message:privacy.analysis.paragraph.4} </p>
+
+            <h3>${message:privacy.objection}</h3>
+
+            <p>
+                <t:if test="isTrackingPermitted">${message:privacy.objection.tracking.on}
+                    <p:else>
+                        ${message:privacy.objection.tracking.off}
+                    </p:else>
+                </t:if>
+            </p>
+            <t:zone t:id="privacyObjectionZone" id="privacyObjectionZone" update="none">
+                <form role="form" class="form-horizontal objection" t:type="form" t:id="privacyObjectionForm" zone="^">
+                <div>
+                        <t:checkbox t:id="isTrackingPermitted"
+                                    value="isTrackingPermitted"
+                                    onclick="this.form.submit()"/>
+                        <t:if test="isTrackingPermitted">${message:privacy.objection.tracking.on.info}
+                            <p:else>
+                                ${message:privacy.objection.tracking.off.info}
+                            </p:else>
+                        </t:if>
+                        <div class="form-group hide-on-js">
+                            <div class="col-md-9">
+                                <input type="submit" value="${message:submit}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
+
+                </form>
+            </t:zone>
+        </div>
+        </div>
+    </div>
+</div>
+</html>

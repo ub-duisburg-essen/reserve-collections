@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<!--
+  #%L
+  Semesterapparate
+  $Id:$
+  $HeadURL:$
+  %%
+  Copyright (C) 2014 Universitaet Duisburg Essen
+  %%
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  #L%
+  -->
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>${title}</title>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- page background style -->
+    <div id="page-background">
+        <!-- header -->
+        <header id="banner">
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="http://www.uni-due.de" id="ude-logo">
+                        <img alt="${message:alt.logo.img}" src="${context:img/ude-logo.png}"/>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 id="banner-title">
+                        <t:pagelink page="index">${message:html.title}</t:pagelink>
+                    </h2>
+
+                    <h3 id="banner-sub-title">
+                        <a href="#">${title}</a>
+                    </h3>
+                </div>
+            </div>
+
+        </header>
+        <!-- end header -->
+        <div class="navbar-mobile-menu-toggle">
+            <button type="button" class="navbar-toggle actionbar-toggle glyphicon glyphicon-edit">
+                ${message:nav.item.mobile.actions}
+            </button>
+            <button type="button" class="navbar-toggle basenav-toggle glyphicon glyphicon-menu-hamburger">
+                ${message:nav.item.mobile}
+            </button>
+        </div>
+
+        <t:actionbar>
+            <t:if test="actionBarBlock">
+                <t:delegate to="actionBarBlock"/>
+            </t:if>
+        </t:actionbar>
+
+        <div class="row" id="main-content">
+            <div class="col-md-3">
+                <!-- navigation -->
+                <nav role="application-nav" class="hide-on-small-devices">
+                    <div class="navbar">
+
+                        <ul id="main-nav" class="base-nav navbar navbar-default">
+                            <li>
+                                <a t:type="pagelink" t:page="Index">${message:nav.item.reserve.collections}</a>
+                                <ul>
+                                    <li>
+                                        <a t:type="pagelink" t:page="Index"
+                                           class="${prop:getClassForLink('Index')}">${message:nav.item.current.list}</a>
+                                    </li>
+                                    <t:if test="loggedIn">
+                                        <t:secureblock action="CREATE_RESERVE_COLLECTION">
+                                        <li>
+                                            <a t:type="pagelink" t:page="collection/createcollection"
+                                               class="${prop:getClassForLink('collection/createcollection')}">${message:nav.item.create.reserve.collection}</a>
+                                        </li>
+                                            <p:else>
+                                                <a t:type="pagelink" t:page="user/requestmembership" context="docentRoleId"
+                                                   class="${prop:getClassForLink('user/requestmembership')}">${message:nav.item.create.reserve.collection}</a>
+                                            </p:else>
+                                        </t:secureblock>
+                                    </t:if>
+                                    <t:secureblock action="EDIT_LOCATIONS">
+                                        <li>
+                                            <a t:type="pagelink" t:page="location/index"
+                                               class="${prop:getClassForLink('location/index')}">${message:nav.item.locations}</a>
+                                        </li>
+                                    </t:secureblock>
+                                    <t:secureblock action="EDIT_BOOK_JOBS">
+                                        <li>
+                                            <a t:type="pagelink" t:page="jobs/bookjobs"
+                                               class="${prop:getClassForLink('jobs/bookjobs')}">${message:nav.item.book.jobs}</a>
+                                        </li>
+                                    </t:secureblock>
+                                    <t:secureblock action="EDIT_SCAN_JOBS">
+                                        <li>
+                                            <a t:type="pagelink" t:page="jobs/scanjobs"
+                                               class="${prop:getClassForLink('jobs/scanjobs')}">${message:nav.item.scan.jobs}</a>
+                                        </li>
+                                    </t:secureblock>
+                                    <t:secureblock action="EDIT_COPYRIGHT_REVIEWS">
+                                        <li>
+                                            <a t:type="pagelink" t:page="jobs/copyrightreviewjobs"
+                                               class="${prop:getClassForLink('jobs/copyrightreviewjobs')}">${message:nav.item.review.jobs}</a>
+                                        </li>
+                                    </t:secureblock>
+                                    <t:secureblock action="EDIT_ROLES">
+                                        <li>
+                                            <a t:type="pagelink" t:page="roles/index"
+                                               class="${prop:getClassForLink('roles/index')}">${message:nav.item.roles}</a>
+                                        </li>
+                                    </t:secureblock>
+                                    <t:secureblock action="EDIT_USER_ROLES">
+                                        <li>
+                                            <a t:type="pagelink" t:page="roles/memberships"
+                                               class="${prop:getClassForLink('roles/memberships')}">${message:nav.item.memberships}</a>
+                                        </li>
+                                    </t:secureblock>
+                                    <t:if test="loggedIn">
+                                        <li>
+                                            <a t:type="pagelink" t:page="user/index" context="userID"
+                                               class="${prop:getClassForLink('user/index')}">
+                                               ${message:nav.item.user.details}
+                                                <span class="glyphicon glyphicon-user"></span>
+                                            </a>
+                                        </li>
+                                        <ul>
+                                            <li>
+                                                <a t:type="pagelink" t:page="user/participations" context="userID"
+                                                   class="${prop:getClassForLink('user/participations')}">
+                                                   ${message:nav.item.user.participations}
+                                                    <span class="glyphicon glyphicon-bookmark"></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </t:if>
+                                    <li>
+                                        <a t:type="pagelink" t:page="copyright/index"
+                                           class="${prop:getClassForLink('copyright/index')}">${message:nav.item.copyright.law}</a>
+                                    </li>
+                                    <li>
+                                       <a t:type="pagelink" t:page="privacy/index" class="${prop:getClassForLink('privacy/index')}">${message:nav.item.privacy}</a>
+                                    </li>
+                                    <t:if test="editSettingsPermitted">
+                                        <li>
+                                        <a t:type="pagelink" t:page="configuration/index" class="${prop:getClassForLink('configuration/index')}">${message:nav.item.config}</a>
+                                    </li>
+                                    </t:if>
+
+                                    <t:secureblock action="READ_COLLECTION_STATISTICS">
+                                        <li>
+                                            <a t:type="pagelink" t:page="stats/generalstats" class="${prop:getClassForLink('stats/generalstats')}">${message:nav.item.stats}</a>
+                                        </li>
+                                    </t:secureblock>
+                                    <li>
+                                        <a t:type="pagelink" t:page="faq" class="${prop:getClassForLink('faq')}">${message:nav.item.faq}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="spacer">
+                                <a href="${sys:duepublico.url}">${message:nav.item.duepublico}</a>
+                            </li>
+                        </ul>
+                        <ul id="service-nav" class="secondary-nav">
+                            <li>
+                                <a href="${sys:duepublico.az.url}">${message:nav.item.a-z}</a>
+                            </li>
+                        </ul>
+                        <ul id="language-nav" class="secondary-nav">
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+            <!-- end navigation -->
+
+            <!-- content body -->
+            <div class="col-md-9">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="breadcrumb last-column">
+                            <li t:type="crumb/breadcrumbtrail" t:value="breadCrumb">
+                                <a t:type="crumb/displaybreadcrumb" t:breadcrumb="breadCrumb"/>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <t:body/>
+
+            </div>
+        </div>
+        <!-- footer -->
+        <footer id="site-footer">
+            <hr/>
+            <div class="row">
+                <div class="col-md-6">
+                    <ul>
+                        <li>
+                            <a href="${sys:duepublico.contact.url}">${message:footer.item.contact}</a>
+                        </li>
+                        <li>
+                            <a href="${sys:duepublico.legal.info.url}">${message:footer.item.legal.info}</a>
+                        </li>
+                    </ul>
+                </div>
+
+
+
+                <div class="col-md-6">
+                    <p class="text-right">&copy;
+                        Universit&auml;t
+                        Duisburg-Essen
+                    </p>
+                </div>
+            </div>
+        </footer>
+        <!-- end footer -->
+    </div>
+    <!-- end page background style -->
+
+</div>
+
+</body>
+</html>

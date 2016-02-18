@@ -1,0 +1,34 @@
+<html t:type="layout" title="${audio.fileName}"
+      actionBarBlock="audioBlock"
+
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+        >
+
+<t:block t:id="audioBlock">
+    <t:reservecollectionactionslinklist/>
+    <t:if test="downloadAllowed">
+        <ul class="nav navbar-nav">
+            <li>
+                <t:pagelink page="entry/download" context="[audio.id,'attachment']">
+                    <b class="glyphicon glyphicon-download"></b>
+                    <span> ${message:download}</span>
+                </t:pagelink>
+            </li>
+        </ul>
+    </t:if>
+</t:block>
+
+
+<div class="last-column">
+    <section>
+        <div class="row">
+            <div class="col-md-12">
+                <audio class="video-js vjs-default-skin" controls="controls" width="100%" preload="auto" data-setup="{}">
+                    <source src="${sourceURL}" type="${audio.mimeType}"/>
+                    <p>${message:error.msg.could.not.play.audio}</p>
+                </audio>
+            </div>
+        </div>
+    </section>
+</div>
+</html>

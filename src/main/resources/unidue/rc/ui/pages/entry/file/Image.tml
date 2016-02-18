@@ -1,0 +1,29 @@
+<html t:type="layout" title="${image.fileName}"
+      actionBarBlock="textBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+        >
+
+<t:block t:id="textBlock">
+    <t:reservecollectionactionslinklist/>
+    <ul class="nav navbar-nav">
+        <li>
+            <t:pagelink page="entry/download" context="[image.id,'attachment']">
+                <b class="glyphicon glyphicon-download"></b>
+                <span> ${message:download}</span>
+            </t:pagelink>
+        </li>
+    </ul>
+</t:block>
+
+<div class="last-column">
+    <section>
+        <div class="row">
+            <div class="col-md-12">
+                <picture>
+                    <img src="${originalImage}"></img>
+                </picture>
+            </div>
+        </div>
+    </section>
+</div>
+</html>

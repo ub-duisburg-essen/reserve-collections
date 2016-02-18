@@ -1,0 +1,23 @@
+<t:container xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+    <div t:type="paper">
+        <form t:type="Form" class="form-horizontal" t:id="openIDLoginForm" id="openIDLoginForm"
+              t:clientValidation="none" t:autofocus="true">
+            <fieldset>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="openIDPart">${message:openid.part.label}</label>
+
+                    <div class="col-md-6">
+                        <input t:type="TextField" t:id="openIDPart" value="openIDPart" class="form-control"/>
+                        <t:error for="openIDPart"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="submit" value="${message:form-submit-label}"/>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</t:container>

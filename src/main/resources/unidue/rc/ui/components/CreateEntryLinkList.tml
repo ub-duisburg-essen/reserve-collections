@@ -1,0 +1,51 @@
+<t:container xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+<t:secureblock action="EDIT_ENTRIES" objectID="collection.id">
+
+    <ul class="nav navbar-nav">
+
+
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <b class="glyphicon glyphicon-plus-sign"></b>
+                <span class="dropdown-text"> ${message:link.new.entry} </span>
+                <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li>
+                    <t:pagelink page="entry/createheadline"
+                                context="collection.id">${message:headline}</t:pagelink>
+                </li>
+                <li>
+                    <t:pagelink page="entry/createhtml"
+                                context="collection.id">${message:html}</t:pagelink>
+                </li>
+                <li>
+                    <t:pagelink page="entry/createfile"
+                                context="collection.id">${message:file}</t:pagelink>
+                </li>
+                <li>
+                    <t:pagelink page="entry/createjournal"
+                                context="collection.id">${message:journal}</t:pagelink>
+                </li>
+                <li>
+                    <t:pagelink page="entry/createbook"
+                                context="collection.id">${message:book}</t:pagelink>
+                </li>
+                <li>
+                    <t:pagelink page="entry/createreference"
+                                context="collection.id">${message:reference}</t:pagelink>
+                </li>
+                <li>
+                    <t:pagelink page="entry/createbookchapter"
+                                context="collection.id">${message:bookchapter}</t:pagelink>
+                </li>
+                <li>
+                    <t:pagelink page="entry/createweblink"
+                                context="collection.id">${message:weblink}</t:pagelink>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</t:secureblock>
+</t:container>

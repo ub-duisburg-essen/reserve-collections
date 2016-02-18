@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-map xmlns="http://cayenne.apache.org/schema/3.0/modelMap"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://cayenne.apache.org/schema/3.0/modelMap http://cayenne.apache.org/schema/3.0/modelMap.xsd"
+	 project-version="6">
+	<property name="defaultPackage" value="unidue.rc.model.accesslog"/>
+	<db-entity name="access" schema="public">
+		<db-attribute name="bytes" type="INTEGER" isMandatory="true" length="10"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="10"/>
+		<db-attribute name="method" type="VARCHAR" isMandatory="true" length="8"/>
+		<db-attribute name="query" type="VARCHAR" length="1024"/>
+		<db-attribute name="referer" type="VARCHAR" length="1024"/>
+		<db-attribute name="remotehost" type="VARCHAR" isMandatory="true" length="128"/>
+		<db-attribute name="requesturi" type="VARCHAR" length="1024"/>
+		<db-attribute name="status" type="SMALLINT" isMandatory="true" length="5"/>
+		<db-attribute name="timestamp" type="TIMESTAMP" isMandatory="true" length="29"/>
+		<db-attribute name="useragent" type="VARCHAR" length="1024"/>
+		<db-attribute name="username" type="VARCHAR" length="128"/>
+		<db-attribute name="virtualhost" type="VARCHAR" isMandatory="true" length="256"/>
+	</db-entity>
+	<obj-entity name="Access" className="unidue.rc.model.accesslog.Access" dbEntityName="access">
+		<obj-attribute name="bytes" type="java.lang.Integer" db-attribute-path="bytes"/>
+		<obj-attribute name="method" type="java.lang.String" db-attribute-path="method"/>
+		<obj-attribute name="query" type="java.lang.String" db-attribute-path="query"/>
+		<obj-attribute name="referer" type="java.lang.String" db-attribute-path="referer"/>
+		<obj-attribute name="remoteHost" type="java.lang.String" db-attribute-path="remotehost"/>
+		<obj-attribute name="requestURI" type="java.lang.String" db-attribute-path="requesturi"/>
+		<obj-attribute name="status" type="java.lang.Short" db-attribute-path="status"/>
+		<obj-attribute name="timestamp" type="java.util.Date" db-attribute-path="timestamp"/>
+		<obj-attribute name="userAgent" type="java.lang.String" db-attribute-path="useragent"/>
+		<obj-attribute name="username" type="java.lang.String" db-attribute-path="username"/>
+		<obj-attribute name="virtualHost" type="java.lang.String" db-attribute-path="virtualhost"/>
+	</obj-entity>
+</data-map>

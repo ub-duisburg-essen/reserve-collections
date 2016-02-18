@@ -1,0 +1,15 @@
+<html t:type="layout" title="${message:faq.title}"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+<div class="row">
+    <div class="col-md-12">
+        <div t:type="paper">
+            <div class="paper-content">
+                <t:outputraw value="${faq}"/>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</html>

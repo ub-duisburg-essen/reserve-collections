@@ -1,0 +1,54 @@
+<t:container xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+             xmlns:p="tapestry:parameter">
+    <div class="row">
+        <div class="col-md-2">
+            <t:if test="${reference.thumbnailURL}">
+                <div class="book-thumbnail">
+                    <img src="${reference.thumbnailURL}"/>
+                </div>
+                <p:else>
+                    <div class="book-thumbnail">
+                        <img src="${context:/img/book_thumbnail.png}"/>
+                    </div>
+                </p:else>
+            </t:if>
+        </div>
+        <div class="col-md-10">
+
+            <section>
+                <p>
+                    <t:if test="reference.title">${reference.title}</t:if>
+                    <t:if test="reference.authors"> / ${reference.authors} </t:if>
+                    <t:if test="reference.volume"> / ${reference.volume}</t:if>
+                </p>
+                <p>
+                    <t:if test="reference.edition">${reference.edition}.</t:if>
+                    <t:if test="reference.placeOfPublication"> - ${reference.placeOfPublication}</t:if>
+                    <t:if test="reference.publisher">: ${reference.publisher}</t:if>
+                    <t:if test="reference.yearOfPublication">, ${reference.yearOfPublication}</t:if>
+                    <t:if test="reference.isbn">. - ${message:reference-isbn-label}: ${reference.isbn}</t:if>
+                </p>
+                <t:if test="reference.signature">
+                    <p>${message:reference-signature-label}: <a
+                        href="${sys:primo.sig.search.url}${reference.signature}">${reference.signature}
+                        (${message:primo.sig.show.in.catalogue})</a>
+                    </p>
+                </t:if>
+                <t:if test="reference.resource">
+                    <t:if test="reference.resource.fullTextURL">
+                        <p>
+                            <a href="${reference.resource.fullTextURL}">${reference.resource.fullTextURL}</a>
+                        </p>
+                    </t:if>
+                </t:if>
+                <t:if test="reference.comment">
+                    <p>${reference.comment}</p>
+                </t:if>
+                <t:if test="reference.collectionNumber">
+                    <p>${message:reference-collection-reference-label} ${reference.collectionNumber}</p>
+                </t:if>
+            </section>
+        </div>
+    </div>
+</t:container>

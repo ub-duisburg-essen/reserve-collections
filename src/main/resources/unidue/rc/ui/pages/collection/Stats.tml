@@ -1,0 +1,52 @@
+<html t:type="layout" title="${message:statistic} #${collection.id}"
+      actionBarBlock="viewCollectionBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+        >
+
+<t:block t:id="viewCollectionBlock">
+    <t:reservecollectionactionslinklist collection="collection"/>
+    <t:createentrylinklist collection="collection"/>
+</t:block>
+
+<div t:type="paper">
+    <section class="folder-tab" id="reserve-collection-meta">
+        <div class="row">
+            <div class="col-md-9">
+                <header>
+                    <h2>${message:statistic} (${collection.id})</h2>
+                </header>
+            </div>
+        </div>
+    </section>
+    <form t:type="Form" class="form-horizontal" t:id="statisticsForm" t:clientValidation="none" autofocus="false">
+        <div class="row">
+            <div class="col-md-2"><label style="text-align: right;" for="from">${message:stats.selector.timespan.from}</label></div>
+            <div class="col-md-2"><input t:type="textfield" readonly="readonly" value="from" t:id="from"
+                                         class="form-control datepicker"/>
+                <t:error for="from"/>
+            </div>
+            <div class="col-md-1"><label class="col-md-3" style="text-align: right;" for="to">${message:stats.selector.timespan.to}</label></div>
+            <div class="col-md-2"><input t:type="textfield" readonly="readonly" value="to" t:id="to"
+                                         class="form-control datepicker"/>
+                <t:error for="to"/>
+            </div>
+            <div class="col-md-5">
+                <input type="submit" value="${message:form-submit-label}"/>
+            </div>
+        </div>
+    </form>
+
+    <div class="row">
+        <div class="col-md-12">
+            <t:highchartsgraph datasources="datasources" xtype="'datetime'" xZoom="'28 * 24 * 3600 * 1000'" xTitle="${message:stats.graph.label.timespan}"
+                               yTitle="${message:stats.graph.label.hitcount}" ></t:highchartsgraph>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <t:downloadstatstable dataSource="downloads"></t:downloadstatstable>
+        </div>
+    </div>
+
+</div>
+</html>

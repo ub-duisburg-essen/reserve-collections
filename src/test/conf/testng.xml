@@ -1,0 +1,61 @@
+<!--
+  #%L
+  Semesterapparate
+  $Id:$
+  $HeadURL:$
+  %%
+  Copyright (C) 2014 Universitaet Duisburg Essen
+  %%
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+       http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  #L%
+  -->
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="reserve-collections Application Test Suite" annotations="1.5">
+    <test name="Unit tests" enabled="true">
+        <classes>
+            <class name="unidue.rc.dao.TestCayenneServiceImpl"/>
+            <class name="unidue.rc.dao.TestLibraryLocationDAO"/>
+            <class name="unidue.rc.dao.TestReserveCollectionDAO"/>
+            <class name="unidue.rc.dao.TestReserveCollectionNumberDAO"/>
+            <class name="unidue.rc.dao.TestWeblinkEntry"/>
+            <class name="unidue.rc.dao.TestFileEntry"/>
+            <class name="unidue.rc.dao.TestHTMLEntry"/>
+            <class name="unidue.rc.dao.TestJournalArticleEntry"/>
+            <class name="unidue.rc.dao.TestBookChapterEntry"/>
+            <class name="unidue.rc.dao.TestBookEntry"/>
+            <class name="unidue.rc.dao.TestLegalEntityXMLFileDAO"/>
+            <class name="unidue.rc.dao.TestRoleDAO"/>
+            <class name="unidue.rc.io.TestLegalEntityIO"/>
+            <class name="unidue.rc.dao.TestSetting"/>
+        </classes>
+    </test>
+    <test name="Integration tests" enabled="true">
+        <parameter name="tapestry.browser-start-command" value="*googlechrome"/>
+        <parameter name="tapestry.port" value="9091"/>
+        <classes>
+            <class name="unidue.rc.ui.pages.TestReserveCollectionIndex"/>
+            <class name="unidue.rc.ui.pages.collection.TestReserveCollection"/>
+            <class name="unidue.rc.ui.valueencoder.TestEntryValueEncoder"/>
+            <class name="unidue.rc.ui.pages.login.TestLoginIndex"/>
+            <class name="unidue.rc.ui.pages.roles.TestCreateRole"/>
+            <class name="unidue.rc.ui.pages.roles.TestRolesIndex"/>
+            <class name="unidue.rc.ui.pages.entry.TestCreateBookChapter"/>
+            <!--
+            <class name="unidue.rc.ui.pages.entry.TestCreateHTML"/>
+            -->
+            <class name="unidue.rc.ui.pages.entry.TestCreateJournal"/>
+            <class name="unidue.rc.ui.pages.entry.TestCreateHeadline"/>
+            <class name="unidue.rc.ui.pages.entry.TestCreateBook"/>
+          </classes>
+      </test>
+  </suite>

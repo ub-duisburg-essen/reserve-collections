@@ -1,0 +1,192 @@
+<html t:type="layout" title="${message:user.page.title}"
+      actionBarBlock="userActionBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+
+<t:block t:id="userActionBlock">
+    <t:secureblock action="CREATE_RESERVE_COLLECTION">
+        <t:reservecollectionactionslinklist/>
+    </t:secureblock>
+</t:block>
+
+<t:secureblock action="EDIT_USER">
+    <div t:type="paper">
+
+        <t:zone t:id="userSearchZone" id="userSearchZone" t:update="none">
+
+            <!-- base form style from bootstrap. see http://twitter.github.io/bootstrap/base-css.html#forms -->
+            <form t:type="Form" class="form-horizontal" zone="^" t:id="userSearchForm" id="userSearchForm"
+                  t:clientValidation="none">
+                <fieldset>
+
+                    <div class="form-group focused">
+                        <label class="control-label col-md-3" for="userSearch">${message:search.user.label}</label>
+                        <div class="col-md-6">
+                            <input t:type="TextField" t:id="userSearch" id="userSearch" class="form-control"
+                                   t:value="userSearch"/>
+                            <t:error for="userSearch"/>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="submit" value="${message:search}"/>
+                        </div>
+                    </div>
+
+                </fieldset>
+            </form>
+
+            <div class="loader"></div>
+        </t:zone>
+
+        <t:zone t:id="chooseUserZone" id="chooseUserZone" visible="false" update="none">
+
+            <form t:type="Form" t:id="chooseUserForm" t:clientValidation="none" class="form-horizontal">
+                <t:errors/>
+                <table class="table">
+                    <caption>${message:search-result}</caption>
+                    <thead>
+                    <tr>
+                        <th>${message:username.label}</th>
+                        <th>${message:realm.label}</th>
+                        <th>${message:name-label}</th>
+                        <th>${message:mail.label}</th>
+                        <t:secureblock action="EDIT_USER">
+                            <th></th>
+                        </t:secureblock>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <t:loop source="users" value="user" encoder="userEncoder">
+                        <tr>
+                            <td>${user.username}</td>
+                            <td>${user.realm}</td>
+                            <td>${user.realname}</td>
+                            <td>${user.email}</td>
+                            <t:secureblock action="EDIT_USER">
+                                <td>
+                                    <t:pagelink page="user/participations" context="user.id">${message:participations}</t:pagelink>
+                                </td>
+                            </t:secureblock>
+                            <td>
+                                <t:actionlink t:id="choose" t:context="user" class="glyphicon glyphicon-edit" zone="^"/>
+                            </td>
+                        </tr>
+                    </t:loop>
+                    </tbody>
+                </table>
+            </form>
+        </t:zone>
+    </div>
+</t:secureblock>
+
+<t:zone t:id="userZone" id="userZone" t:update="none">
+    <div t:type="paper">
+
+        <form t:type="Form" class="form-horizontal" t:id="edit_user_form" t:clientValidation="blur">
+
+            <fieldset>
+                <div class="form-group">
+                    <h4 class="col-md-12 ">${message:user.data.label}</h4>
+                </div>
+
+                <!-- username -->
+                <div class="form-group">
+
+                    <label class="col-md-3 control-label"
+                           for="username">${message:user.username.label}</label>
+
+                    <div class="col-md-6">
+                        <input t:type="TextField" t:id="username" id="username" class="form-control"
+                               t:value="user.username" t:disabled="literal:true"/>
+                        <t:error for="username"/>
+                    </div>
+                </div>
+
+                <!-- realname -->
+                <div class="form-group">
+
+                    <label class="col-md-3 control-label required"
+                           for="realname">${message:user.realname.label}</label>
+
+                    <div class="col-md-6">
+                        <input t:type="TextField" t:id="realname" id="realname" class="form-control"
+                               t:value="user.realname" placeholder="${message:user.realname.label}"/>
+                        <t:error for="realname"/>
+                    </div>
+                </div>
+
+                <!-- email -->
+                <div class="form-group">
+
+                    <label class="col-md-3 control-label required"
+                           for="email">${message:user.email.label}</label>
+
+                    <div class="col-md-6">
+                        <input t:type="TextField" t:id="email" id="email" class="form-control"
+                               t:value="user.email" placeholder="${message:user.email.label}"/>
+                        <t:error for="email"/>
+                    </div>
+                </div>
+                <!-- origin -->
+
+                <div class="form-group">
+
+                    <label class="col-md-3 control-label"
+                           for="origin">${message:origin-label}</label>
+
+                    <div class="col-md-6">
+                        <select data-placeholder="${message:chosen-placeholder-label}" t:mixins="chosenSelect"
+                                t:type="Select" t:id="origin" id="origin" t:value="origin" t:model="originSelectModel"
+                                t:encoder="originEncoder" class="form-control autocomplete"
+                                t:blankOption="ALWAYS"/>
+                        <t:error for="origin"/>
+                    </div>
+                </div>
+
+                <!-- do not show password inputs if user has none -->
+                <t:if test="user.password">
+
+                    <!-- password -->
+                    <div class="form-group">
+
+                        <label class="col-md-3 control-label"
+                               for="password">${message:new.password}</label>
+
+                        <div class="col-md-6">
+                            <input class="form-control" type="password" t:type="TextField" t:id="password"
+                                   id="password" placeholder="${message:password.label}" value="password"/>
+                            <t:error for="password"/>
+                        </div>
+                    </div>
+                    <!-- password repeat -->
+                    <div class="form-group">
+
+                        <label class="col-md-3 control-label"
+                               for="passwordRepeat">${message:password.repetition.label}</label>
+
+                        <div class="col-md-6">
+                            <input class="form-control" type="password" t:type="TextField" t:id="passwordRepeat"
+                                   id="passwordRepeat" placeholder="${message:password.repetition.label}" value="passwordRepeat"/>
+                            <t:error for="passwordRepeat"/>
+                        </div>
+                    </div>
+                </t:if>
+
+                <div class="form-group">
+                    <div class="col-md-9 col-md-offset-3">
+                        <span class="required-label">${message:required-label}</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-9 col-md-offset-3">
+
+                        <input type="submit" value="${message:form-submit-label}"/>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+    </div>
+</t:zone>
+</html>

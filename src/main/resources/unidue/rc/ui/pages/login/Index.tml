@@ -1,0 +1,77 @@
+<html t:type="layout" title="${message:login.page.title}"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+<!-- Most of the page content, including <head>, <body>, etc. tags, comes
+    from Layout.tml -->
+<div class="row">
+    <div class="col-md-12">
+
+        <t:if test="unauthorizedMessage">
+            <div class="last-column">
+                <p class="alert alert-warning">${unauthorizedMessage}</p>
+            </div>
+        </t:if>
+        <!-- login -->
+        <ul class="linklist last-column">
+            <li class="${prop:classForLoginLink}">
+                <t:actionlink t:id="login" id="login">
+                    <span>${message:login}</span>
+                    <a class="help" title="${message:help.message.auth}"/>
+                </t:actionlink>
+            </li>
+        </ul>
+        <t:if test="isLoginVisible">
+            <div t:type="paper">
+
+                <form t:type="form" class="form-horizontal" t:id="loginForm" id="loginForm"
+                      t:clientValidation="none" t:autofocus="true">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label required" for="username">${message:username.label}</label>
+
+                            <div class="col-md-6">
+                                <input t:type="TextField" t:id="username" id="username" value="username"
+                                       class="form-control"
+                                       placeholder="${message:username.placeholder}"/>
+                                <t:error for="username"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label required" for="password">${message:password.label}</label>
+
+                            <div class="col-md-6">
+                                <input t:type="PasswordField" t:id="password" id="password" value="password" class="form-control"/>
+                                <t:error for="password"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-3 col-md-9">
+                                <span class="required-label">${message:required-label}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-3 col-md-9">
+                                <input type="submit" value="${message:form-submit-label}"/>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </t:if>
+
+        <!-- register -->
+        <ul class="linklist last-column">
+
+            <li class="${prop:classForRegisterLink}">
+                <t:actionlink t:id="register" id="register">
+                    <span>${message:login.create.new.user}</span>
+                    <a class="help" title="${message:help.message.new.user}"/>
+                </t:actionlink>
+            </li>
+        </ul>
+        <t:if test="isRegisterVisible">
+            <div t:type="RegisterForm"/>
+        </t:if>
+    </div>
+</div>
+</html>

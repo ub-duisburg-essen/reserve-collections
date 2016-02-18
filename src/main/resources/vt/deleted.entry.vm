@@ -1,0 +1,12 @@
+#if($entry.Deleted)
+<ul>
+    <li>Der Status des Eintrags ist noch "Neueintrag". Falls Sie den Text gerade beschaffen, ist dies nicht mehr erforderlich, Sie k&ouml;nnen den Vorgang stornieren.</li>
+    <li>Auch die &uuml;berpr&uuml;fung der bibliographischen Angaben ist nicht mehr erforderlich.</li>
+</ul>
+#else
+<ul>
+    <li>&uuml;berpr&uuml;fen Sie die bibligraphischen Angaben</li>
+    <li>Korrigieren Sie diese ggf. im Online Semesterapparat</li>
+    <li>Beschaffen Sie den Text als PDF-Dokument und stellen Sie ihn via Formular zum Online-Semesterapparat hinzu</li>
+</ul>
+#end

@@ -1,0 +1,38 @@
+<t:container xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+    <div class="stats-table-container">
+        <table class="table">
+            <thead >
+            <tr>
+                <th>${message:stats.table.access}</th>
+                <th  class="rotate30">${message:stats.table.sum}</th>
+                <t:loop source="dataSource.downloadDates" value="downloadDate">
+                    <th class="rotate30">${getDateHeading(downloadDate.date)}</th>
+                </t:loop>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>${message:stats.table.access.total}</td>
+                <td>${dataSource.getTotalHitCount()}</td>
+                <t:loop source="dataSource.downloadDates" value="downloadDate">
+                    <td>${downloadDate.getHitSum()}</td>
+                </t:loop>
+            </tr>
+            <t:loop source="dataSource.getResourceIds()" value="id">
+                <tr>
+                    <td>
+                        <t:pagelink page="entry/download" context="[id, 'attachment']"
+                                    >${getFileName(id)}</t:pagelink>
+                    </td>
+                    <td>${dataSource.getFile(id).getTotalHits()}</td>
+                    <t:loop source="dataSource.downloadDates" value="downloadDate">
+                        <td>${dataSource.getFile(id).getHitsForDate(downloadDate.getDate())}</td>
+                    </t:loop>
+                </tr>
+            </t:loop>
+            </tbody>
+        </table>
+    </div>
+
+</t:container>

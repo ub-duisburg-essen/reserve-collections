@@ -1,0 +1,142 @@
+<html t:type="layout" title="${message:roles.page.title}"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      actionBarBlock="roleBarBlock">
+
+<t:block t:id="roleBarBlock">
+    <t:reservecollectionactionslinklist/>
+    <ul class="nav navbar-nav">
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <b class="glyphicon glyphicon-user"></b>
+                <span class="dropdown-text"> ${message:role} </span><b
+                    class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <t:secureblock action="EDIT_USER_ROLES">
+                    <li>
+                        <t:pagelink page="roles/memberships">${message:memberships.page.title}</t:pagelink>
+                    </li>
+                </t:secureblock>
+                <li>
+                    <t:pagelink page="roles/createrole">${message:new}</t:pagelink>
+                </li>
+                <t:secureblock action="EDIT_ROLES">
+                    <t:if test="selectedRole">
+                        <li>
+                            <t:actionlink t:id="deleteRole">${message:delete}</t:actionlink>
+                        </li>
+                    </t:if>
+                </t:secureblock>
+            </ul>
+        </li>
+    </ul>
+</t:block>
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div t:type="paper">
+
+            <t:zone t:id="availableActionsZone" id="availableActionsZone" update="none">
+                <t:if test="permissionSavedMessage">
+                    <p class="alert alert-success">${permissionSavedMessage}</p>
+                </t:if>
+
+                <form role="form" class="form-horizontal filter" t:type="form" t:id="availableActionsForm"
+                      zone="^">
+
+                    <fieldset class="collapsible">
+                        <legend>${message:actions}</legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">${message:role}</label>
+
+                            <div class="col-md-5">
+                                <select t:type="Select" t:id="roles" id="roles" t:value="selectedRole"
+                                        encoder="roleValueEncoder"
+                                        t:zone="selectedActionsZone" t:model="roleSelectModel"
+                                        data-placeholder="${message:chosen-placeholder-label}" t:blankOption="ALWAYS"
+                                        class="form-control"/>
+                            </div>
+                            <div class="col-md-4">
+                                <t:if test="selectedRole">
+                                    <t:eventlink event="deleteRole" class="button deleteRole"
+                                                 zone="^">${message:delete}</t:eventlink>
+                                </t:if>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">${message:available.actions}</label>
+
+                            <div class="col-md-5">
+                                <select t:type="Select" t:id="availableActions" id="availableActions"
+                                        t:value="selectedAction"
+                                        encoder="actionEncoder"
+                                        t:zone="selectedActionsZone" t:model="unselectedActionsModel" blankOption="AUTO"
+                                        data-placeholder="${message:chosen-placeholder-label}"
+                                        class="form-control"/>
+                            </div>
+                            <div class="col-md-4">
+                                <t:if test="selectedRole">
+                                    <t:if test="selectedAction">
+                                        <t:eventlink event="add" class="button addAction" zone="^"
+                                                     context="selectedAction">${message:add}</t:eventlink>
+                                    </t:if>
+                                </t:if>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </t:zone>
+
+            <t:zone t:id="selectedActionsZone" id="selectedActionsZone" update="none">
+
+                <t:if test="selectedRole">
+                    <!-- base form style from bootstrap. see http://twitter.github.io/bootstrap/base-css.html#forms -->
+                    <form t:type="Form" class="form-horizontal" t:id="permissionDefinitionForm" t:clientValidation="none"
+                          t:zone="^">
+                        <t:errors class="literal:alert alert-danger" banner="message:default-error-banner"/>
+                        <fieldset>
+
+                            <table class="table">
+                                <caption>${message:is-able-label}</caption>
+                                <thead>
+                                <tr>
+                                    <th>
+                                        <span>${message:name-label}</span>
+                                    </th>
+                                    <th>
+                                        <span>${message:is.instance.bound}</span>
+                                    </th>
+                                    <th>
+                                        <span></span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <t:loop source="permissionDefinitions" value="permissionDefinition">
+                                    <tr>
+                                        <td>${prop:actionLabel}</td>
+                                        <td>
+                                            <t:checkbox value="bind" t:id="bindCheckbox" id="bind" />
+                                        </td>
+                                        <td>
+
+                                            <t:actionlink t:id="removeActionLink" zone="selectedActionsZone"
+                                                          context="permissionDefinition">
+                                                ${message:remove}
+                                            </t:actionlink>
+                                        </td>
+                                    </tr>
+                                </t:loop>
+                                </tbody>
+                            </table>
+                            <div>
+                                <input type="submit" value="${message:save-label}"/>
+                            </div>
+                        </fieldset>
+                    </form>
+                </t:if>
+            </t:zone>
+        </div>
+    </div>
+</div>
+</html>

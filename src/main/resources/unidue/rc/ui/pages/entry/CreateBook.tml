@@ -1,0 +1,124 @@
+<html t:type="layout" title="${collection.title}"
+      actionBarBlock="bookActionBlock"
+
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+<t:block t:id="bookActionBlock">
+    <t:reservecollectionactionslinklist collection="collection"/>
+    <t:createentrylinklist collection="collection"/>
+</t:block>
+
+<t:if test="message">
+    <p class="alert alert-info">${prop:message}</p>
+</t:if>
+
+<div t:type="paper">
+
+    <form t:type="Form" class="form-horizontal" t:id="bookForm" id="bookForm"
+          t:clientValidation="none">
+
+        <t:if test="bookRequest">
+            <ul class="wizard-breadcrumb">
+                <t:loop source="bookRequest.breadcrumbs" value="position">
+                    <li><span>${position}</span></li>
+                </t:loop>
+            </ul>
+        </t:if>
+        <t:formfragment visible="inSearch">
+
+            <fieldset>
+
+                <div class="form-group focused">
+                    <label class="control-label col-md-3" for="bookSearch">${message:search-label}</label>
+
+                    <div class="col-md-9">
+                        <input t:type="TextField" t:id="bookSearch" id="bookSearch" class="form-control" t:value="bookSearch"/>
+                        <t:error for="bookSearch"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-2">
+                        <input type="submit" value="${message:search}"/>
+                    </div>
+                    <div class="col-md-offset-6 col-md-1">
+                        <a href="#" data-toggle="tooltip" class="help" id="create-book-help"
+                           title="${message:help.message.add.books.to.collection}"></a>
+                    </div>
+                </div>
+            </fieldset>
+        </t:formfragment>
+        <t:formfragment visible="inChooseBook">
+            <table id="booktable" class="table">
+                <caption>${message:search-result}</caption>
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>${message:book.title.label}</th>
+                    <th>${message:book.year.of.publication.label}</th>
+                    <th>${message:author-label}</th>
+                    <th>${message:book.place.of.publication.label}</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <t:radiogroup t:id="chosenBookDocNumber">
+                    <t:loop source="bookRequest.availableBooks" value="book" encoder="opacBookEncoder">
+                        <tr>
+                            <td>
+                                <input t:type="radio" value="book.docNumber"/>
+                            </td>
+                            <td>${book.title}</td>
+                            <td>${book.year}</td>
+                            <td>${book.author}</td>
+                            <td>${book.publishingLocation}</td>
+                        </tr>
+                    </t:loop>
+                </t:radiogroup>
+                <t:error for="chosenBookDocNumber"/>
+                </tbody>
+            </table>
+            <div class="form-group">
+                <div class="col-md-9">
+                    <input type="submit" value="${message:next-label}"/>
+                </div>
+            </div>
+        </t:formfragment>
+        <t:formfragment visible="inSelectItem">
+            <t:if test="!bookRequest.libraryItems">
+                <div class="alert alert-warning">${message:warning.msg.no.library.items}</div>
+                <div class="btn-group">
+                    <t:actionlink t:id="new_search" class="button">${message:new.search}</t:actionlink>
+                    <t:pagelink page="entry/createreference"
+                                context="collection.id"
+                                class="button">${message:new.reference}</t:pagelink>
+                </div>
+                <p:else>
+                    <div class="form-group">
+
+                        <label class="control-label col-md-3" for="signature">${message:book.location.signature.label}</label>
+
+                        <div class="col-md-6">
+                            <t:select value="chosenLibraryItem"
+                                      class="form-control"
+                                      t:id="signature" id="signature"
+                                      model="libraryItemModel"
+                                      encoder="libraryItemEncoder"
+                                      blankOption="never"/>
+                            <t:error for="signature"/>
+                        </div>
+                    </div>
+                    <t:arrangetoheadlineformgroup t:collection="collection" t:value="headline"/>
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-md-9">
+                            <input type="submit" id="submit" value="${message:bind}"/>
+                        </div>
+                    </div>
+                </p:else>
+            </t:if>
+        </t:formfragment>
+    </form>
+
+</div>
+</html>

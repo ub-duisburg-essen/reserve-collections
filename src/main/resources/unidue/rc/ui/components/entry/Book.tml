@@ -1,0 +1,54 @@
+<t:container xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+             xmlns:p="tapestry:parameter">
+    <div class="row">
+        <div class="col-md-2">
+            <t:if test="${book.thumbnailURL}">
+                <div class="book-thumbnail">
+                    <img src="${book.thumbnailURL}"/>
+                </div>
+                <p:else>
+                    <div class="book-thumbnail">
+                        <img src="${context:/img/book_thumbnail.png}"/>
+                    </div>
+                </p:else>
+            </t:if>
+        </div>
+        <div class="col-md-10">
+            <section>
+                <p>
+                    <t:if test="book.title">${book.title}</t:if>
+                    <t:if test="book.authors"> / ${book.authors} </t:if>
+                    <t:if test="book.volume"> / ${book.volume}</t:if>
+                </p>
+                <p>
+                    <t:if test="book.edition">${book.edition}.</t:if>
+                    <t:if test="book.placeOfPublication"> - ${book.placeOfPublication}</t:if>
+                    <t:if test="book.publisher">: ${book.publisher}</t:if>
+                    <t:if test="book.yearOfPublication">, ${book.yearOfPublication}</t:if>
+                    <t:if test="book.isbn">. - ${message:book-isbn-label}: ${book.isbn}</t:if>
+                </p>
+                <t:if test="book.signature">
+                    <p>${message:book-signature-label}: <a
+                        href="${sys:primo.sig.search.url}${book.signature}">${book.signature}
+                        (${message:primo.sig.show.in.catalogue})</a>
+                    </p>
+                </t:if>
+                <t:if test="book.resource">
+                    <t:if test="book.resource.fullTextURL">
+                        <p>
+                            <a href="${book.resource.fullTextURL}">${book.resource.fullTextURL}</a>
+                        </p>
+                    </t:if>
+                </t:if>
+                <t:if test="book.collectionNumber">
+                    <p>${message:book-collection-reference-label}: ${book.collectionNumber}</p>
+                </t:if>
+                <t:if test="book.comment">
+                    <p>${book.comment}</p>
+                </t:if>
+
+            </section>
+        </div>
+    </div>
+</t:container>

@@ -1,0 +1,104 @@
+<t:container xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+    <div class="job-meta">
+        <section>
+
+            <h4>${message:reserve.collection}</h4>
+            <dl>
+                <dt>${message:title-label}</dt>
+                <dd>
+                    <t:pagelink page="collection/viewcollection"
+                                context="journalArticle.reserveCollection.id">${journalArticle.reserveCollection.title}</t:pagelink>
+                </dd>
+                <dt>${message:meta.label.number}</dt>
+                <dd>${journalArticle.reserveCollection.number?.number}</dd>
+                <dt>${message:libraryLocation-label}</dt>
+                <dd>
+                    <t:pagelink page="location/editlocation"
+                                context="journalArticle.reserveCollection.libraryLocation.id">${journalArticle.reserveCollection.libraryLocation.name}</t:pagelink>
+                </dd>
+            </dl>
+        </section>
+        <section>
+
+            <h4>${message:personal.data}</h4>
+            <dl>
+                <dt>${message:lecturer-label}</dt>
+                <dd>
+                    <t:loop source="docents" value="docent"><div>${docent}</div></t:loop>
+                </dd>
+                <t:if test="originLabel">
+                    <dt>${message:origin-label}</dt>
+                    <dd>${originLabel}</dd>
+                </t:if>
+            </dl>
+        </section>
+        <section>
+
+            <h4>${message:job.data}</h4>
+            <dl>
+                <dt>${message:modified}</dt>
+                <dd>${prop:jobModificationDate}</dd>
+                <dt>${message:status}</dt>
+                <dd>${prop:localizedStatus}</dd>
+                <t:if test="scanJob.location">
+                    <dt>${message:reviser}</dt>
+                    <dd>${scanJob.location.name}</dd>
+                </t:if>
+                <dt>${message:book-pagesfrom-label}</dt>
+                <dd>${prop:journalArticle.pageStart}</dd>
+                <dt>${message:book-pagesto-label}</dt>
+                <dd>${prop:journalArticle.pageEnd}</dd>
+            </dl>
+        </section>
+        <section>
+
+            <h4>${message:journal.data}</h4>
+            <dl>
+                <dt>${message:entry}</dt>
+                <dd>
+                    <t:secureblock action="VIEW_RESERVE_COLLECTION" objectID="journalArticle.reserveCollection.id">
+                        <t:pagelink page="collection/viewcollection"
+                                    context="journalArticle.reserveCollection.id"
+                                    anchor="${journalArticle.id}">${prop:journalArticle.id}</t:pagelink>
+                    </t:secureblock>
+                </dd>
+                <dt>${message:journal}</dt>
+                <dd>${journalArticle.title}</dd>
+                <t:if test="journalArticle.authors">
+                    <dt>${message:article-authors-label}</dt>
+                    <dd>${journalArticle.authors}</dd>
+                </t:if>
+                <t:if test="journalArticle.journalTitle">
+                    <dt>${message:journal-title-label}</dt>
+                    <dd>${journalArticle.journalTitle}</dd>
+                </t:if>
+                <t:if test="journalArticle.placeOfPublication">
+                    <dt>${message:journal-place-label}</dt>
+                    <dd>${journalArticle.placeOfPublication}</dd>
+                </t:if>
+                <t:if test="journalArticle.publisher">
+                    <dt>${message:journal-publisher-label}</dt>
+                    <dd>${journalArticle.publisher}</dd>
+                </t:if>
+                <t:if test="journalArticle.issn">
+                    <dt>${message:journal-issn-label}</dt>
+                    <dd>${journalArticle.issn}</dd>
+                </t:if>
+                <t:if test="journalArticle.signature">
+                    <dt>${message:journal-signature-label}</dt>
+                    <dd>${journalArticle.signature}</dd>
+                </t:if>
+                <t:if test="journalArticle.issue">
+                    <dt>${message:journal-issue-label}</dt>
+                    <dd>${journalArticle.issue}</dd>
+                </t:if>
+            </dl>
+        </section>
+        <section class="visible-print">
+            <h4>Barcode</h4>
+            <t:barcodeimage content="barcodeContent" width="400" height="128"/>
+        </section>
+    </div>
+</t:container>

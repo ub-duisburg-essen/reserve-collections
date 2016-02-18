@@ -1,0 +1,205 @@
+<html t:type="layout" title="${collection.title} #${collection.id}"
+      actionBarBlock="editBookBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+
+<t:block t:id="editBookBlock">
+    <t:reservecollectionactionslinklist collection="collection"/>
+    <t:createentrylinklist collection="collection"/>
+</t:block>
+
+<div t:type="paper">
+
+    <!-- base form style from bootstrap. see http://twitter.github.io/bootstrap/base-css.html#forms -->
+    <form t:type="Form" class="form-horizontal" t:id="book_form" t:clientValidation="blur">
+        <fieldset>
+            <div class="form-group">
+                <h4 class="col-md-12 ">${message:book-info-label}</h4>
+            </div>
+
+            <!-- title -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label required"
+                       for="booktitle">${message:book-title-label}</label>
+
+                <div class="col-md-6">
+                    <t:bootstraptextfield t:id="booktitle" id="booktitle" class="form-control"
+                                          t:value="book.title" placeholder="${message:book-title-placeholder}"
+                                          disabled="isReadOnly"/>
+                    <t:error for="booktitle"/>
+                </div>
+            </div>
+
+            <!-- authors -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label"
+                       for="authors">${message:book-authors-label}</label>
+
+                <div class="col-md-6">
+                    <t:bootstraptextfield t:id="authors" id="authors" class="form-control"
+                                          t:value="book.authors" placeholder="${message:book-authors-placeholder}"
+                                          disabled="isReadOnly"/>
+                    <t:error for="authors"/>
+                </div>
+            </div>
+
+            <!-- volume -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label"
+                       for="volume">${message:book-volume-label}</label>
+
+                <div class="col-md-6">
+                    <t:bootstraptextfield t:id="volume" id="volume" class="form-control"
+                                          t:value="book.volume" placeholder="${message:book-volume-placeholder}"
+                                          disabled="isReadOnly"/>
+                    <t:error for="volume"/>
+                </div>
+            </div>
+
+            <!-- edition -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label"
+                       for="edition">${message:book-edition-label}</label>
+
+                <div class="col-md-6">
+                    <t:bootstraptextfield t:id="edition" id="edition" class="form-control"
+                                          t:value="book.edition" placeholder="${message:book-edition-placeholder}"
+                                          disabled="isReadOnly"/>
+                    <t:error for="edition"/>
+                </div>
+            </div>
+
+            <!-- place of publication -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label"
+                       for="placeOfPublication">${message:book-place-label}</label>
+
+                <div class="col-md-6">
+                    <t:bootstraptextfield t:id="placeOfPublication" id="placeOfPublication" class="form-control"
+                                          t:value="book.placeOfPublication"
+                                          placeholder="${message:book-place-placeholder}"
+                                          disabled="isReadOnly"/>
+                    <t:error for="placeOfPublication"/>
+                </div>
+            </div>
+
+            <!-- publisher -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label"
+                       for="publisher">${message:book-publisher-label}</label>
+
+                <div class="col-md-6">
+                    <t:bootstraptextfield t:id="publisher" id="publisher" class="form-control"
+                                          t:value="book.publisher" placeholder="${message:book-publisher-placeholder}"
+                                          disabled="isReadOnly"/>
+                    <t:error for="publisher"/>
+                </div>
+            </div>
+
+            <!-- year of publication -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label"
+                       for="yearOfPublication">${message:book-year-label}</label>
+
+                <div class="col-md-6">
+                    <t:bootstraptextfield t:id="yearOfPublication" id="yearOfPublication" class="form-control"
+                                          t:value="book.yearOfPublication"
+                                          placeholder="${message:book-year-placeholder}"
+                                          disabled="isReadOnly"/>
+                    <t:error for="yearOfPublication"/>
+                </div>
+            </div>
+
+            <!-- isbn -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label"
+                       for="isbn">${message:book-isbn-label}</label>
+
+                <div class="col-md-6">
+                    <t:bootstraptextfield t:id="isbn" id="isbn" class="form-control"
+                                          t:value="book.isbn" placeholder="${message:book-isbn-placeholder}"
+                                          disabled="isReadOnly"/>
+                    <t:error for="isbn"/>
+                </div>
+            </div>
+
+            <!-- signature -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label"
+                       for="signature">${message:book-signature-label}</label>
+
+                <div class="col-md-6">
+                    <t:bootstraptextfield t:id="signature" id="signature" class="form-control"
+                                          t:value="book.signature" placeholder="${message:book-signature-placeholder}"
+                                          disabled="isReadOnly"/>
+                    <t:error for="signature"/>
+                </div>
+            </div>
+
+            <!-- url -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label"
+                       for="url">${message:book-url-label}</label>
+
+                <div class="col-md-6">
+                    <t:bootstraptextfield t:id="url" id="url" class="form-control"
+                                          t:value="fullTextURL"
+                                          placeholder="${message:book-url-placeholder}"
+                                          disabled="isReadOnly"/>
+                    <t:error for="url"/>
+                </div>
+            </div>
+
+            <!-- comment -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label"
+                       for="comment">${message:book-comment-label}</label>
+
+                <div class="col-md-6">
+                    <t:bootstraptextfield t:id="comment" id="comment" class="form-control"
+                                          t:value="book.comment" placeholder="${message:book-comment-placeholder}"/>
+                    <t:error for="comment"/>
+                </div>
+            </div>
+
+            <!-- in collection -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label"
+                       for="collectionref">${message:book-collection-reference-label}</label>
+
+                <div class="col-md-6">
+                    <t:bootstraptextfield t:id="collectionref" id="collectionref" class="form-control"
+                                          t:value="book.collectionNumber" placeholder="${message:book-collection-reference-placeholder}"/>
+                    <t:error for="collectionref"/>
+                </div>
+            </div>
+
+            <t:arrangetoheadlineformgroup t:value="headline" t:collection="collection"/>
+
+            <div class="form-group">
+                <div class="col-md-9 col-md-offset-3">
+                    <span class="required-label">${message:required-label}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-3 col-md-9">
+
+                    <input type="submit" value="${message:save-label}"/>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+</html>

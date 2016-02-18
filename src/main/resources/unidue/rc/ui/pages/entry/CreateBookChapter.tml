@@ -1,0 +1,194 @@
+<html t:type="layout" title="${collection.title} #${collection.id}"
+      actionBarBlock="createBookChapterBlock"
+
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+        >
+
+<t:block t:id="createBookChapterBlock">
+    <t:reservecollectionactionslinklist collection="collection"/>
+    <t:createentrylinklist collection="collection"/>
+</t:block>
+
+<div t:type="paper">
+
+<!-- base form style from bootstrap. see http://twitter.github.io/bootstrap/base-css.html#forms -->
+
+<form t:type="Form" class="form-horizontal" t:id="chapterForm" t:clientValidation="none">
+
+<t:if test="wizardData">
+    <ul class="wizard-breadcrumb">
+        <t:loop source="wizardData.breadcrumbs" value="position">
+            <li><span>${position}</span></li>
+        </t:loop>
+    </ul>
+</t:if>
+<t:formfragment visible="inSelect">
+    <t:radiogroup t:id="source" value="source">
+        <div class="form-group center">
+            <label class="control-label source-selector" for="source_catalogue">${message:chapter-wizard-catalogue-label}</label>
+            <input t:type="radio" t:id="source_catalogue" id="source_catalogue"/>
+        </div>
+        <div class="form-group center">
+            <label class="control-label source-selector" for="source_file">${message:chapter-wizard-file-label}</label>
+            <input t:type="radio" t:id="source_file" id="source_file"/>
+        </div>
+        <div class="form-group center">
+            <label class="control-label source-selector" for="source_url">${message:chapter-wizard-url-label}</label>
+            <input t:type="radio" t:id="source_url" id="source_url"/>
+        </div>
+        <div class="form-group center">
+            <label class="control-label source-selector" for="source_refno">${message:chapter-wizard-refno-label}</label>
+            <input t:type="radio" t:id="source_refno" id="source_refno"/>
+        </div>
+    </t:radiogroup>
+    <t:error for="source"/>
+
+    <input type="submit" value="${message:next-label} "/>
+
+
+</t:formfragment>
+
+<t:formfragment visible="inBookSearch">
+    <fieldset>
+
+        <div class="form-group focused">
+            <label class="control-label col-md-3" for="html">${message:search-label}</label>
+
+            <div class="col-md-9">
+                <input t:type="TextField" t:id="bookSearch" class="form-control" value="bookSearch"/>
+                <t:error for="bookSearch"/>
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-3 col-md-2">
+                <input type="submit" value="${message:search}"/>
+            </div>
+            <div class="col-md-offset-6 col-md-1">
+                <a href="#" data-toggle="tooltip" class="help" id="create-book-help"
+                   title="${message:help.message.add.books.to.collection}"></a>
+            </div>
+        </div>
+    </fieldset>
+
+</t:formfragment>
+
+<t:formfragment visible="inBookSelect">
+
+    <table id="booktable" class="table">
+        <caption>${message:search-result}</caption>
+        <thead>
+        <tr>
+            <th></th>
+            <th>${message:book.title.label}</th>
+            <th>${message:book.year.of.publication.label}</th>
+            <th>${message:book.isbn.label}</th>
+            <th>${message:book.place.of.publication.label}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <t:radiogroup t:id="bookToAdd">
+            <t:loop source="wizardData.books" value="book" encoder="opacBookEncoder">
+                <tr>
+                    <td>
+                        <t:radio value="book.docNumber"/>
+                        <!--<input t:type="checkbox" t:id="add" value="add"/> -->
+                    </td>
+                    <td>${book.title}</td>
+                    <td>${book.year}</td>
+                    <td>${book.isbn}</td>
+                    <td>${book.publishingLocation}</td>
+                </tr>
+            </t:loop>
+        </t:radiogroup>
+
+        </tbody>
+    </table>
+    <input type="submit" value="${message:bind}"/>
+
+
+    <script>
+        jQuery('#create-book-help').tooltip({
+            placement: 'left',
+            container: 'body'
+        });
+    </script>
+
+</t:formfragment>
+
+<t:formfragment visible="inuploadFile">
+    ${message:chapter-fulltext-label}:
+    <div class="form-group">
+
+        <label class="col-md-3 control-label" for="path">${message:file-label}</label>
+
+        <div class="col-md-6">
+            <div t:type="udetapestry/ajaxupload" t:id="uploads" maxFiles="1"/>
+
+        </div>
+    </div>
+    <input type="submit" value="${message:next-label}"/>
+</t:formfragment>
+<t:formfragment visible="inurl">
+
+    ${message:chapter-fulltext-label}:
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="path">${message:book-url-label}</label>
+
+        <div class="col-md-6">
+            <input t:type="TextField" t:id="bookurl" class="form-control"
+                   value="wizardData.url" placeholder="${message:book-url-placeholder}"/>
+            <t:error for="bookurl"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-3 col-md-9">
+            <span class="required-label">${message:required-label}</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-3 col-md-9">
+            <input type="submit" value="${message:next-label}"/>
+        </div>
+    </div>
+
+</t:formfragment>
+<t:formfragment visible="inrefno">
+
+    ${message:chapter-fulltext-label}:
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="path">${message:chapter-refno-label}</label>
+
+        <div class="col-md-6">
+            <input t:type="TextField" t:id="refno" class="form-control"
+                   value="wizardData.refno" placeholder="${message:chapter-refno-placeholder}"/>
+            <t:error for="refno"/>
+            <br/>
+            ${message:chapter-refno-info}
+            <br/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-3 col-md-9">
+            <span class="required-label">${message:required-label}</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-3 col-md-9">
+            <input type="submit" value="${message:next-label}"/>
+        </div>
+    </div>
+
+</t:formfragment>
+<t:bookchapterformfragment chapter="wizardData.chapter" collection="collection" form="chapterForm" isVisible="inEdit" t:id="chapterMeta"/>
+
+</form>
+<div class="loader"></div>
+</div>
+
+<div>
+
+</div>
+</html>

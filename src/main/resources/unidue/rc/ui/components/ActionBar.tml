@@ -1,0 +1,32 @@
+<t:container xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+    <nav id="actionbar" role="navigation" class="hide-on-small-devices">
+
+        <div class="ribbon">
+            <div class="ribbon-stitches-top"></div>
+            <div class="ribbon-content">
+                <div class="row">
+                    <div class="col-md-9 col-md-offset-3">
+                        <div class="pull-right">
+                            <ul class="nav navbar-nav">
+                                <li>
+                                    <a t:type="eventlink" href="Index" class="mobilebutton" t:event="DoAuth">
+
+                                        <b class="glyphicon glyphicon-user"></b> ${prop:authActionLabel}
+                                        <t:if test="username">
+                                            <span>, ${username}</span>
+                                        </t:if>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <t:body/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ribbon-stitches-bottom"></div>
+        </div>
+    </nav>
+
+</t:container>

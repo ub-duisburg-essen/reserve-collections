@@ -1,0 +1,154 @@
+<html t:type="layout" title="${message:view.book.job.page.title} #${bookJob.id}"
+      actionBarBlock="bookJobActionBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+<t:block t:id="bookJobActionBlock">
+    <t:reservecollectionactionslinklist/>
+
+    <ul class="nav navbar-nav">
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <b class="glyphicon glyphicon-tasks"></b>
+                <span class="dropdown-text"> ${message:job}</span>
+                <b class="caret"></b>
+            </a>
+
+            <ul class="dropdown-menu">
+                <li>
+                    <t:pagelink page="jobs/editbookjob" context="bookJob.id">${message:edit}</t:pagelink>
+                    <a href="#" class="print-button" onclick="window.print();">${message:print}</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</t:block>
+
+<div t:type="paper">
+
+    <section class="folder-tab">
+        <div class="row">
+
+            <div class="col-md-9">
+
+                <header>
+                    <h2>${book.title}</h2>
+                </header>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-md-7">
+                <div class="job-meta">
+                    <section>
+
+                        <h4>${message:reserve.collection}</h4>
+                        <dl>
+                            <dt>${message:title-label}</dt>
+                            <dd>
+                                <t:pagelink page="collection/viewcollection"
+                                            context="book.reserveCollection.id">${book.reserveCollection.title}</t:pagelink>
+                            </dd>
+                            <dt>${message:meta.label.number}</dt>
+                            <dd>${book.reserveCollection.number?.number}</dd>
+                            <dt>${message:libraryLocation-label}</dt>
+                            <dd>
+                                <t:pagelink page="location/editlocation"
+                                            context="book.reserveCollection.libraryLocation.id">${book.reserveCollection.libraryLocation.name}</t:pagelink>
+                            </dd>
+                        </dl>
+                    </section>
+                    <section>
+
+                        <h4>${message:personal.data}</h4>
+                        <dl>
+                            <dt>${message:lecturer-label}</dt>
+                            <dd>
+                                <t:loop source="docents" value="docent"><div>${docent}</div></t:loop>
+                            </dd>
+                            <t:if test="originLabel">
+                                <dt>${message:origin-label}</dt>
+                                <dd>${originLabel}</dd>
+                            </t:if>
+                        </dl>
+                    </section>
+                    <section>
+
+                        <h4>${message:job.data}</h4>
+                        <dl>
+                            <dt>${message:modified}</dt>
+                            <dd>${prop:jobModificationDate}</dd>
+                            <dt>${message:status}</dt>
+                            <dd>${prop:localizedStatus}</dd>
+                        </dl>
+                    </section>
+                    <section>
+
+                        <h4>${message:book.data}</h4>
+                        <dl>
+                            <dt>${message:entry}</dt>
+                            <dd>
+                                <t:pagelink page="collection/viewcollection"
+                                            context="book.reserveCollection.id"
+                                            anchor="${book.id}">${prop:book.id}</t:pagelink>
+                            </dd>
+                            <dt>${message:book-title-label}</dt>
+                            <dd>${book.title}</dd>
+                            <t:if test="book.authors">
+                                <dt>${message:book-authors-label}</dt>
+                                <dd>${book.authors}</dd>
+                            </t:if>
+                            <t:if test="book.volume">
+                                <dt>${message:book-volume-label}</dt>
+                                <dd>${book.volume}</dd>
+                            </t:if>
+                            <t:if test="book.placeOfPublication">
+                                <dt>${message:book-place-label}</dt>
+                                <dd>${book.placeOfPublication}</dd>
+                            </t:if>
+                            <t:if test="book.publisher">
+                                <dt>${message:book-publisher-label}</dt>
+                                <dd>${book.publisher}</dd>
+                            </t:if>
+                            <t:if test="book.yearOfPublication">
+                                <dt>${message:book.year.of.publication.label}</dt>
+                                <dd>${book.yearOfPublication}</dd>
+                            </t:if>
+                            <t:if test="book.isbn">
+                                <dt>${message:book-isbn-label}</dt>
+                                <dd>${book.isbn}</dd>
+                            </t:if>
+                            <t:if test="book.signature">
+                                <dt>${message:book-signature-label}</dt>
+                                <dd>${book.signature}</dd>
+                            </t:if>
+                        </dl>
+                    </section>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <section class="comments">
+                    <h4>${message:comments}</h4>
+                    <t:loop source="bookJob.comments" value="comment">
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="annotator">${annotatorNameForComment}</div>
+                            </div>
+                            <div class="col-md-6">
+
+                                <div>${commentDate}</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <div class="comment">${comment.comment}</div>
+                            </div>
+                        </div>
+                    </t:loop>
+                </section>
+            </div>
+        </div>
+    </section>
+</div>
+</html>

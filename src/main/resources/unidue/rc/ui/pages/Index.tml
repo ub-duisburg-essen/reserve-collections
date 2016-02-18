@@ -1,0 +1,208 @@
+<html t:type="layout" title="${message:page.title}"
+      actionBarBlock="indexBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+<t:block t:id="indexBlock">
+    <t:secureblock action="CREATE_RESERVE_COLLECTION">
+        <t:reservecollectionactionslinklist/>
+    </t:secureblock>
+    <ul class="nav navbar-nav">
+
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <b class="glyphicon glyphicon-filter"></b><span class="dropdown-text"> ${message:filter} </span><b
+                    class="caret"></b>
+            </a>
+            <ul class="dropdown-menu" t:type="zone" t:id="filterSelectZone" id="filterSelectZone" t:update="none">
+                <t:loop source="availableFilter" value="filter">
+                    <li>
+                        <t:eventlink event="addFilter" zone="filterZone"
+                                     context="filter">${prop:nameForFilter}</t:eventlink>
+                    </li>
+                </t:loop>
+            </ul>
+        </li>
+    </ul>
+</t:block>
+
+<!-- Most of the page content, including <head>, <body>, etc. tags, comes
+    from Layout.tml -->
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div t:type="paper">
+
+            <t:zone t:id="filterZone" id="filterZone" update="none">
+                <form role="form" class="form-horizontal filter" t:type="form" t:id="appliedFilterForm"
+                      zone="^">
+                    <fieldset class="collapsible">
+                        <legend>${message:filter}</legend>
+
+                        <div class="collapsedContent">
+
+                            <t:loop source="appliedFilter" value="filter">
+                                <t:delegate to="blockForFilter"/>
+                            </t:loop>
+
+                            <div class="form-group hide-on-js">
+                                <div class="col-md-9 col-md-offset-3">
+                                    <input type="submit" value="${message:apply.filter}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <hr/>
+                    </fieldset>
+                </form>
+            </t:zone>
+            <t:zone t:id="reserveCollectionZone" id="reserveCollectionZone" update="none">
+                <table class="table collection-table">
+                    <thead>
+                    <tr>
+                        <th>
+                            <span>${message:location}</span>
+                            <t:eventlink event="sort" t:id="sortByLocation" name="sortByLocation"  zone="reserveCollectionZone"
+                                         class="sort-icon ${prop:classForSortByLocation}"
+                                         context="SORT_FIELD_LOCATION"/>
+                        </th>
+                        <th>
+                            <span>${message:number-label}</span>
+                            <t:eventlink event="sort" t:id="sortByNumber" name="sortByNumber" zone="reserveCollectionZone"
+                                         class="sort-icon ${prop:classForSortByNumber}"
+                                         context="SORT_FIELD_NUMBER"/>
+                        </th>
+                        <t:secureblock action="VIEW_RESERVE_COLLECTION_EXPIRATION">
+                            <th>
+                                <span>${message:expiration-label}<span class="label label-info"> ${message:dissolution}</span></span>
+                                <t:eventlink event="sort" t:id="sortByExpiration" name="sortByExpiration" zone="reserveCollectionZone"
+                                             class="sort-icon ${prop:classForSortByExpiration}"
+                                             context="SORT_FIELD_EXPIRATION"/>
+                            </th>
+                        </t:secureblock>
+                        <th>
+                            <span>${message:author-label}</span>
+                        </th>
+                        <th>
+                            <span>${message:title-label}</span>
+                            <t:eventlink event="sort" t:id="sortByTitle" name="sortByTitle" zone="reserveCollectionZone"
+                                         class="sort-icon ${prop:classForSortByTitle}"
+                                         context="SORT_FIELD_TITLE"/>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <t:loop source="reserveCollections.items" value="collectionView">
+                        <tr>
+                            <td>${collectionView.location}</td>
+                            <td>${collectionView.collectionNumber}</td>
+                            <t:secureblock action="VIEW_RESERVE_COLLECTION_EXPIRATION">
+                                <td>
+                                ${expirationDate}
+                                <t:if test="collectionView.dissolveAt">
+                                    <span class="label label-info"> ${dissolutionDate}</span>
+                                </t:if>
+                                </td>
+                            </t:secureblock>
+                            <td>
+                                <ul>
+                                <t:if test="collectionView.authors">
+                                    <t:loop source="collectionView.authors" value="author">
+                                        <li>${author}</li>
+                                    </t:loop>
+                                </t:if>
+                                </ul>
+                            </td>
+                            <td>
+                                <t:pagelink page="collection/viewcollection"
+                                            context="collectionView.collectionId">${collectionView.title}</t:pagelink>
+                                <t:secureblock action="EDIT_RESERVE_COLLECTION_ADMIN_DATA">
+                                    <t:if test="collectionView.collectionComment">
+                                        <a href="#" data-toggle="tooltip" class="help" id="show-collectioncomment-help"
+                                           title="${collectionView.collectionComment}"></a>
+                                    </t:if>
+                                </t:secureblock>
+                            </td>
+                        </tr>
+                    </t:loop>
+                    </tbody>
+                    <!-- place collection count beneath loop cause the variable is set after retrieval -->
+                    <caption>${collectionCount} ${message:reserve-collections}</caption>
+                </table>
+                <t:pagination t:id="pagination" maxRowsPerPage="sys:pagination.max.rows" range="sys:pagination.range"
+                              itemCount="reserveCollections.count"></t:pagination>
+            </t:zone>
+
+        </div>
+    </div>
+</div>
+
+<t:block t:id="queryFilterFormGroup">
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="query">${message:search-label}</label>
+
+        <div class="col-md-5">
+            <t:textfield value="query" id="query" class="form-control input-sm" t:mixins="zoneUpdater"
+                         t:clientEvent="keyup" t:event="queryChanged" t:zone="reserveCollectionZone"/>
+        </div>
+        <div class="col-md-4">
+            <t:eventlink event="removeFilter" context="filter" class="glyphicon glyphicon-remove" zone="^"
+                         title="${message:remove}"/>
+        </div>
+    </div>
+</t:block>
+
+<t:block t:id="locationFilterFormGroup">
+
+    <div class="form-group">
+        <label class="col-md-3 control-label"
+               for="libraryLocation">${message:location}</label>
+
+        <div class="col-md-5">
+            <t:select value="locationFilter" model="libraryLocationSelectModel"
+                      t:id="locationFilter"
+                      id="libraryLocation" zone="reserveCollectionZone"
+                      class="form-control input-sm" encoder="libraryLocationEncoder"
+                      blankLabel="message:blank-label"/>
+        </div>
+        <div class="col-md-4">
+            <t:eventlink event="removeFilter" context="filter" class="glyphicon glyphicon-remove" zone="^"
+                         title="${message:remove}"/>
+        </div>
+    </div>
+</t:block>
+
+<t:block t:id="collectionStatusFilterFormGroup">
+
+    <div class="form-group">
+        <label class="col-md-3 control-label"
+               for="collectionStatus">${message:status}</label>
+
+        <div class="col-md-5">
+            <select t:id="collectionStatusFilter" t:type="select"
+                    id="collectionStatus" t:zone="reserveCollectionZone"
+                    class="form-control input-sm"
+                    t:blankLabel="message:blank-label"/>
+        </div>
+        <div class="col-md-4">
+            <t:eventlink event="removeFilter" context="filter" class="glyphicon glyphicon-remove" zone="^"
+                         title="${message:remove}"/>
+        </div>
+    </div>
+</t:block>
+
+<t:block t:id="dissolveAtFilterFormGroup">
+
+    <div class="form-group">
+        <label class="col-md-3 control-label"
+               for="dissolveAt">${message:DISSOLVE_AT_FILTER}</label>
+
+        <div class="col-md-5">
+            <input t:type="checkbox" readonly="readonly" id="dissolveAt" disabled="literal:true" value="literal:true"/>
+        </div>
+        <div class="col-md-4">
+            <t:eventlink event="removeFilter" context="filter" class="glyphicon glyphicon-remove" zone="^"
+                         title="${message:remove}"/>
+        </div>
+    </div>
+</t:block>
+</html>

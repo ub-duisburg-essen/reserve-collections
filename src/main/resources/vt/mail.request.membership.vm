@@ -1,0 +1,15 @@
+<html>
+<head>
+    <title></title>
+    #include("mail.style.vm")
+</head>
+<body>
+<div class="alert alert-info">
+    Benutzer $user.Username w&uuml;nscht Aufnahme in die Gruppe $role.Name.
+</div>
+
+#parse('user.vm')
+</body>
+</html>
+
+

@@ -1,0 +1,61 @@
+<html t:type="layout" title="${message:view.participation} #${collection.id}"
+      actionBarBlock="viewParticipationBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+<t:block t:id="viewParticipationBlock">
+    <t:secureblock action="EDIT_RESERVE_COLLECTION" objectID="collection.id">
+
+        <t:reservecollectionactionslinklist collection="collection"/>
+    </t:secureblock>
+    <t:secureblock action="EDIT_ENTRIES" objectID="collection.id">
+        <t:createentrylinklist collection="collection"/>
+    </t:secureblock>
+</t:block>
+<div t:type="paper">
+    <div class="padding">${message:view.participation.managebleroles}<br />
+    <t:secureblock action="EDIT_DOCENT_PARTICIPATION" objectID="collection.id">
+        ${message:view.participation.managebleroles.docent},
+    </t:secureblock>
+    <t:secureblock action="EDIT_ASSISTANT_PARTICIPATION" objectID="collection.id">
+        ${message:view.participation.managebleroles.assistant},
+    </t:secureblock>
+    <t:secureblock action="EDIT_STUDENT_PARTICIPATION" objectID="collection.id">
+        ${message:view.participation.managebleroles.student},
+    </t:secureblock>
+    <t:secureblock action="EDIT_STUDENT_PARTICIPATION" objectID="collection.id">
+        ${message:view.participation.managebleroles.custom}
+    </t:secureblock></div>
+    <t:loop source="roles" t:value="role">
+        <t:if test="participations">
+
+            <table id="usertable" class="table">
+                <caption><h3>${role.getName()}</h3></caption>
+                <thead>
+                <tr>
+                    <th>${message:user.realname.label}</th>
+                    <th>${message:user.username.label}</th>
+                    <th>${message:user.email.label}</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <t:loop source="participations" t:value="participation">
+                    <tr>
+                        <td>${user?.realname}</td>
+                        <td>${user?.username}</td>
+                        <td>${user?.email}</td>
+                        <td>
+                            <t:if test="participationEndingAllowed">
+                                <t:eventlink event="deleteParticipation" class="glyphicon glyphicon-remove"
+                                             title="message:delete" context="participation.id"/>
+                            </t:if>
+                        </td>
+                    </tr>
+                </t:loop>
+                </tbody>
+            </table>
+        </t:if>
+    </t:loop>
+</div>
+</html>

@@ -1,0 +1,36 @@
+<html t:type="layout" title="${message:request.membership.page.title}"
+      actionBarBlock="userActionBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+
+<t:block t:id="userActionBlock">
+    <t:secureblock action="CREATE_RESERVE_COLLECTION">
+        <t:reservecollectionactionslinklist/>
+    </t:secureblock>
+</t:block>
+
+<div t:type="paper">
+
+    <div class="paper-content last-column">
+
+        <t:if test="requestSuccessMsg">
+            <div class="alert alert-success">
+                <p>${requestSuccessMsg}</p>
+            </div>
+            <p:else>
+                <t:if test="requestFailedMsg">
+                    <p>${requestFailedMsg}</p>
+                </t:if>
+                <div class="alert alert-info">
+                    <t:outputraw value="requestMessage"/>
+                </div>
+                <div>
+                    <t:actionlink class="button" t:id="requestLink">${message:request.membership}</t:actionlink>
+                </div>
+            </p:else>
+        </t:if>
+    </div>
+</div>
+
+</html>

@@ -1,0 +1,13 @@
+<table>
+    <caption>Bearbeitet durch</caption>
+    <tr>
+        <td>Rolle:</td>
+        <td>
+            <ul>
+                #foreach($role in $roles)
+                <li>$role.Name</li>
+                #end
+            </ul>
+        </td>
+    </tr>
+</table>

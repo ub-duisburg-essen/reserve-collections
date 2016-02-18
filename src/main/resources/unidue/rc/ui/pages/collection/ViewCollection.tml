@@ -1,0 +1,294 @@
+<html t:type="layout" title="${collection.title} #${collection.libraryLocation?.name} ${collection.number?.number}"
+      actionBarBlock="viewCollectionBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+<t:block t:id="viewCollectionBlock">
+    <t:reservecollectionactionslinklist collection="collection"/>
+    <t:secureblock action="EDIT_ENTRIES" objectID="collection.id">
+        <t:createentrylinklist collection="collection"/>
+    </t:secureblock>
+    <ul class="nav navbar-nav">
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <b class="glyphicon glyphicon-export"></b>
+                <span class="dropdown-text"> ${message:export} </span>
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <t:if test="participation">
+                    <li>
+                        <t:pagelink page="collection/rss" context="[collection.id, participation.userId, participation.accessKey]">${message:rss}</t:pagelink>
+                    </li>
+                </t:if>
+            </ul>
+        </li>
+    </ul>
+</t:block>
+<t:if test="workflowMessage">
+    <div class="row">
+        <div class="col-md-12">
+            <p class="alert alert-success">
+                <t:outputraw value="workflowMessage"/>
+            </p>
+        </div>
+    </div>
+</t:if>
+
+<t:if test="expiring">
+    <t:if test="prolongable">
+
+        <t:secureblock action="PROLONG_RESERVE_COLLECTION" objectID="collection.id">
+            <div class="last-column">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alert alert-warning">
+                            <p>
+                                <span class="glyphicon glyphicon-warning-sign"/> <t:outputraw value="message:warning.msg.collection.expiring"/></p>
+
+                            <t:pagelink page="collection/prolongcollection" class="button"
+                                        context="[collection.id, collection.prolongCode]">${message:prolong}</t:pagelink>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t:secureblock>
+    </t:if>
+</t:if>
+<div t:type="paper">
+    <section class="folder-tab" id="reserve-collection-meta">
+        <div class="row">
+
+            <div class="col-md-9">
+                <header>
+                    <h4>${collection.title}</h4>
+                </header>
+            </div>
+            <div class="col-md-3 hide-on-no-js">
+                <button id="toggle-details" data-show-msg="${message:show.details}" class="button"
+                        data-hide-msg="${message:hide.details}">${message:show.details}</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-3 col-md-9">
+                <dl class="hide-on-js">
+                    <dt>${message:meta.label.number}</dt>
+                    <!-- get integer value of collections number if a number is given-->
+                    <dd>${collection.number?.number}</dd>
+                    <dt>${message:status}</dt>
+                    <dd>${prop:localizedStatus}</dd>
+                    <dt>${message:meta.label.valid.to}</dt>
+                    <dd>${validTo}</dd>
+                    <t:if test="collection.dissolveAt">
+                        <dt>${message:meta.label.dissolve.at}</dt>
+                        <dd>${dissolveAt}</dd>
+                    </t:if>
+                    <dt>${message:meta.label.docent}</dt>
+                    <dd>
+                        <t:loop source="docents" value="docent"><div>${docent}</div></t:loop>
+                    </dd>
+                    <dt>${message:media.download.allowed}</dt>
+                    <dd>
+                        <t:if test="collection.mediaDownloadAllowed">
+                            <span class="glyphicon glyphicon-ok"/>
+                            <p:else>
+                                <span class="glyphicon glyphicon-remove"/>
+                            </p:else>
+                        </t:if>
+                        <div></div>
+                    </dd>
+                    <t:secureblock action="EDIT_RESERVE_COLLECTION_ADMIN_DATA" objectID="collection.id">
+                        <dt>${message:alephSystemId-label}</dt>
+                        <dd>${collection.alephSystemId}</dd>
+                        <dt>${message:alephUserId-label}</dt>
+                        <dd>${collection.alephUserId}</dd>
+                        <dt>${message:comment-label}</dt>
+                        <dd>${collection.comment}</dd>
+                    </t:secureblock>
+                    <t:secureblock action="EDIT_STUDENT_ROLE_KEY" objectID="collection.id">
+                        <dt>${message:meta.label.read.key}</dt>
+                        <dd>${collection.readKey}</dd>
+                    </t:secureblock>
+                    <t:secureblock action="EDIT_ASSISTANT_ROLE_KEY" objectID="collection.id">
+                        <dt>${message:meta.label.write.key}</dt>
+                        <dd>${collection.writeKey}</dd>
+                    </t:secureblock>
+                    <dt>${message:location}</dt>
+                    <dd>${collection.libraryLocation.name}</dd>
+                </dl>
+            </div>
+        </div>
+    </section>
+</div>
+<div t:type="paper">
+
+    <section>
+        <div class="list-highlight toc">
+            <div class="stacked-paper-container headline-entry">
+                <div class="stacked-paper">
+                    <h3>${message:toc.header.label}</h3>
+                </div>
+            </div>
+            <ul>
+                <t:loop source="headlines" value="headline">
+                    <li>
+                        <div class="headline">
+                            <a href="#${headline.id}">${headline.text}</a>
+                        </div>
+                        <div class="page-number">${headlinePageNumber}</div>
+                    </li>
+                </t:loop>
+            </ul>
+        </div>
+    </section>
+
+</div>
+
+<div t:type="paper">
+
+    <t:zone t:id="entriesZone" id="entriesZone" update="none">
+        <t:form t:id="entriesForm" id="entriesForm" zone="^">
+            <ul class="entry-list" id="entries">
+
+                <t:loop source="collection.entries" value="entry" encoder="entryEncoder">
+                    <li class="entry" id="${entry.id}">
+                        <t:hidden value="entry.position" id="index_${entry.position}"/>
+                        <t:delegate to="blockForEntry"/>
+                    </li>
+                </t:loop>
+            </ul>
+
+            <!-- workaround to submit the form via ajax -->
+            <t:linksubmit/>
+        </t:form>
+    </t:zone>
+
+    <t:block id="headlineBlock">
+        <t:delegate to="entryControlsBlock" entryID="${entry.id}" page="entry/editheadline"/>
+        <t:entry.headline headline="entryAsHeadline"/>
+    </t:block>
+
+    <t:block id="htmlBlock">
+        <t:delegate to="entryControlsBlock" entryID="${entry.id}" page="entry/edithtml"/>
+        <t:entry.html html="entryAsHtml"/>
+    </t:block>
+
+    <t:block id="bookBlock">
+        <t:delegate to="entryControlsBlock" entryID="${entry.id}" page="entry/editbook"/>
+        <t:entry.book book="entryAsBook"/>
+    </t:block>
+
+    <t:block id="bookChapterBlock">
+        <t:delegate to="cloneableEntryControlsBlock" entryID="${entry.id}" page="entry/editbookchapter"/>
+        <t:entry.bookchapter bookChapter="entryAsBookChapter"/>
+    </t:block>
+
+    <t:block id="fileBlock">
+        <t:delegate to="entryControlsBlock" entryID="${entry.id}" page="entry/editfile"/>
+        <t:entry.file file="entryAsFile"/>
+    </t:block>
+
+    <t:block id="journalArticleBlock">
+        <t:delegate to="cloneableEntryControlsBlock" entryID="${entry.id}" page="entry/editjournal"/>
+        <t:entry.journalarticle journalArticle="entryAsJournalArticle"/>
+    </t:block>
+
+    <t:block id="webLinkBlock">
+        <t:delegate to="entryControlsBlock" entryID="${entry.id}" page="entry/editweblink"/>
+        <t:entry.weblink webLink="entryAsWebLink"/>
+    </t:block>
+
+    <t:block id="referenceBlock">
+        <t:delegate to="entryControlsBlock" entryID="${entry.id}" page="entry/editreference"/>
+        <t:entry.reference reference="entryAsReference"/>
+    </t:block>
+
+    <!-- block that generates the div for entry controls for one single entry -->
+    <t:block id="entryControlsBlock">
+        <div class="row block">
+            <div class="col-md-1">
+                <div class="center-block">
+                    <a class="glyphicon glyphicon-move draggable"/>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="entry-divider"></div>
+            </div>
+            <div class="col-md-1">
+                <t:secureblock action="EDIT_ENTRIES" objectID="collection.id">
+                    <div class="entry-controls center-block">
+                        <div class="dropdown">
+                            <button data-toggle="dropdown" class="btn btn-default">
+                                <span class="glyphicon glyphicon-option-vertical"/>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <t:eventlink event="deleteEntry" title="message:delete"
+                                                 context="var:entryID">
+                                        <span class="glyphicon glyphicon-remove"/>
+                                        ${message:delete}
+                                    </t:eventlink>
+                                </li>
+                                <li>
+                                    <t:pagelink page="var:page" context="var:entryID" title="message:edit">
+                                        <span class="glyphicon glyphicon-edit" ></span>
+                                        ${message:edit}
+                                    </t:pagelink>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </t:secureblock>
+            </div>
+        </div>
+    </t:block>
+
+    <t:block id="cloneableEntryControlsBlock">
+
+        <div class="row block">
+            <div class="col-md-1">
+                <div class="center-block">
+                    <a class="glyphicon glyphicon-move draggable"/>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="entry-divider"></div>
+            </div>
+            <div class="col-md-1">
+                <t:secureblock action="EDIT_ENTRIES" objectID="collection.id">
+                    <div class="entry-controls center-block">
+                        <div class="dropdown">
+                            <button data-toggle="dropdown" class="btn btn-default">
+                                <span class="glyphicon glyphicon-option-vertical"/>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <t:eventlink event="deleteEntry" title="message:delete"
+                                                 context="var:entryID">
+                                        <span class="glyphicon glyphicon-remove"/>
+                                        ${message:delete}
+                                    </t:eventlink>
+                                </li>
+                                <li>
+                                    <t:pagelink page="var:page" context="var:entryID" title="message:edit">
+                                        <span class="glyphicon glyphicon-edit" ></span>
+                                        ${message:edit}
+                                    </t:pagelink>
+                                </li>
+                                <li>
+                                    <t:eventlink event="cloneEntry" title="message:clone"
+                                                 context="var:entryID">
+                                        <span class="glyphicon glyphicon-copy" ></span>
+                                        ${message:clone}
+                                    </t:eventlink>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </t:secureblock>
+            </div>
+        </div>
+    </t:block>
+</div>
+</html>
+

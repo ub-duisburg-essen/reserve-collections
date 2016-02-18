@@ -1,0 +1,99 @@
+<t:container xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+    <ul class="nav navbar-nav">
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <b class="glyphicon glyphicon-home"></b>
+                <span class="dropdown-text"> ${message:reserve.collection} </span>
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <t:secureblock action="CREATE_RESERVE_COLLECTION">
+                    <li>
+                        <t:pagelink page="collection/createcollection">${message:create}</t:pagelink>
+                    </li>
+                </t:secureblock>
+                <t:if test="collection">
+                    <t:secureblock action="EDIT_RESERVE_COLLECTION" objectID="collection.id">
+                        <li>
+                            <t:pagelink page="collection/editcollection"
+                                        context="collection.id">${message:edit}</t:pagelink>
+                        </li>
+                    </t:secureblock>
+                    <t:secureblock action="REENTER_ACCESS_KEY" objectID="collection.id">
+                        <li>
+                            <t:pagelink page="collection/enteraccesskey"
+                                        context="collection.id">${message:reenter.access.key}</t:pagelink>
+                        </li>
+                    </t:secureblock>
+                    <t:secureblock action="READ_COLLECTION_STATISTICS" objectID="collection.id">
+                        <li>
+                            <t:pagelink page="collection/stats"
+                                        context="collection.id">${message:statistic}</t:pagelink>
+                        </li>
+                    </t:secureblock>
+                    <t:secureblock action="EDIT_RESERVE_COLLECTION" objectID="collection.id">
+                        <li>
+                            <t:pagelink page="participation/viewparticipation"
+                                        context="collection.id">${message:view.participation}</t:pagelink>
+                        </li>
+                        <li>
+                            <t:pagelink page="participation/createparticipation"
+                                        context="collection.id">${message:add.participation}</t:pagelink>
+                        </li>
+                    </t:secureblock>
+                    <li>
+                        <hr/>
+                    </li>
+                    <t:if test="collection.renewable">
+                        <t:secureblock action="RENEW_RESERVE_COLLECTION" objectID="collection.id">
+                            <li>
+                                <t:eventlink t:event="renew" t:context="collection.id"
+                                             t:mixins="confirm"
+                                             confirm.message="message:confirm.msg.renew"
+                                             confirm.title="message:collection.renew">${message:renew}</t:eventlink>
+                            </li>
+                        </t:secureblock>
+                    </t:if>
+                    <t:if test="collection.activateable">
+                        <t:secureblock action="ACTIVATE_RESERVE_COLLECTION" objectID="collection.id">
+                            <li>
+                                <t:pagelink page="collection/activatecollection" t:context="collection.id">
+                                    ${message:activate}
+                                </t:pagelink>
+                            </li>
+                        </t:secureblock>
+                    </t:if>
+                    <t:if test="collection.deactivateable">
+                        <t:secureblock action="DEACTIVATE_RESERVE_COLLECTION" objectID="collection.id">
+                            <li>
+                                <t:eventlink event="deactivate" context="collection.id"
+                                             t:mixins="confirm"
+                                             confirm.message="message:confirm.msg.deactivate"
+                                             confirm.title="message:collection.deactivate">${message:deactivate}</t:eventlink>
+                            </li>
+                        </t:secureblock>
+                    </t:if>
+                    <t:if test="collection.archiveable">
+                        <t:secureblock action="ARCHIVE_RESERVE_COLLECTION" objectID="collection.id">
+                            <li>
+                                <t:eventlink event="archive" context="collection.id"
+                                             t:mixins="confirm"
+                                             confirm.message="message:confirm.msg.archive"
+                                             confirm.title="message:collection.archive">${message:archive}</t:eventlink>
+                            </li>
+                        </t:secureblock>
+                    </t:if>
+                    <t:secureblock action="DELETE_RESERVE_COLLECTION" objectID="collection.id">
+                        <li>
+                            <t:eventlink event="delete" context="collection.id"
+                                         t:mixins="confirm"
+                                         confirm.message="message:confirm.msg.delete"
+                                         confirm.title="message:collection.delete">${message:delete}</t:eventlink>
+                        </li>
+                    </t:secureblock>
+                </t:if>
+            </ul>
+        </li>
+    </ul>
+</t:container>

@@ -1,0 +1,39 @@
+<t:container xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+    <div class="row">
+
+        <div class="col-md-2">
+            <img src="${context:/img/mimetypes}/${prop:filenameForMime}" class="book-thumbnail"></img>
+        </div>
+        <div class="col-md-10">
+
+            <div class="row">
+                <t:if test="file.description">
+                    <div class="col-md-2">
+                        <div class="entry-label">${message:description}</div>
+                    </div>
+                    <div class="col-md-10">${file.description}</div>
+                </t:if>
+            </div>
+
+            <t:if test="file.resource">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="entry-label">${message:filename}</div>
+                    </div>
+                    <div class="col-md-10">
+                        <t:eventlink event="download" title="message:download"
+                                     context="file.resource.id" class="piwik_download">
+                            ${file.resource.fileName}
+                        </t:eventlink>
+                        <t:if test="downloadAllowed">
+
+                            <t:pagelink page="entry/download" context="[file.resource.id, 'attachment']"
+                                        class="glyphicon glyphicon-download piwik_download"/>
+                        </t:if>
+                    </div>
+                </div>
+            </t:if>
+        </div>
+    </div>
+</t:container>

@@ -1,0 +1,14 @@
+<html t:type="layout" title="${resource.fileName}"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+        >
+
+<div class="last-column">
+    <section>
+        <div class="row">
+            <div class="col-md-12">
+                downloading...
+            </div>
+        </div>
+    </section>
+</div>
+</html>

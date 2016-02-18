@@ -1,0 +1,65 @@
+<t:container xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="book-thumbnail">
+                <img src="${context:/img/chapter_thumbnail.png}"/>
+            </div>
+        </div>
+        <div class="col-md-10">
+
+            <section>
+                <p>
+                    <strong>
+                        ${bookChapter.chapterTitle}
+                        <t:if test="bookChapter.chapterAuthors"> / ${bookChapter.chapterAuthors}</t:if>
+                    </strong>
+                </p>
+                <p>
+                    <t:if test="bookChapter.bookTitle">${message:in}: ${bookChapter.bookTitle} </t:if>
+                    <t:if test="bookChapter.bookAuthors"> / ${bookChapter.bookAuthors}</t:if>
+                    <t:if test="bookChapter.editor"> / ${bookChapter.editor} </t:if>
+                    /
+                    <t:if test="bookChapter.edition"> - ${bookChapter.edition}</t:if>
+                    <t:if test="bookChapter.placeOfPublication"> . - ${bookChapter.placeOfPublication}</t:if>
+                    <t:if test="bookChapter.publisher">: ${bookChapter.publisher}</t:if>
+                    <t:if test="bookChapter.yearOfPublication">, ${bookChapter.yearOfPublication}</t:if>
+                    <t:if test="bookChapter.isbn">. - ${message:chapter-issn-label}: ${bookChapter.isbn}</t:if>
+                </p>
+                <t:if test="bookChapter.signature"><p>
+                    ${message:chapter-signature-label}: <a
+                    href="${sys:primo.sig.search.url}${bookChapter.signature}">${bookChapter.signature}
+                    (${message:primo.sig.show.in.catalogue})</a>
+                </p>
+                </t:if>
+                <p>
+                    <t:if test="bookChapter.pageStart">${message:chapter-page-label} ${bookChapter.pageStart}</t:if>
+                    <t:if test="bookChapter.pageEnd"> - ${bookChapter.pageEnd}</t:if>
+
+                </p>
+                <t:if test="bookChapter.fileAvailable">
+                    <p>
+                        <t:eventlink event="download" title="message:download"
+                                     context="bookChapter.resource.id">
+                            ${bookChapter.resource.fileName}
+                        </t:eventlink>
+                        <t:pagelink page="entry/download"
+                                    context="[bookChapter.resource.id, 'attachment']"
+                                    class="glyphicon glyphicon-download "/>
+                    </p>
+                </t:if>
+                <t:if test="bookChapter.resource?.fullTextURL">
+                    <p>
+                        <a href="${bookChapter.resource.fullTextURL}"
+                           target="_blank">${bookChapter.resource.fullTextURL}</a></p>
+                </t:if>
+                <t:if test="bookChapter.comment">
+                    <p>
+                        ${bookChapter.comment}
+                    </p>
+                </t:if>
+
+            </section>
+        </div>
+    </div>
+</t:container>

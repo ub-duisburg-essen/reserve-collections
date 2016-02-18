@@ -1,0 +1,238 @@
+<html t:type="layout" title="${collection.title} #${collection.id}"
+      actionBarBlock="editJournalBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+
+<t:block t:id="editJournalBlock">
+    <t:reservecollectionactionslinklist collection="collection"/>
+    <t:createentrylinklist collection="collection"/>
+</t:block>
+
+<div t:type="paper">
+
+<!-- base form style from bootstrap. see http://twitter.github.io/bootstrap/base-css.html#forms -->
+<form t:type="Form" class="form-horizontal" t:id="journal_form" t:clientValidation="blur">
+    <fieldset>
+        <div class="form-group">
+            <h4 class="col-md-12 ">${message:article-info-label}</h4>
+        </div>
+
+        <div class="form-group">
+
+            <label class="col-md-3 control-label required" for="articletitle">${message:article-title-label}</label>
+
+            <div class="col-md-6">
+                <input t:type="TextField" t:id="articletitle" id="articletitle"
+                       t:value="journal.articleTitle" placeholder="${message:article-title-placeholder}"
+                       class="form-control" validate="required"/>
+                <t:error for="articletitle"/>
+            </div>
+        </div>
+        <div class="form-group">
+
+            <label class="col-md-3 control-label " for="articleauthors">${message:article-authors-label}</label>
+
+            <div class="col-md-6">
+                <input t:type="TextField" t:id="articleauthors" id="articleauthors"
+                       t:value="journal.authors" placeholder="${message:article-authors-placeholder}"
+                       class="form-control"/>
+                <t:error for="articleauthors"/>
+            </div>
+        </div>
+        <div class="form-group">
+
+            <label class="col-md-3 control-label " for="articlecomment">${message:article-comment-label}</label>
+
+            <div class="col-md-6">
+                <input t:type="TextField" t:id="articlecomment" id="articlecomment"
+                       t:value="journal.comment" placeholder="${message:article-comment-placeholder}"
+                       class="form-control"/>
+                <t:error for="articlecomment"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <h4 class="col-md-12">${message:journal-info-label}</h4>
+        </div>
+        <div class="form-group">
+
+            <label class="col-md-3 control-label required" for="journaltitle">${message:journal-title-label}</label>
+
+            <div class="col-md-6">
+                <input t:type="TextField" t:id="journaltitle" id="journaltitle"
+                       t:value="journal.journalTitle" placeholder="${message:journal-title-placeholder}"
+                       class="form-control" validate="required"/>
+                <t:error for="journaltitle"/>
+            </div>
+        </div>
+        <div class="form-group">
+
+            <label class="col-md-3 control-label" for="journalplace">${message:journal-place-label}</label>
+
+            <div class="col-md-6">
+                <input t:type="TextField" t:id="journalplace" id="journalplace"
+                       t:value="journal.placeofPublication" placeholder="${message:journal-place-placeholder}"
+                       class="form-control"/>
+                <t:error for="journalplace"/>
+            </div>
+        </div>
+        <div class="form-group">
+
+            <label class="col-md-3 control-label " for="journalpublisher">${message:journal-publisher-label}</label>
+
+            <div class="col-md-6">
+                <input t:type="TextField" t:id="journalpublisher" id="journalpublisher"
+                       t:value="journal.publisher" placeholder="${message:journal-publisher-placeholder}"
+                       class="form-control"/>
+                <t:error for="journalpublisher"/>
+            </div>
+        </div>
+        <div class="form-group">
+
+            <label class="col-md-3 control-label " for="journalissn">${message:journal-issn-label}</label>
+
+            <div class="col-md-6">
+                <input t:type="TextField" t:id="journalissn" id="journalissn"
+                       t:value="journal.issn" placeholder="${message:journal-issn-placeholder}" class="form-control"/>
+                <t:error for="journalissn"/>
+            </div>
+
+        </div>
+        <div class="form-group">
+
+            <label class="col-md-3 control-label " for="journalsignature">${message:journal-signature-label}</label>
+
+            <div class="col-md-6">
+                <input t:type="TextField" t:id="journalsignature" id="journalsignature"
+                       t:value="journal.signature" placeholder="${message:journal-signature-placeholder}"
+                       class="form-control"/>
+                <t:error for="journalsignature"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <h4 class="col-md-12">${message:article-locationinfo-label}</h4>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-3 control-label " for="journalvolume">${message:journal-volume-label}</label>
+
+            <div class="col-md-6">
+                <input t:type="TextField" t:id="journalvolume" id="journalvolume"
+                       t:value="journal.volume" placeholder="${message:journal-volume-placeholder}"
+                       class="form-control"/>
+                <t:error for="journalvolume"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-3 control-label " for="journalissue">${message:journal-issue-label}</label>
+
+            <div class="col-md-6">
+                <input t:type="TextField" t:id="journalissue" id="journalissue"
+                       t:value="journal.issue" placeholder="${message:journal-issue-placeholder}" class="form-control"/>
+                <t:error for="journalissue"/>
+            </div>
+        </div>
+        <div class="form-group">
+
+            <label class="col-md-3 control-label required"
+                   for="journalpagesfrom">${message:journal-pagesfrom-label}</label>
+
+            <div class="col-md-6">
+                <input t:type="TextField" t:id="journalpagesfrom" id="journalpagesfrom"
+                       t:value="journal.pageStart" placeholder="${message:journal-pagesfrom-placeholder}"
+                       class="form-control" validate="required"/>
+                <t:error for="journalpagesfrom"/>
+            </div>
+        </div>
+        <div class="form-group">
+
+            <label class="col-md-3 control-label required" for="journalpagesto">${message:journal-pagesto-label}</label>
+
+            <div class="col-md-6">
+
+
+                <input t:type="TextField" t:id="journalpagesto" id="journalpagesto"
+                       t:value="journal.pageEnd" placeholder="${message:journal-pagesto-placeholder}"
+                       class="form-control" validate="required"/>
+                <t:error for="journalpagesto"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <h4 class="col-md-12">${message:article-fulltext-label}</h4>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-3 control-label" for="refno">${message:journal-refno-label}</label>
+
+            <div class="col-md-6">
+                <input t:type="TextField" t:id="refno" id="refno"
+                       t:value="journal.referenceNumber" placeholder="${message:journal-refno-placeholder}"
+                       class="form-control"/>
+                <t:error for="refno"/>
+                <p>${message:journal-refno-info}</p>
+            </div>
+        </div>
+        <div class="form-group">
+
+
+            <label class="col-md-3 control-label" for="uploads">${message:file-label}</label>
+
+            <div class="col-md-6">
+                <div t:type="udetapestry/ajaxupload" t:id="uploads" id="uploads" maxFiles="1"/>
+
+            </div>
+        </div>
+        <t:if test="journal.fileAvailable">
+            <t:if test="journal.resource.filePath">
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="deleteFile">${message:delete-file-label}</label>
+
+                    <div class="col-md-6">
+                        <input t:type="checkbox" value="deleteFile" t:id="deleteFile" id="deleteFile"/>
+                        <label class="sub" for="deleteFile">${journal.resource.fileName}</label>
+                    </div>
+                </div>
+            </t:if>
+
+        </t:if>
+        <div class="form-group">
+
+            <label class="col-md-3 control-label" for="journalurl">${message:journal-url-label}</label>
+
+            <div class="col-md-6">
+                <input t:type="TextField" t:id="journalurl" id="journalurl"
+                       t:value="fullTextURL" placeholder="${message:journal-url-placeholder}"
+                       class="form-control"/>
+                <t:error for="journalurl"/>
+            </div>
+        </div>
+        <t:secureblock action="EDIT_COPYRIGHT_REVIEWS">
+            <div class="form-group">
+                <label class="col-md-3 control-label"
+                       for="copyright">${message:copyright-label}</label>
+
+                <div class="col-md-6">
+
+                    <select data-placeholder="${message:chosen-placeholder-label}"
+                            t:type="Select" t:id="copyright" id="copyright" t:value="copyrightStatus"
+                            class="form-control" t:blankOption="NEVER"/>
+                    <t:error for="copyright"/>
+                </div>
+            </div>
+        </t:secureblock>
+
+        <t:arrangetoheadlineformgroup t:value="headline" t:collection="collection"/>
+        <div class="form-group">
+            <div class="col-md-9 col-md-offset-3">
+                <span class="required-label">${message:required-label}</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-6 col-md-offset-3">
+
+                <input type="submit" value="${message:form-submit-label}"/>
+            </div>
+        </div>
+    </fieldset>
+</form>
+</div>
+</html>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-map xmlns="http://cayenne.apache.org/schema/3.0/modelMap"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://cayenne.apache.org/schema/3.0/modelMap http://cayenne.apache.org/schema/3.0/modelMap.xsd"
+	 project-version="6">
+	<property name="defaultPackage" value="miless.model"/>
+	<db-entity name="ACCESSKEYS">
+		<db-attribute name="docid" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="readkey" type="VARCHAR" isMandatory="true" length="64"/>
+		<db-attribute name="writekey" type="VARCHAR" length="64"/>
+	</db-entity>
+	<db-entity name="DERIVATES">
+		<db-attribute name="created" type="TIMESTAMP" isMandatory="true"/>
+		<db-attribute name="cts" type="VARCHAR" length="250"/>
+		<db-attribute name="docId" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="locator" type="VARCHAR" length="250"/>
+		<db-attribute name="mainFile" type="VARCHAR" length="250"/>
+		<db-attribute name="modified" type="TIMESTAMP" isMandatory="true"/>
+		<db-attribute name="numFiles" type="INTEGER"/>
+		<db-attribute name="original" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="size" type="BIGINT"/>
+		<db-attribute name="type" type="VARCHAR" isMandatory="true" length="16"/>
+	</db-entity>
+	<db-entity name="FILES">
+		<db-attribute name="checksum" type="VARCHAR" isMandatory="true" length="32"/>
+		<db-attribute name="copyright_review_status" type="VARCHAR" length="128"/>
+		<db-attribute name="ct" type="VARCHAR" isMandatory="true" length="32"/>
+		<db-attribute name="deleted" type="BOOLEAN"/>
+		<db-attribute name="file_id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="id" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="modified" type="TIMESTAMP" isMandatory="true"/>
+		<db-attribute name="path" type="VARCHAR" isMandatory="true" length="250"/>
+		<db-attribute name="size" type="BIGINT" isMandatory="true"/>
+		<db-attribute name="storageid" type="VARCHAR" isMandatory="true" length="250"/>
+		<db-attribute name="storeid" type="VARCHAR" isMandatory="true" length="50"/>
+	</db-entity>
+	<db-entity name="MCRCATEGORY">
+		<db-attribute name="CATEGID" type="VARCHAR" length="128"/>
+		<db-attribute name="CLASSID" type="VARCHAR" isMandatory="true" length="32"/>
+		<db-attribute name="INTERNALID" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="10"/>
+		<db-attribute name="LEFTVALUE" type="INTEGER" length="10"/>
+		<db-attribute name="LEVEL" type="INTEGER" length="10"/>
+		<db-attribute name="PARENTID" type="INTEGER" length="10"/>
+		<db-attribute name="POSITIONINPARENT" type="INTEGER" length="10"/>
+		<db-attribute name="RIGHTVALUE" type="INTEGER" length="10"/>
+		<db-attribute name="URI" type="VARCHAR" length="254"/>
+	</db-entity>
+	<db-entity name="MCRCATEGORYLABELS">
+		<db-attribute name="CATEGORY" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="10"/>
+		<db-attribute name="DESCRIPTION" type="VARCHAR" length="255"/>
+		<db-attribute name="LANG" type="VARCHAR" isPrimaryKey="true" isMandatory="true" length="255"/>
+		<db-attribute name="TEXT" type="VARCHAR" length="255"/>
+	</db-entity>
+	<db-entity name="PERMISSIONS">
+		<db-attribute name="action" type="CHAR" isMandatory="true" length="1"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="sid" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="stype" type="CHAR" isMandatory="true" length="1"/>
+		<db-attribute name="tid" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="ttype" type="CHAR" isMandatory="true" length="1"/>
+	</db-entity>
+	<db-entity name="USERS" catalog="miless">
+		<db-attribute name="EMAIL" type="VARCHAR" length="128"/>
+		<db-attribute name="HINT" type="VARCHAR" length="128"/>
+		<db-attribute name="IS_TRACKING_ALLOWED" type="BOOLEAN"/>
+		<db-attribute name="LASTLOGIN" type="TIMESTAMP" length="19"/>
+		<db-attribute name="LEID" type="INTEGER" length="10"/>
+		<db-attribute name="ORIGIN" type="VARCHAR" length="32"/>
+		<db-attribute name="OWNERID" type="INTEGER" length="10"/>
+		<db-attribute name="PASSWORD" type="VARCHAR" length="32"/>
+		<db-attribute name="REALM" type="VARCHAR" isMandatory="true" length="8"/>
+		<db-attribute name="REALNAME" type="VARCHAR" length="128"/>
+		<db-attribute name="USERID" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="10"/>
+		<db-attribute name="USERNAME" type="VARCHAR" isMandatory="true" length="32"/>
+	</db-entity>
+	<obj-entity name="Accesskeys" className="miless.model.Accesskeys" dbEntityName="ACCESSKEYS">
+		<obj-attribute name="readkey" type="java.lang.String" db-attribute-path="readkey"/>
+		<obj-attribute name="writekey" type="java.lang.String" db-attribute-path="writekey"/>
+	</obj-entity>
+	<obj-entity name="Derivates" className="miless.model.Derivates" dbEntityName="DERIVATES">
+		<obj-attribute name="created" type="java.util.Date" db-attribute-path="created"/>
+		<obj-attribute name="cts" type="java.lang.String" db-attribute-path="cts"/>
+		<obj-attribute name="docId" type="java.lang.Integer" db-attribute-path="docId"/>
+		<obj-attribute name="locator" type="java.lang.String" db-attribute-path="locator"/>
+		<obj-attribute name="mainFile" type="java.lang.String" db-attribute-path="mainFile"/>
+		<obj-attribute name="modified" type="java.util.Date" db-attribute-path="modified"/>
+		<obj-attribute name="numFiles" type="java.lang.Integer" db-attribute-path="numFiles"/>
+		<obj-attribute name="original" type="java.lang.Integer" db-attribute-path="original"/>
+		<obj-attribute name="size" type="java.lang.Long" db-attribute-path="size"/>
+		<obj-attribute name="type" type="java.lang.String" db-attribute-path="type"/>
+	</obj-entity>
+	<obj-entity name="Files" className="miless.model.Files" dbEntityName="FILES">
+		<obj-attribute name="checksum" type="java.lang.String" db-attribute-path="checksum"/>
+		<obj-attribute name="copyrightReviewStatus" type="java.lang.String" db-attribute-path="copyright_review_status"/>
+		<obj-attribute name="ct" type="java.lang.String" db-attribute-path="ct"/>
+		<obj-attribute name="deleted" type="boolean" db-attribute-path="deleted"/>
+		<obj-attribute name="id" type="java.lang.Integer" db-attribute-path="id"/>
+		<obj-attribute name="modified" type="java.util.Date" db-attribute-path="modified"/>
+		<obj-attribute name="path" type="java.lang.String" db-attribute-path="path"/>
+		<obj-attribute name="size" type="java.lang.Long" db-attribute-path="size"/>
+		<obj-attribute name="storageid" type="java.lang.String" db-attribute-path="storageid"/>
+		<obj-attribute name="storeid" type="java.lang.String" db-attribute-path="storeid"/>
+	</obj-entity>
+	<obj-entity name="MCRCategory" className="miless.model.MCRCategory" dbEntityName="MCRCATEGORY">
+		<obj-attribute name="categid" type="java.lang.String" db-attribute-path="CATEGID"/>
+		<obj-attribute name="classid" type="java.lang.String" db-attribute-path="CLASSID"/>
+		<obj-attribute name="internalId" type="java.lang.Integer" db-attribute-path="INTERNALID"/>
+		<obj-attribute name="leftvalue" type="java.lang.Integer" db-attribute-path="LEFTVALUE"/>
+		<obj-attribute name="level" type="java.lang.Integer" db-attribute-path="LEVEL"/>
+		<obj-attribute name="positioninparent" type="java.lang.Integer" db-attribute-path="POSITIONINPARENT"/>
+		<obj-attribute name="rightvalue" type="java.lang.Integer" db-attribute-path="RIGHTVALUE"/>
+		<obj-attribute name="uri" type="java.lang.String" db-attribute-path="URI"/>
+	</obj-entity>
+	<obj-entity name="MCRCategoryLabel" className="miless.model.MCRCategoryLabel" dbEntityName="MCRCATEGORYLABELS">
+		<obj-attribute name="description" type="java.lang.String" db-attribute-path="DESCRIPTION"/>
+		<obj-attribute name="lang" type="java.lang.String" db-attribute-path="LANG"/>
+		<obj-attribute name="text" type="java.lang.String" db-attribute-path="TEXT"/>
+	</obj-entity>
+	<obj-entity name="Permissions" className="miless.model.Permissions" dbEntityName="PERMISSIONS">
+		<obj-attribute name="action" type="java.lang.String" db-attribute-path="action"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+		<obj-attribute name="stype" type="java.lang.String" db-attribute-path="stype"/>
+		<obj-attribute name="tid" type="java.lang.Integer" db-attribute-path="tid"/>
+		<obj-attribute name="ttype" type="java.lang.String" db-attribute-path="ttype"/>
+	</obj-entity>
+	<obj-entity name="User" className="miless.model.User" dbEntityName="USERS">
+		<obj-attribute name="email" type="java.lang.String" db-attribute-path="EMAIL"/>
+		<obj-attribute name="hint" type="java.lang.String" db-attribute-path="HINT"/>
+		<obj-attribute name="isTrackingAllowed" type="java.lang.Boolean" db-attribute-path="IS_TRACKING_ALLOWED"/>
+		<obj-attribute name="lastlogin" type="java.util.Date" db-attribute-path="LASTLOGIN"/>
+		<obj-attribute name="leid" type="int" db-attribute-path="LEID"/>
+		<obj-attribute name="origin" type="java.lang.String" db-attribute-path="ORIGIN"/>
+		<obj-attribute name="ownerid" type="int" db-attribute-path="OWNERID"/>
+		<obj-attribute name="password" type="java.lang.String" db-attribute-path="PASSWORD"/>
+		<obj-attribute name="realm" type="java.lang.String" db-attribute-path="REALM"/>
+		<obj-attribute name="realname" type="java.lang.String" db-attribute-path="REALNAME"/>
+		<obj-attribute name="userid" type="java.lang.Integer" db-attribute-path="USERID"/>
+		<obj-attribute name="username" type="java.lang.String" db-attribute-path="USERNAME"/>
+	</obj-entity>
+	<db-relationship name="labels" source="MCRCATEGORY" target="MCRCATEGORYLABELS" toDependentPK="true" toMany="true">
+		<db-attribute-pair source="INTERNALID" target="CATEGORY"/>
+	</db-relationship>
+	<db-relationship name="mcrcategoryArray" source="MCRCATEGORY" target="MCRCATEGORY" toMany="true">
+		<db-attribute-pair source="INTERNALID" target="PARENTID"/>
+	</db-relationship>
+	<db-relationship name="toMcrcategory" source="MCRCATEGORY" target="MCRCATEGORY" toMany="false">
+		<db-attribute-pair source="PARENTID" target="INTERNALID"/>
+	</db-relationship>
+	<db-relationship name="category" source="MCRCATEGORYLABELS" target="MCRCATEGORY" toMany="false">
+		<db-attribute-pair source="CATEGORY" target="INTERNALID"/>
+	</db-relationship>
+	<obj-relationship name="childCategories" source="MCRCategory" target="MCRCategory" deleteRule="Deny" db-relationship-path="mcrcategoryArray"/>
+	<obj-relationship name="labels" source="MCRCategory" target="MCRCategoryLabel" deleteRule="Deny" db-relationship-path="labels"/>
+	<obj-relationship name="parentCategory" source="MCRCategory" target="MCRCategory" deleteRule="Nullify" db-relationship-path="toMcrcategory"/>
+	<obj-relationship name="category" source="MCRCategoryLabel" target="MCRCategory" deleteRule="Nullify" db-relationship-path="category"/>
+	<query name="select_max_userid" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="data-map" root-name="miless_datamap">
+		<property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
+		<sql><![CDATA[SELECT max(u.USERID) as userid
+FROM USERS u]]></sql>
+	</query>
+</data-map>

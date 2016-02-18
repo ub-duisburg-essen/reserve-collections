@@ -1,0 +1,16 @@
+<html t:type="layout" title="${collection.title} #${collection.id}"
+      actionBarBlock="createJournalBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+
+<t:block t:id="createJournalBlock">
+    <t:reservecollectionactionslinklist collection="collection"/>
+    <t:createentrylinklist collection="collection"/>
+</t:block>
+
+<div t:type="paper">
+    <form t:type="Form" class="form-horizontal" t:id="article_form" t:clientValidation="none">
+        <t:journalarticleformfragment collection="collection" article="article" t:id="articleFragment"/>
+    </form>
+</div>
+</html>

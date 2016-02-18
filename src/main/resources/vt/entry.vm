@@ -1,0 +1,11 @@
+<table>
+    <caption>Eintrag</caption>
+    <tr>
+        <td>Datum:</td>
+        <td>$entry.Created</td>
+    </tr>
+    <tr>
+        <td>Link Eintrag:</td>
+        <td><a href="$entryLink">$entryLink</a></td>
+    </tr>
+</table>

@@ -1,0 +1,82 @@
+## variables
+#set($collection = $book.Entry.ReserveCollection)
+#set($entry = $book.Entry)
+
+<html>
+<head>
+    <title></title>
+    #include("mail.style.vm")
+</head>
+<body>
+#parse("collection.vm")
+#parse("entry.vm")
+<table>
+    <caption>Buch</caption>
+    <tr>
+        <td>Titel:</td>
+        <td>$book.Title</td>
+    </tr>
+    #if($book.Authors)
+        <tr>
+            <td>Autor(Innen):</td>
+            <td>$book.Authors</td>
+        </tr>
+    #end
+    #if($book.Volume)
+        <tr>
+            <td>Band:</td>
+            <td>$book.Volume</td>
+        </tr>
+    #end
+    #if($book.Edition)
+        <tr>
+            <td>Ausgabe/Auflage:</td>
+            <td>$book.Edition</td>
+        </tr>
+    #end
+    #if($book.PlaceOfPublication)
+        <tr>
+            <td>Erscheinungsort:</td>
+            <td>$book.PlaceOfPublication</td>
+        </tr>
+    #end
+    #if($book.Publisher)
+        <tr>
+            <td>Verlag:</td>
+            <td>$book.Publisher</td>
+        </tr>
+    #end
+    #if($book.YearOfPublication)
+        <tr>
+            <td>Erscheinungsjahr:</td>
+            <td>$book.YearOfPublication</td>
+        </tr>
+    #end
+    #if($book.Isbn)
+        <tr>
+            <td>ISBN:</td>
+            <td>$book.Isbn</td>
+        </tr>
+    #end
+    #if($book.Comment)
+        <tr>
+            <td>Kommentar:</td>
+            <td>$book.Comment</td>
+        </tr>
+    #end
+    #if($book.Signature)
+        <tr>
+            <td>Signatur:</td>
+            <td>$book.Signature</td>
+        </tr>
+        <tr>
+            <td>Link zum Katalog:</td>
+            <td>
+                <a href="http://primo.ub.uni-due.de/primo_library/libweb/action/dlSearch.do?vid=UDE&institution=UDE&search_scope=default_scope&bulkSize=10&lang=ger&indx=1&onCampus=false&query=lsr11,contains,$book.Signature">Primo</a></td>
+        </tr>
+    #end
+</table>
+
+#parse("deleted.entry.vm")
+</body>
+</html>

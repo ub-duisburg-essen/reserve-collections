@@ -1,0 +1,47 @@
+<html t:type="layout" title="${message:user.page.title}"
+      actionBarBlock="userActionBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+
+<t:block t:id="userActionBlock">
+    <t:secureblock action="CREATE_RESERVE_COLLECTION">
+        <t:reservecollectionactionslinklist/>
+    </t:secureblock>
+</t:block>
+
+<div t:type="paper">
+    <table class="table">
+        <caption>${caption}</caption>
+        <thead>
+        <tr>
+            <th>${message:location}</th>
+            <th>${message:number-label}</th>
+            <th>${message:title-label}</th>
+            <th>${message:status}</th>
+            <th>${message:role}</th>
+            <th>${message:actions}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <t:loop source="participations" value="participation" encoder="participationEncoder">
+            <tr>
+                <td>${participation.reserveCollection.libraryLocation.name}</td>
+                <td>${participation.reserveCollection.number.number}</td>
+                <td>
+                    <t:pagelink page="collection/viewcollection" context="participation.reserveCollection.id">
+                        ${participation.reserveCollection.title}
+                    </t:pagelink>
+                </td>
+                <td>${status}</td>
+                <td>${participation.role.name}</td>
+                <td>
+                    <t:if test="participationEndingAllowed">
+                        <t:eventlink event="removeParticipation" context="participation.id">${message:remove}</t:eventlink>
+                    </t:if>
+                </td>
+            </tr>
+        </t:loop>
+        </tbody>
+    </table>
+</div>
+</html>

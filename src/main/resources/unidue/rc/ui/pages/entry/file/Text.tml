@@ -1,0 +1,27 @@
+<html t:type="layout" title="${text.fileName}"
+      actionBarBlock="textBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+        >
+
+<t:block t:id="textBlock">
+    <t:reservecollectionactionslinklist/>
+    <ul class="nav navbar-nav">
+        <li>
+            <t:pagelink page="entry/download" context="[text.id,'attachment']">
+                <b class="glyphicon glyphicon-download"></b>
+                <span> ${message:download}</span>
+            </t:pagelink>
+        </li>
+    </ul>
+</t:block>
+
+<div class="last-column">
+    <section>
+        <div class="row">
+            <div class="col-md-12">
+                <pre><code class="${brush}">${rawText}</code></pre>
+            </div>
+        </div>
+    </section>
+</div>
+</html>

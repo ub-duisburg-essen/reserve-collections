@@ -1,0 +1,76 @@
+<html t:type="layout" title="${message:view.scan.job.page.title} #${scanJob.id}"
+      actionBarBlock="scanJobActionBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+<t:block t:id="scanJobActionBlock">
+    <t:reservecollectionactionslinklist/>
+
+    <ul class="nav navbar-nav">
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <b class="glyphicon glyphicon-tasks"></b>
+                <span class="dropdown-text"> ${message:job}</span>
+                <b class="caret"></b>
+            </a>
+
+            <ul class="dropdown-menu">
+                <li>
+                    <t:pagelink page="jobs/editscanjob" context="scanJob.id">${message:edit}</t:pagelink>
+                    <a href="#" class="print-button" onclick="window.print();">${message:print}</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</t:block>
+
+<div t:type="paper">
+
+    <section class="folder-tab">
+        <div class="row">
+
+            <div class="col-md-9">
+
+                <header>
+                    <h2>${libraryItem.title}</h2>
+                </header>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-md-7">
+                <t:if test="isJournalArticle">
+                    <t:scanarticledefinitionlist journalArticle="journalArticle" scanJob="scanJob"
+                                                 barcodeContent="barcodeContent"/>
+                </t:if>
+                <t:if test="isBookChapter">
+                    <t:scanchapterdefinitionlist bookChapter="bookChapter" scanJob="scanJob"
+                                                 barcodeContent="barcodeContent"/>
+                </t:if>
+            </div>
+            <div class="col-md-5">
+                <section class="comments">
+                    <h4>${message:comments}</h4>
+                    <t:loop source="scanJob.comments" value="comment">
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="annotator">${annotatorNameForComment}</div>
+                            </div>
+                            <div class="col-md-6">
+
+                                <div>${commentDate}</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <div class="comment">${comment.comment}</div>
+                            </div>
+                        </div>
+                    </t:loop>
+                </section>
+            </div>
+        </div>
+    </section>
+</div>
+</html>

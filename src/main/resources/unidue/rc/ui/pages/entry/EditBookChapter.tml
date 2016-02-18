@@ -1,0 +1,236 @@
+<html t:type="layout" title="${collection.title} #${collection.id}"
+      actionBarBlock="editBookChapterBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+        >
+
+<t:block t:id="editbookChapterBlock">
+    <t:reservecollectionactionslinklist collection="collection"/>
+    <t:createentrylinklist collection="collection"/>
+</t:block>
+
+<div t:type="paper">
+
+    <form t:type="Form" class="form-horizontal" t:id="edit_bookchapter_form" t:clientValidation="none">
+
+        <fieldset>
+            <div class="form-group">
+                <h4 class="col-md-12 ">${message:chapter-info-label}</h4>
+            </div>
+            <div class="form-group">
+
+                <label class="col-md-3 control-label required"
+                       for="chaptertitle">${message:chapter-title-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="chaptertitle" id="chaptertitle" class="form-control"
+                           t:value="chapter.chapterTitle" placeholder="${message:chapter-title-placeholder}"
+                           validate="required"/>
+                    <t:error for="chaptertitle"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label " for="chapterauthors">${message:chapter-authors-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="chapterauthors" id="chapterauthors" class="form-control"
+                           t:value="chapter.chapterAuthors" placeholder="${message:chapter-authors-placeholder}"/>
+                    <t:error for="chapterauthors"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label " for="chaptercomment">${message:chapter-comment-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="chaptercomment" id="chaptercomment" class="form-control"
+                           t:value="chapter.comment" placeholder="${message:chapter-comment-placeholder}"/>
+                    <t:error for="chaptercomment"/>
+                </div>
+            </div>
+            <h4>${message:chapter-bookinfo-label}</h4>
+
+            <div class="form-group">
+
+                <label class="col-md-3 control-label required" for="booktitle">${message:book-title-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="booktitle" id="booktitle" class="form-control"
+                           t:value="chapter.bookTitle" placeholder="${message:book-title-placeholder}"
+                           validate="required"/>
+                    <t:error for="booktitle"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label " for="bookauthors">${message:book-authors-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="bookauthors" id="bookauthors" class="form-control"
+                           t:value="chapter.bookAuthors" placeholder="${message:book-authors-placeholder}"/>
+                    <t:error for="bookauthors"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label " for="bookedition">${message:book-edition-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="bookedition" id="bookedition" class="form-control"
+                           t:value="chapter.edition" placeholder="${message:book-edition-placeholder}"/>
+                    <t:error for="bookedition"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label " for="bookplaceofpublication">${message:book-place-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="bookplaceofpublication" id="bookplaceofpublication" class="form-control"
+                           t:value="chapter.placeOfPublication" placeholder="${message:book-place-placeholder}"
+                           validate="required"/>
+                    <t:error for="bookplaceofpublication"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label " for="bookpublisher">${message:book-publisher-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="bookpublisher" id="bookpublisher" class="form-control"
+                           t:value="chapter.publisher" placeholder="${message:book-publisher-placeholder}"/>
+                    <t:error for="bookpublisher"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label " for="bookyearofpublication">${message:book-year-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="bookyearofpublication" id="bookyearofpublication" class="form-control"
+                           t:value="chapter.yearOfPublication" placeholder="${message:book-year-placeholder}"/>
+                    <t:error for="bookyearofpublication"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label " for="bookissn">${message:book-isbn-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="bookissn" id="bookissn" class="form-control"
+                           t:value="chapter.isbn" placeholder="${message:book-isbn-placeholder}"/>
+                    <t:error for="bookissn"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label " for="booksignature">${message:book-signature-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="booksignature" id="booksignature" class="form-control"
+                           t:value="chapter.signature" placeholder="${message:book-signature-placeholder}"/>
+                    <t:error for="booksignature"/>
+                </div>
+            </div>
+            <h4>${message:chapter-pageinfo-label}</h4>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label required"
+                       for="bookpagesfrom">${message:book-pagesfrom-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="bookpagesfrom" id="bookpagesfrom" class="form-control"
+                           t:value="chapter.pageStart" placeholder="${message:book-pagesfrom-placeholder}"
+                           validate="required"/>
+                    <t:error for="bookpagesfrom"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label required" for="bookpagesto">${message:book-pagesto-label}</label>
+
+                <div class="col-md-6">
+
+                    <input t:type="TextField" t:id="bookpagesto" id="bookpagesto" class="form-control"
+                           t:value="chapter.pageEnd" placeholder="${message:book-pagesto-placeholder}"
+                           validate="required"/>
+                    <t:error for="bookpagesto"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <h4 class="col-md-12">${message:chapter-fulltext-label}</h4>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="refno">${message:chapter-refno-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="refno" id="refno"
+                           t:value="chapter.referenceNumber" placeholder="${message:chapter-refno-placeholder}"
+                           class="form-control"/>
+                    <t:error for="refno"/>
+                    <br/>
+                    ${message:chapter-refno-info}
+                    <br/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="uploads">${message:file-label}</label>
+
+                <div class="col-md-6">
+                    <div t:type="udetapestry/ajaxupload" t:id="uploads" id="uploads" maxFiles="1"/>
+
+                </div>
+            </div>
+            <t:if test="chapter.fileAvailable">
+                <t:if test="chapter.resource.filePath">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="deleteFile">${message:delete-file-label}</label>
+
+                        <div class="col-md-6">
+                            <input t:type="checkbox" value="deleteFile" t:id="deleteFile" id="deleteFile"/>
+                            <label class="sub" for="deleteFile">${chapter.resource.fileName}</label>
+                        </div>
+                    </div>
+                </t:if>
+
+            </t:if>
+            <div class="form-group">
+
+                <label class="col-md-3 control-label" for="chapterurl">${message:chapter-url-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="chapterurl" id="chapterurl"
+                           t:value="fullTextURL" placeholder="${message:chapter-url-placeholder}"
+                           class="form-control"/>
+                    <t:error for="chapterurl"/>
+                </div>
+            </div>
+            <t:secureblock action="EDIT_COPYRIGHT_REVIEWS">
+                <div class="form-group">
+                    <label class="col-md-3 control-label"
+                           for="copyright">${message:copyright-label}</label>
+
+                    <div class="col-md-6">
+
+                        <select data-placeholder="${message:chosen-placeholder-label}"
+                                t:type="Select" t:id="copyright" id="copyright" t:value="copyrightStatus"
+                                class="form-control" t:blankOption="NEVER"/>
+                        <t:error for="copyright"/>
+                    </div>
+                </div>
+            </t:secureblock>
+            <t:arrangetoheadlineformgroup t:value="headline" t:collection="collection"/>
+
+            <div class="form-group">
+                <div class="col-md-9 col-md-offset-3">
+                    <span class="required-label">${message:required-label}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-3 col-md-9">
+
+                    <input type="submit" value="${message:save-label}"/>
+                </div>
+            </div>
+        </fieldset>
+
+    </form>
+
+</div>
+
+<div>
+
+</div>
+</html>

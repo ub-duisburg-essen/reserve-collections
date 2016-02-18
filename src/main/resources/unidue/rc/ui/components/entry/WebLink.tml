@@ -1,0 +1,27 @@
+<t:container xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+    <div class="row">
+        <div class="col-md-2">
+
+            <p class="internet-logo">(#)</p>
+        </div>
+        <div class="col-md-10">
+            <section>
+                <div class="row">
+                    <t:if test="weblink.url">
+                        <div class="col-md-2">
+                            <div class="entry-label">${message:weblink-url-label}</div>
+                        </div>
+                        <div class="col-md-10"><a href="${weblink.url}">${weblink.url}</a></div>
+                    </t:if>
+                    <t:if test="weblink.name">
+                        <div class="col-md-2">
+                            <div class="entry-label">${message:weblink-name-label}</div>
+                        </div>
+                        <div class="col-md-10">${weblink.name}</div>
+                    </t:if>
+                </div>
+            </section>
+        </div>
+    </div>
+</t:container>

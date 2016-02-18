@@ -1,0 +1,20 @@
+<p>
+    Sehr geehrte(r) Mitarbeiter(in),
+</p>
+#if($collection.Status.Value == 1)
+<p>
+    ein neuer Semesterapparat ist eingerichtet worden.
+    Bitte vergeben Sie eine Nummer f&uuml;r die Aufstellung in der Fachbibliothek und aktivieren Sie den Apparat.
+</p>
+#elseif($collection.Status.Value == 4)
+<p>
+    ein Semesterapparat wurde deaktiviert.
+    Alle reservierten B&uuml;cher f&uuml;r den Semesterapparat werden nicht mehr ben&ouml;tigt und k&ouml;nnen in den regul&auml;ren
+    Bestand zur&uuml;ck gesetzt werden.
+</p>
+#else
+<p>
+    ein Semesterapparat wurde aktualisiert.
+    Bitte ergreifen Sie alle erforderlichen Ma&szlig;nahmen zum neuen Status. 
+</p>
+#end

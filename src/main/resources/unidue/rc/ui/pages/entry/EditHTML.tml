@@ -1,0 +1,50 @@
+<html t:type="layout" title="${collection.title} #${collection.id}"
+      actionBarBlock="createHtmlBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+
+<t:block t:id="createHtmlBlock">
+    <t:reservecollectionactionslinklist collection="collection"/>
+    <t:createentrylinklist collection="collection"/>
+</t:block>
+
+<div t:type="paper">
+
+    <!-- base form style from bootstrap. see http://twitter.github.io/bootstrap/base-css.html#forms -->
+    <form t:type="Form" class="form-horizontal" t:id="html_form" t:clientValidation="blur">
+        <fieldset>
+
+            <div class="form-group">
+                <div class="col-md-offset-1 col-md-11">
+                    <label class="required control-label" for="html">${message:html-label}</label>
+                </div>
+            </div>
+
+            <div class="form-group focused">
+
+                <div class="col-md-12">
+
+                    <t:textarea t:value="html.text" t:id="html" t:mixins="tynamo/ckeditor"
+                                parameters="{'toolbar': 'Full'}" validate="required"/>
+
+
+                    <t:error for="html"/>
+                </div>
+            </div>
+
+            <t:arrangetoheadlineformgroup t:value="headline" t:collection="collection"/>
+            <div class="form-group">
+                <div class="col-md-offset-1 col-md-9">
+                    <span class="required-label">${message:required-label}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-1 col-md-9">
+
+                    <input type="submit" value="${message:form-submit-label}"/>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+</html>

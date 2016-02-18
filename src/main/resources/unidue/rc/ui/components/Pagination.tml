@@ -1,0 +1,76 @@
+<t:container xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+             xmlns:p="tapestry:parameter">
+
+    <form role="form" class="form-horizontal filter" t:type="form" zone="^" t:id="paginationForm"
+          autofocus="literal:false">
+
+        <div class="form-group">
+
+
+            <label class="col-md-3 control-label" for="page">${message:page}</label>
+
+            <div class="col-md-9">
+                <ul id="page" class="pagination">
+                    <t:if test="hasPrev()">
+                        <li>
+                            <t:eventlink event="updateZone" zone="^" context="[firstPage]">&laquo;</t:eventlink>
+                        </li>
+                        <li>
+                            <t:eventlink event="updateZone" zone="^" context="[previousPage]">&lsaquo;</t:eventlink>
+                        </li>
+                        <p:else>
+                            <li class="disabled">
+                                <t:eventlink event="updateZone" zone="^" context="[firstPage]">&laquo;</t:eventlink>
+                            </li>
+                            <li class="disabled">
+                                <t:eventlink event="updateZone" zone="^" context="[previousPage]">&lsaquo;</t:eventlink>
+                            </li>
+                        </p:else>
+                    </t:if>
+                    <t:loop index="index" t:source="min..max">
+                        <t:if test="isCurrent()">
+                            <li class="active">
+                                <t:eventlink event="updateZone" zone="^"
+                                             context="[pageNumber]">${pageNumber}</t:eventlink>
+                            </li>
+                            <p:else>
+                                <li>
+                                    <t:eventlink event="updateZone" zone="^"
+                                                 context="[pageNumber]">${pageNumber}</t:eventlink>
+                                </li>
+                            </p:else>
+                        </t:if>
+                    </t:loop>
+                    <t:if test="hasNext()">
+                        <li>
+                            <t:eventlink event="updateZone" zone="^" context="[nextPage]">&rsaquo;</t:eventlink>
+                        </li>
+                        <li>
+                            <t:eventlink event="updateZone" zone="^" context="[lastPage]">&raquo;</t:eventlink>
+                        </li>
+                        <p:else>
+                            <li class="disabled">
+                                <t:eventlink event="updateZone" zone="^" context="[nextPage]">&rsaquo;</t:eventlink>
+                            </li>
+                            <li class="disabled">
+                                <t:eventlink event="updateZone" zone="^" context="[lastPage]">&raquo;</t:eventlink>
+                            </li>
+                        </p:else>
+                    </t:if>
+                </ul>
+            </div>
+            <label class="col-md-3" style="text-align: right;" for="page"> ${message:pagination.page.results}</label>
+
+            <div class="col-md-2">
+                <t:select t:id="selectedMaxRows" zone="^" t:value="selectedMaxRows" model="literal:20,50,100,200"
+                          class="dropdown"/>
+            </div>
+        </div>
+    </form>
+
+
+</t:container>
+
+
+

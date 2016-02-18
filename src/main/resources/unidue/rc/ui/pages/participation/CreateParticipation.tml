@@ -1,0 +1,102 @@
+<html t:type="layout" title="${message:add.participation} #${collection.id}"
+      actionBarBlock="createParticipationBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+<t:block t:id="createParticipationBlock">
+    <t:reservecollectionactionslinklist collection="collection"/>
+    <t:secureblock action="EDIT_ENTRIES" objectID="collection.id">
+        <t:createentrylinklist collection="collection"/>
+    </t:secureblock>
+</t:block>
+<div t:type="paper">
+
+    <t:zone t:id="userSearchZone" id="userSearchZone" t:update="none">
+
+        <!-- base form style from bootstrap. see http://twitter.github.io/bootstrap/base-css.html#forms -->
+        <form t:type="Form" class="form-horizontal" zone="^" t:id="userSearchForm" id="userSearchForm"
+              t:clientValidation="none">
+            <fieldset>
+
+                <div class="form-group focused">
+                    <label class="control-label col-md-3" for="html">${message:search.user.label}</label>
+
+                    <div class="col-md-9">
+                        <input t:type="TextField" t:id="userSearch" class="form-control" t:value="userSearch"/>
+                        <t:error for="userSearch"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-2">
+                        <input id="startsearch" type="submit" value="${message:search}"/>
+                    </div>
+                    <div class="col-md-offset-4 col-md-3">
+                        <a href="#" data-toggle="tooltip" class="help"  id="add-participation-help"
+                           title="${message:help.message.add.participation.to.collection}"></a>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+        <div class="loader"></div>
+    </t:zone>
+
+</div>
+<t:zone t:id="chooseUserZone" id="chooseUserZone" visible="false" update="none">
+    <div t:type="paper">
+        <t:if test="prop:isSearchEmpty">
+            <p class="message">${prop:message}</p>
+            <p:else>
+                <form t:type="Form" t:id="chooseUserForm" t:clientValidation="none" class="form-horizontal">
+                    <t:errors/>
+                    <div class="row">
+                        <div class="col-md-3"><label>${message:user.role.label}</label></div>
+                        <div class="col-md-9"> </div>
+                    </div>
+
+                    <table id="usertable" class="table">
+                        <caption>${message:search-result}</caption>
+                        <thead>
+                        <tr>
+                            <th>${message:user.realname.label}</th>
+                            <th>${message:user.username.label}</th>
+                            <th>${message:user.email.label}</th>
+                            <th>${message:user.activerole.label}</th>
+                            <th>${message:user.newrole.label}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <t:loop source="userRoleMappers" value="mapping" encoder="encoder">
+                            <tr>
+                                <td>${mapping.user.realname}</td>
+                                <td>${mapping.user.username}</td>
+                                <td>${mapping.user.email}</td>
+                                <td>${mapping.roleName}</td>
+                                <td>
+                                    <t:if test="checkEditPermissionForRole(mapping.role)">
+                                        <input t:type="Select" t:id="selectedRole" t:value="mapping.role" t:encoder="roleValueEncoder" t:model="roleSelectModel" class="form-control"/>
+                                    <p:else>
+                                        <a href="#" data-toggle="tooltip" class="help" id="add-participation-help"
+                                           title="${message:help.message.add.participation.no.permission}"></a>
+                                    </p:else>
+                                    </t:if>
+                                </td>
+                            </tr>
+                        </t:loop>
+
+                        </tbody>
+                    </table>
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-md-9">
+                            <input type="submit" id="submit" value="${message:bind}"/>
+                        </div>
+                    </div>
+                </form>
+            </p:else>
+        </t:if>
+    </div>
+</t:zone>
+
+</html>

@@ -1,0 +1,143 @@
+<html t:type="layout" title="${message:reserve-collection.prolong}"
+      actionBarBlock="renewCollectionBlock"
+      xmlns:p="tapestry:parameter"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+<t:block t:id="renewCollectionBlock">
+    <t:reservecollectionactionslinklist/>
+</t:block>
+
+<t:if test="successMessage">
+    <div t:type="paper">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <p class="alert alert-success">
+                    <t:outputraw value="successMessage"/>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-11 col-md-offset-1">
+                <t:pagelink page="collection/viewcollection"
+                            context="collectionID">${message:goto.collection}</t:pagelink>
+            </div>
+        </div>
+    </div>
+</t:if>
+
+<t:if test="showForms">
+    <div t:type="paper">
+
+        <form t:type="Form" class="form-horizontal" t:id="prolong_form" t:clientValidation="none">
+
+            <p class="alert alert-info">${message:info.msg.prolong.collection}</p>
+
+            <input t:type="hidden" value="validTo" t:id="validTo" />
+            <fieldset>
+
+                <!-- collection title -->
+                <div class="form-group">
+
+                    <label class="col-md-3 control-label" for="collection_title">${message:title-label}</label>
+
+                    <div class="col-md-6">
+                        <input t:type="textfield" id="collection_title"
+                               value="collection.title" readonly="readonly" class="form-control"/>
+                    </div>
+                </div>
+
+                <!-- current expiration -->
+                <div class="form-group">
+
+                    <label class="col-md-3 control-label" for="valid_to">${message:validTo-label}</label>
+
+                    <div class="col-md-6">
+                        <t:textfield value="visibleValidTo" readonly="readonly" class="form-control" id="valid_to"/>
+                    </div>
+                </div>
+
+                <!-- current expiration -->
+                <div class="form-group">
+
+                    <label class="col-md-3 control-label" for="prolong_code">${message:prolong-code-label}</label>
+
+                    <div class="col-md-6">
+                        <input t:type="textfield" t:id="prolong_code" id="prolong_code"
+                               value="prolongCode" readonly="readonly" class="form-control"/>
+                    </div>
+                </div>
+
+                <!-- new expiration of collection -->
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="expiry">${message:prolong-to-label}</label>
+
+                    <div class="col-md-6">
+                        <select t:id="expiry" id="expiry" class="form-control" t:type="Select" t:mixins="chosenSelect"
+                                model="expirySelectModel" value="expiry" t:encoder="timeEncoder"/>
+                        <t:error for="expiry"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="submit" value="${message:prolong}"/>
+                    </div>
+                </div>
+            </fieldset>
+
+        </form>
+
+    </div>
+
+
+    <div t:type="paper">
+
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+            </div>
+        </div>
+        <form t:type="Form" class="form-horizontal" t:id="dissolve_form" t:clientValidation="none">
+            <p class="alert alert-info">${message:info.msg.dissolve.collection}</p>
+
+            <fieldset>
+                <div class="form-group">
+
+                    <label class="col-md-3 control-label" for="dissolve_in_weeks">${message:dissolve-in-label}</label>
+
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <input t:type="textfield" t:id="dissolve_in_weeks" id="dissolve_in_weeks"
+                                   type="number"
+                                   value="dissolveInWeeks" class="form-control" placeholder="${message:weeks}"/>
+                            <div class="input-group-addon">${message:weeks}</div>
+                        </div>
+                        <t:error for="dissolve_in_weeks"/>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="badge" id="dissolve_at_date"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="submit"/>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <p:else>
+        <t:if test="!successMessage">
+            <t:if test="collection.prolongUsed">
+                <p class="alert alert-info">
+                    <t:outputraw value="prolongedInfoMessage"/>
+                </p>
+            </t:if>
+            <t:if test="collection.dissolveAt">
+                <p class="alert alert-info">
+                    <t:outputraw value="dissolvedInfoMessage"/>
+                </p>
+            </t:if>
+        </t:if>
+    </p:else>
+</t:if>
+</html>

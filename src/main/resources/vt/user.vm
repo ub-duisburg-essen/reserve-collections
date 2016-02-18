@@ -1,0 +1,29 @@
+<table>
+    <caption>Benutzer</caption>
+    <tr>
+        <td>Benutzerkennung:</td>
+        <td>$user.Username</td>
+    </tr>
+    <tr>
+        <td>Name:</td>
+        <td>$user.Realname</td>
+    </tr>
+    <tr>
+        <td>E-Mail:</td>
+        <td>
+            #if($user.Email)
+                $user.Email
+            #end
+        </td>
+    </tr>
+    <tr>
+        <td>Fakultät:</td>
+        <td>$userOrigin</td>
+    </tr>
+    #if($editUserLink)
+        <tr>
+            <td>Link:</td>
+            <td><a href="$editUserLink">$editUserLink</a></td>
+        </tr>
+    #end
+</table>

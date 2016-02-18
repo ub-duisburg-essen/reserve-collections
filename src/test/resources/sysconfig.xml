@@ -1,0 +1,728 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<defaultSettingsList>
+    <defaultSetting>
+        <label>Basisverzeichnis der Anwendung</label>
+        <key>collection.home</key>
+        <value>/tmp/reserve-collections-home</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Streaming Port für HTTP</label>
+        <key>stream.protocol.port.http</key>
+        <value>4887</value>
+        <format>[0-9]+</format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Streaming Protokoll für FLV</label>
+        <key>stream.format.protocol.flv</key>
+        <value>rtmp</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Streaming Protokoll für MP3</label>
+        <key>stream.format.protocol.mp3</key>
+        <value>rtsp</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Temporäres Verzeichnis für Dateiuploads</label>
+        <key>upload.repository-location</key>
+        <value>${collection.home}/fileupload</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Verzeichnis in dem Miless Legal Entities gespeichert sind</label>
+        <key>legal.entity.basedir</key>
+        <value>${collection.home}/legalentities</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Streaming Protokoll für MP4</label>
+        <key>stream.format.protocol.mp4</key>
+        <value>rtmp</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Piwik Tracking URL</label>
+        <key>piwik.tracking.url</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Streaming Server Mountpoint</label>
+        <key>streaming.server.mount.point</key>
+        <value>/semapp/</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>CAS Server URL</label>
+        <key>cas.server.url</key>
+        <value>https://cas.uni-duisburg-essen.de/cas</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>UDE OpenID IDP URL</label>
+        <key>ude.openid.idp.url</key>
+        <value>https://benutzerverwaltung.uni-due.de</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>UDE OpenID URL Prefix</label>
+        <key>ude.openid.url.prefix</key>
+        <value>https://openid.uni-due.de/</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>OpenID Callback URL</label>
+        <key>openid.callback.url</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>LDAP Timeout</label>
+        <key>ldap.read.timeout</key>
+        <value>5000</value>
+        <format>[0-9]+</format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Syntax Highlight Extensions</label>
+        <key>syntax.highlight.extensions</key>
+        <value>python,py,gyp,profile,ruby,rb,gemspec,podspec,thor,irb,haml,perl,pl,php,php3,php4,php5,php6,scala,groovy,go,golang,gradle,xml,html,xhtml,rss,atom,xsl,plist,lasso,ls,lassoscript,css,scss,less,stylus,styl,markdown,md,mkdown,mkd,asciidoc,django,jinja,twig,craftcms,handlebars,hbs,html.hbs,html.handlebars,dust,dst,json,mathematica,mma,javascript,js,typescript,ts,coffeescript,coffee,cson,iced,dartlivescript,ls,actionscript,as,haxe,hx,vbscript,vbs,vbnet,vb,protobuf,capnproto,capnp,thrift,http,lua,delphi,oxygene,java,jsp,processing,cpp,c,h,c++,h++,objectivec,m,mm,obj,obj-c,vala,cs,csharp,fsharp,fs,ocaml,ml,d,rsl,rib,mel,sql,smalltalk,st,lisp,clojure,clj,scheme,ini,apache,apacheconf,nginx,nginxconf,diff,patch,dos,bat,cmd,powershell,ps,bash,sh,zsh,makefile,mk,mak,cmake,cmake.in,nix,nsis,axapta,ruleslanguage,1c,x86asm,avrasm,vhdl,parser3,livecodeserver,text,haskell,hs,erlang,erl,elixir,rust,rs,matlab,scilab,sci,r,glsl,applescript,osascript,vim,brainfuck,bf,mizar,autohotkey,monkey,fix,gherkin,nimrod,swift,gcode,nc,k,kdb,tcl,tk,puppet,pp,xl,tao</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Opac Facade URL zur Textsuche</label>
+        <key>opac.facade.query.url</key>
+        <value>${opac.facade.url}/services/Query?op=find&amp;q=%s</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Streaming Port für HTTPS</label>
+        <key>stream.protocol.port.https</key>
+        <value>4888</value>
+        <format>[0-9]+</format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>DuEPublico A-Z URL</label>
+        <key>duepublico.az.url</key>
+        <value>${duepublico.url}/about/abisz.xml</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Piwik Auth Token</label>
+        <key>piwik.auth.token</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Sicherung der Seiten per https</label>
+        <key>secure.pages</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Solr URL für Scanaufträge</label>
+        <key>solr.core.scanjobs</key>
+        <value>${solr.server}/scanjobs</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>RTMP Port</label>
+        <key>stream.protocol.port.rtmp</key>
+        <value>1935</value>
+        <format>[0-9]+</format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Solr URL für Buchaufträge</label>
+        <key>solr.core.bookjobs</key>
+        <value>${solr.server}/bookjobs</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Basisverzeichnis zur Speicherung von Dateien</label>
+        <key>files.store</key>
+        <value>${collection.home}/files</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Ansprechpartner URL</label>
+        <key>duepublico.contact.url</key>
+        <value>${duepublico.url}/authoring/ansprechpartner.xml</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>URL der alten Semesterapparate</label>
+        <key>duepublico.legacy.collections.url</key>
+        <value>${duepublico.url}/servlets/SemAppListEditor?action=show</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Piwik Tracking ID</label>
+        <key>piwik.tracking.id</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Opac Facade URL zur Angabe von Details</label>
+        <key>opac.facade.details.url</key>
+        <value>${opac.facade.url}/services/Query?op=docDetails&amp;docNum=%s</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>DuEPublico Impressum</label>
+        <key>duepublico.legal.info.url</key>
+        <value>${duepublico.url}/impressum.xml</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Opac Facade URL</label>
+        <key>opac.facade.url</key>
+        <value>http://duepublico.dev.ub.uni-due.de/opac-facade</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>DuEPublico URL</label>
+        <key>duepublico.url</key>
+        <value>http://duepublico.uni-due.de</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Opac Facade URL zur Signatursuche</label>
+        <key>opac.facade.sig.url</key>
+        <value>${opac.facade.url}/services/Query?op=find&amp;sig=%s</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Opac Facade URL zu Exemplardaten</label>
+        <key>opac.facade.library.data.url</key>
+        <value>${opac.facade.url}/services/Query?op=libraryData&amp;docNum=%s</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Streaming Port für MMS</label>
+        <key>stream.protocol.port.mms</key>
+        <value>1755</value>
+        <format>[0-9]+</format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Streaming Server URL</label>
+        <key>streaming.server.url</key>
+        <value>streaming.uni-due.de</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>URLProcessor zur Erstellung von sicheren URLs zum Abruf von Videos</label>
+        <key>streaming.server.url.processor</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>LDAP UID Filter</label>
+        <key>ldap.uid.filter</key>
+        <value>(uid=%s)</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Solr Server URL</label>
+        <key>solr.server</key>
+        <value>http://localhost:8983/solr</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Sicherheitsüberprüfung benutzen</label>
+        <key>use.security.checks</key>
+        <value>false</value>
+        <format>(false|true)</format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Benutzerberechtigungen zwischenspeichern</label>
+        <key>security.cache.enabled</key>
+        <value>true</value>
+        <format>(false|true)</format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Primo Signatur Suche URL</label>
+        <key>primo.sig.search.url</key>
+        <value>http://primo.ub.uni-due.de/primo_library/libweb/action/dlSearch.do?vid=UDE&amp;institution=UDE&amp;search_scope=default_scope&amp;bulkSize=10&amp;lang=ger&amp;indx=1&amp;onCampus=false&amp;query=lsr11,contains,</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Tapestry Minification</label>
+        <key>tapestry.enable-minification</key>
+        <value>false</value>
+        <format>(false|true)</format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Time in milli seconds after current time when a cookie expires</label>
+        <key>tapestry.default-cookie-max-age</key>
+        <value>31536000000</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Recaptcha Public Key</label>
+        <key>recaptcha.public.key</key>
+        <value>6LeGeeMSAAAAALHwR9USXRQ2iCIOJWvemVz_QoUu</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Recaptcha Private Key</label>
+        <key>recaptcha.private.key</key>
+        <value>someprivatekey</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>LDAP Mapping Name</label>
+        <key>ldap.mapping.name</key>
+        <value>cn</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Streaming Port für RSTP</label>
+        <key>stream.protocol.port.rtsp</key>
+        <value>7877</value>
+        <format>[0-9]+</format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>LDAP Mapping Email</label>
+        <key>ldap.mapping.email</key>
+        <value>mail</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>LDAP Identity provider URL</label>
+        <key>ldap.provider.url</key>
+        <value>ldap://some.ldap.provider</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>LDAP Basis DN</label>
+        <key>ldap.base.dn</key>
+        <value>id=%s\,ou=leutz,dc=ip</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>i
+    <defaultSetting>
+        <label>LDAP Security principal</label>
+        <key>ldap.security.principal</key>
+        <value>comeon</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>LDAP Passwort</label>
+        <key>ldap.security.credentials</key>
+        <value>asdf</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Solr Core für Copyright</label>
+        <key>solr.core.copyright</key>
+        <value>${solr.server}/copyright</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Solr Core für Semesterapparate</label>
+        <key>solr.core.collections</key>
+        <value>${solr.server}/reservecollections</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+
+    <!-- Dates that are necessary for expiration of reserve collections -->
+    <defaultSetting>
+        <label>Ende des Sommersemesters</label>
+        <key>summer.semester.end</key>
+        <value></value>
+        <format>dd.MM.yyyy</format>
+        <type>2</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Ende des Wintersemesters</label>
+        <key>winter.semester.end</key>
+        <value></value>
+        <format>dd.MM.yyyy</format>
+        <type>2</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Ende der Vorlesungsphase im Sommersemester</label>
+        <key>lecture.end.summer</key>
+        <value>01.01.2099</value>
+        <format>dd.MM.yyyy</format>
+        <type>2</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Ende der Vorlesungsphase im Wintersemester</label>
+        <key>lecture.end.winter</key>
+        <value>01.01.2099</value>
+        <format>dd.MM.yyyy</format>
+        <type>2</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Gültigkeitsdatum für das Sommersemester setzbar ab</label>
+        <key>validation.date.summer.settable.from</key>
+        <value>01.01.2099</value>
+        <format>dd.MM.yyyy</format>
+        <type>2</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Gültigkeitsdatum für das Wintersemester setzbar ab</label>
+        <key>validation.date.winter.settable.from</key>
+        <value>01.01.2099</value>
+        <format>dd.MM.yyyy</format>
+        <type>2</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Gültigkeitsdatum für Dauersemesterapparate</label>
+        <key>no.semester.end</key>
+        <value>31.12.2199</value>
+        <format>dd.MM.yyyy</format>
+        <type>2</type>
+    </defaultSetting>
+
+    <defaultSetting>
+        <label>Verzeichnis in der öffentliche Schlüssel für externe Dienste gespeichert werden</label>
+        <key>keystore</key>
+        <value>${collection.home}/keystore</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Passphrase des privaten Schlüssels dieser Anwendung</label>
+        <key>private.key.passphrase</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Interval in dem der Request Cache geleert wird</label>
+        <key>temp.url.clear.interval</key>
+        <value>10</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Gültigkeit einer temporär ausgelieferten URL</label>
+        <key>temp.url.valid.time</key>
+        <value>60</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Secret zur Kommunikationsvalidierung mit Moodle</label>
+        <key>moodle.secret</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Maximale Suchresultate für Seitenindex</label>
+        <key>pagination.max.rows</key>
+        <value>100</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Anzahl der anzuzeigenden Seitenlinks</label>
+        <key>pagination.range</key>
+        <value>5</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Salz zur Verwendung beim Hashvorgang bei Benutzernamen</label>
+        <key>hash.salt</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+
+    <!-- mail settings -->
+    <defaultSetting>
+        <label>SMTP Host der Mails versendet</label>
+        <key>mail.smtp.host</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Von Adresse der Mails</label>
+        <key>mail.from</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Username für SMTP Authentifizierung</label>
+        <key>mail.smtp.user</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Passwort für SMTP Authentifizierung</label>
+        <key>mail.smtp.password</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>SMTP Port</label>
+        <key>mail.smtp.port</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Verschlüsselung der Verbindung (true|false)</label>
+        <key>mail.smtp.start.tls</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Debug Ausgabe auf der Console (true|false)</label>
+        <key>mail.mail.debug</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Anzahl der maximalen Versuche eine Mail zu versenden</label>
+        <key>mail.max.tries</key>
+        <value>10</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Sollen Mails vom System versendet werden oder nicht (true|false)</label>
+        <key>mail.send</key>
+        <value>false</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Encodingtyp der Mails</label>
+        <key>mail.charset</key>
+        <value>UTF-8</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Logdatei für die Velocity Template Engine</label>
+        <key>velocity.log</key>
+        <value>/tmp/velocity.log</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+
+    <!-- Aleph Settings -->
+    <defaultSetting>
+        <label>Username zur Authenifizierung gegen die Aleph Oracle DB</label>
+        <key>aleph.oracle.userID</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Passwort zur Authenifizierung gegen die Aleph Oracle DB</label>
+        <key>aleph.oracle.passwd</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>JDBC URI zur Aleph Oracle DB</label>
+        <key>aleph.oracle.databaseURI</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+
+    <!-- migration -->
+    <defaultSetting>
+        <label>Pfad zum Verzeichnis in dem alte Dateien gespeichert werden</label>
+        <key>legacy.file.storage.path</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Pfad in dem alte index.msa Dateien gesichert werden</label>
+        <key>migration.backup.dir</key>
+        <value>${collection.home}/legacy_backups</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Pfad zum Verzeichnis in dem alte Videos gespeichert werden</label>
+        <key>legacy.video.storage.path</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Pfad zum Verzeichnis in dem alte zu sicherende Videos gespeichert werden</label>
+        <key>legacy.secure.video.storage.path</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Pfad zum Verzeichnis in dem alte Dokumentmetadaten gespeichert werden</label>
+        <key>legacy.document.metadata.path</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>URL zur Liste der aktiven Semesterapparate</label>
+        <key>legacy.slot.url</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <!-- end migration -->
+
+    <defaultSetting>
+        <label>URL zum Aufruf eines Dokumentes</label>
+        <key>duepublico.document.url</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Mailadresse an die Systemnachrichten geschickt werden</label>
+        <key>system.mail</key>
+        <value>duepublico@uni-duisburg-essen.de</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Protokoll unter der die Webapplikation aufgerufen werden kann</label>
+        <key>server.protocol</key>
+        <value>http</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Name unter der die Webapplikation aufgerufen werden kann</label>
+        <key>server.name</key>
+        <value>localhost</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>URL Pfad der Webapplikation</label>
+        <key>web.application.path</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Port des Webapplikationsservers</label>
+        <key>server.port</key>
+        <value>8080</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Google Books API Key</label>
+        <key>google.books.api.key</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>In Statistik zu berücksichtigender Zeitraum in Tagen. O eingeben um kompletten Erfassungszeitraum zu berücksichtigen.</label>
+        <key>stats.maxdays</key>
+        <value>0</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Datum bis zu dem die allgemeinen Statistiken aus XML importiert werden sollen</label>
+        <key>stats.import.xmlstats.until</key>
+        <value>01.09.2015</value>
+        <format>dd.MM.yyyy</format>
+        <type>2</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>URL Pfad der Statistik-XML</label>
+        <key>stats.xml.source</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Pfad zur Datei die alte Slots enthält</label>
+        <key>legacy.slot.list.xml.file</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Anzahl Tage bevor die erste Warnung zum Ablauf versendet werden soll</label>
+        <key>days.until.first.warning</key>
+        <value>30</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Anzahl Tage bevor die zweite Warnung zum Ablauf versendet werden soll</label>
+        <key>days.until.second.warning</key>
+        <value>7</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+</defaultSettingsList>

@@ -1,0 +1,63 @@
+<html t:type="layout" title="${message:migrate-title}"
+      actionBarBlock="migrationBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+<t:block t:id="migrationBlock">
+    <t:secureblock action="CREATE_RESERVE_COLLECTION">
+        <t:reservecollectionactionslinklist/>
+    </t:secureblock>
+</t:block>
+
+<div class="row">
+    <div class="col-md-12">
+
+        <t:if test="migrationMessage">
+            <div class="last-column">
+                <div class="alert alert-success">
+                    <p>${migrationMessage}</p>
+                    <p>
+                        <span class="h4">
+                            <t:pagelink page="collection/viewcollection" context="collectionID">${message:meta.label.number} ${number}</t:pagelink>
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </t:if>
+        <div t:type="paper">
+
+            <form t:type="Form" class="form-horizontal" t:id="migrationForm" id="migrationForm"
+                  t:clientValidation="none" t:autofocus="true">
+                <t:errors class="literal:alert alert-danger"/>
+
+                <t:if test="stacktrace">
+                    <pre class="pre-scrollable">${stacktrace}</pre>
+                </t:if>
+
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label required" for="documentID">${message:document.id}</label>
+
+                        <div class="col-md-6">
+                            <input t:type="TextField" t:id="documentID" id="documentID" value="documentID"
+                                   class="form-control"/>
+                            <t:error for="documentID"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-md-9">
+                            <span class="required-label">${message:required-label}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-md-9">
+                            <input type="submit" value="${message:form-submit-label}"/>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+</html>

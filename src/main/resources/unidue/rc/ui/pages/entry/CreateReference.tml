@@ -1,0 +1,196 @@
+<html t:type="layout" title="${collection.title}"
+      actionBarBlock="referenceActionBlock"
+
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+<t:block t:id="referenceActionBlock">
+    <t:reservecollectionactionslinklist collection="collection"/>
+    <t:createentrylinklist collection="collection"/>
+</t:block>
+
+<div t:type="paper">
+
+    <form t:type="Form" class="form-horizontal" t:id="reference_form" t:clientValidation="none">
+        <fieldset>
+            <div class="form-group">
+                <h4 class="col-md-12 ">${message:reference-info-label}</h4>
+            </div>
+
+            <!-- title -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label required"
+                       for="referenceTitle">${message:reference-title-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="referenceTitle" id="referenceTitle"
+                           value="referenceTitle" placeholder="${message:reference-title-placeholder}"
+                           class="form-control"/>
+                    <t:error for="referenceTitle"/>
+                </div>
+            </div>
+
+            <!-- authors -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label"
+                       for="authors">${message:reference-authors-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="authors" id="authors"
+                           t:value="authors" placeholder="${message:reference-authors-placeholder}"
+                           class="form-control"/>
+                </div>
+            </div>
+
+            <!-- volume -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label"
+                       for="volume">${message:reference-volume-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="volume" id="volume"
+                           t:value="volume" placeholder="${message:reference-volume-placeholder}"
+                           class="form-control"/>
+                </div>
+            </div>
+
+            <!-- edition -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label"
+                       for="edition">${message:reference-edition-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="edition" id="edition"
+                           t:value="edition" placeholder="${message:reference-edition-placeholder}"
+                           class="form-control"/>
+                </div>
+            </div>
+
+            <!-- place of publication -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label required"
+                       for="placeOfPublication">${message:reference-placeOfPublication-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="placeOfPublication" id="placeOfPublication"
+                           t:value="placeOfPublication" placeholder="${message:reference-placeOfPublication-placeholder}"
+                           class="form-control"/>
+                    <t:error for="placeOfPublication"/>
+                </div>
+            </div>
+
+            <!-- publisher -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label"
+                       for="publisher">${message:reference-publisher-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="publisher" id="publisher"
+                           t:value="publisher" placeholder="${message:reference-publisher-placeholder}"
+                           class="form-control"/>
+                </div>
+            </div>
+
+            <!-- year of publication -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label required"
+                       for="yearOfPublication">${message:reference-yearOfPublication-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="yearOfPublication" id="yearOfPublication"
+                           t:value="yearOfPublication" placeholder="${message:reference-yearOfPublication-placeholder}"
+                           class="form-control"/>
+                    <t:error for="yearOfPublication"/>
+                </div>
+            </div>
+
+            <!-- isbn -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label"
+                       for="isbn">${message:reference-isbn-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="isbn" id="isbn"
+                           t:value="isbn" placeholder="${message:reference-isbn-placeholder}"
+                           class="form-control"/>
+                </div>
+            </div>
+
+            <!-- signature -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label"
+                       for="signature">${message:reference-signature-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="signature" id="signature"
+                           t:value="signature" placeholder="${message:reference-signature-placeholder}"
+                           class="form-control"/>
+                </div>
+            </div>
+
+            <!-- url -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label"
+                       for="fullTextURL">${message:reference-fullTextURL-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="fullTextURL" id="fullTextURL"
+                           t:value="fullTextURL" placeholder="${message:reference-fullTextURL-placeholder}"
+                           class="form-control"/>
+                </div>
+            </div>
+
+            <!-- comment -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label"
+                       for="comment">${message:reference-comment-label}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="comment" id="comment"
+                           t:value="comment" placeholder="${message:reference-comment-placeholder}"
+                           class="form-control"/>
+                </div>
+            </div>
+
+            <!-- in collection -->
+            <div class="form-group">
+
+                <label class="col-md-3 control-label"
+                       for="collectionref">${message:reference-collection-reference-label}</label>
+
+                <div class="col-md-6">
+                    <t:bootstraptextfield t:id="collectionref" id="collectionref" class="form-control"
+                                          t:value="collectionReference" placeholder="${message:reference-collection-reference-placeholder}"/>
+                    <t:error for="collectionref"/>
+                </div>
+            </div>
+
+            <!-- form submission -->
+            <div class="form-group">
+                <div class="col-md-9 col-md-offset-3">
+                    <span class="required-label">${message:required-label}</span>
+                </div>
+            </div>
+
+            <t:arrangetoheadlineformgroup t:value="headline" t:collection="collection"/>
+            <div class="form-group">
+                <div class="col-md-6 col-md-offset-3">
+
+                    <input type="submit" value="${message:form-submit-label}"/>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+</div>
+</html>

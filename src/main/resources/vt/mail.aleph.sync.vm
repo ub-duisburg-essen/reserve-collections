@@ -1,0 +1,44 @@
+<html>
+<head>
+    <title></title>
+    #include("mail.style.vm")
+</head>
+<body>
+<!-- on success -->
+#if($allSyncData)
+    <table>
+        <caption>Synchronisation</caption>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Entfernt</th>
+            <th>Aktualisiert</th>
+            <th>Hinzugef&uuml;gt</th>
+        </tr>
+        </thead>
+        <tbody>
+        #foreach( $alephSyncData in $allSyncData )
+        <tr>
+            <td>$alephSyncData.CollectionID</td>
+            <td>$alephSyncData.Deleted</td>
+            <td>$alephSyncData.Updated</td>
+            <td>$alephSyncData.Added</td>
+        </tr>
+        #end
+        </tbody>
+    </table>
+#end
+<!-- on error -->
+    #if($errorMessage)
+    <h4 class="alert alert-error">Synchronisation fehlgeschlagen</h4>
+
+    <div>
+        <pre>$errorMessage</pre>
+    </div>
+    <div>
+        <pre>$errorStacktrace</pre>
+    </div>
+    #end
+
+</body>
+</html>
