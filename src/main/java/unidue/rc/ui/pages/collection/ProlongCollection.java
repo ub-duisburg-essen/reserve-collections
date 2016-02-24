@@ -156,8 +156,12 @@ public class ProlongCollection {
     @OnEvent(value = EventConstants.VALIDATE, component = "dissolve_form")
     void onValidateDissolve() {
 
-        if (dissolveInWeeks > DISSOLVE_MAX_VALUE || dissolveInWeeks < DISSOLVE_MIN_VALUE)
+        if (dissolveInWeeks > DISSOLVE_MAX_VALUE) {
+            dissolveForm.recordError(dissolveInWeeksField, messages.format("dissolve_in_weeks-max-message", DISSOLVE_MAX_VALUE));
             return;
+        } else if (dissolveInWeeks < DISSOLVE_MIN_VALUE) {
+            return;
+        }
 
         DateTime validTo = new DateTime(collection.getValidTo());
         DateTime dissolveDate = validTo.plusWeeks(dissolveInWeeks);
