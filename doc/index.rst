@@ -10,6 +10,8 @@ Requirements
 * Java >= 1.8
 * PostgreSQL >= 8.4 (Other databases with modification)
 * Running version of `reserve collection solr schema <https://github.com/unibib-duisburg-essen/reserve-collections-solr-schema>`_
+* Apache Maven >= 3.x
+* Apache Ant >= 1.9.x
 
 Installation
 ============
@@ -41,4 +43,18 @@ By default there are three databases that are used:
 +---------------------+-----------+----------+----------+------+
 | miless              | localhost | miless   | miless   | 5432 |
 +---------------------+-----------+----------+----------+------+
+
+After you created the databases you can create the database schema. There are two ways though to do this. The first and maybe a little bit simpler way is via the cayenne modeler. To run the modeler use the following command inside a console.
+
+.. code-block:: shell
+
+    mvn cayenne-modeler:run
+
+or download a modeler binary from `Apache <http://cayenne.apache.org/download.html>`_ in version 3.1. After you opened the cayenne xml from the resources you can see three datamaps and their nodes.
+
+.. image:: installation/assets/cayenne_datamaps.png
+
+When you select one of the datamaps you can create the scheme on your database.
+
+.. image:: installation/assets/cayenne_generate_scheme.png
 
