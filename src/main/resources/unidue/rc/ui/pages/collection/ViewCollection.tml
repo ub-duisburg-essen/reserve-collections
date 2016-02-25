@@ -207,9 +207,11 @@
     <t:block id="entryControlsBlock">
         <div class="row block">
             <div class="col-md-1">
-                <div class="center-block">
-                    <a class="glyphicon glyphicon-move draggable"/>
-                </div>
+                <t:secureblock action="EDIT_ENTRIES" objectID="collection.id">
+                    <div class="center-block">
+                        <a class="glyphicon glyphicon-move draggable"/>
+                    </div>
+                </t:secureblock>
             </div>
             <div class="col-md-10">
                 <div class="entry-divider"></div>
@@ -246,11 +248,13 @@
     <t:block id="cloneableEntryControlsBlock">
 
         <div class="row block">
-            <div class="col-md-1">
-                <div class="center-block">
-                    <a class="glyphicon glyphicon-move draggable"/>
+            <t:secureblock action="EDIT_ENTRIES" objectID="collection.id">
+                <div class="col-md-1">
+                    <div class="center-block">
+                        <a class="glyphicon glyphicon-move draggable"/>
+                    </div>
                 </div>
-            </div>
+            </t:secureblock>
             <div class="col-md-10">
                 <div class="entry-divider"></div>
             </div>
