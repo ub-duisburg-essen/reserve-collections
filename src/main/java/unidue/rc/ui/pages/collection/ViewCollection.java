@@ -182,6 +182,9 @@ public class ViewCollection {
     @InjectComponent
     private Zone entriesZone;
 
+    @InjectComponent
+    private Zone tocZone;
+
     @Inject
     private Request request;
 
@@ -200,7 +203,6 @@ public class ViewCollection {
     @Property
     private ReserveCollection collection;
 
-    @Property
     private List<Headline> headlines;
 
     @Environmental
@@ -239,11 +241,6 @@ public class ViewCollection {
         if (collection == null)
             return new HttpError(HttpServletResponse.SC_NOT_FOUND, messages.get("error.msg.collection.not.found"));
 
-        headlines = collection.getHeadlines()
-                .stream()
-                .sorted()
-                .collect(Collectors.toList());
-
         try {
             securityService.checkPermission(ActionDefinition.VIEW_RESERVE_COLLECTION, reserveCollectionId);
             BreadCrumbInfo breadCrumb = new BreadCrumbInfo("reserve.collection",
@@ -267,7 +264,7 @@ public class ViewCollection {
     }
 
     @OnEvent(value = EventConstants.SUBMIT, component = "entriesForm")
-    Object onEntriesSubmitted() {
+    void onEntriesSubmitted() {
 
         // check security
         securityService.checkPermission(ActionDefinition.EDIT_ENTRIES, collection.getId());
@@ -289,8 +286,11 @@ public class ViewCollection {
                 javascriptSupport.addScript("bindSortable();");
             }
         });
-
-        return request.isXHR() ? entriesZone.getBody() : null;
+        if (request.isXHR()) {
+            ajaxResponseRenderer
+                    .addRender(entriesZone)
+                    .addRender(tocZone);
+        }
     }
 
 
@@ -350,6 +350,13 @@ public class ViewCollection {
 
     public boolean isProlongable() {
         return collectionService.isCollectionProlongable(collection);
+    }
+
+    public List<Headline> getHeadlines() {
+        headlines = collection.getHeadlines().stream()
+                .sorted()
+                .collect(Collectors.toList());
+        return headlines;
     }
 
     public int getHeadlinePageNumber() {

@@ -123,7 +123,7 @@
 <div t:type="paper">
 
     <section>
-        <div class="list-highlight toc">
+        <div class="list-highlight toc" t:type="zone" t:id="tocZone" id="tocZone" t:update="none">
             <div class="stacked-paper-container headline-entry">
                 <div class="stacked-paper">
                     <h3>${message:toc.header.label}</h3>
@@ -258,8 +258,8 @@
             <div class="col-md-10">
                 <div class="entry-divider"></div>
             </div>
-            <div class="col-md-1">
-                <t:secureblock action="EDIT_ENTRIES" objectID="collection.id">
+            <t:secureblock action="EDIT_ENTRIES" objectID="collection.id">
+                <div class="col-md-1">
                     <div class="entry-controls center-block">
                         <div class="dropdown">
                             <button data-toggle="dropdown" class="btn btn-default">
@@ -289,8 +289,8 @@
                             </ul>
                         </div>
                     </div>
-                </t:secureblock>
-            </div>
+                </div>
+            </t:secureblock>
         </div>
     </t:block>
 </div>
