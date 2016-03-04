@@ -385,7 +385,7 @@
 
                 <!-- Do NOT change version simply to jetty >= 7 as some migration
                     has to be done (http://wiki.eclipse.org/Jetty/Howto/Upgrade_from_Jetty_6_to_Jetty_7) -->
-                <version>9.2.3.v20140905</version>
+                <version>9.3.7.v20160115</version>
                 <configuration>
                     <stopKey>exit</stopKey>
                     <stopPort>32154</stopPort>
@@ -401,10 +401,23 @@
                             <value>development</value>
                         </systemProperty>
                         <systemProperty>
+                            <name>tapestry.service-reloading-enabled</name>
+                            <value>true</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <name>tapestry.production-mode</name>
+                            <value>false</value>
+                        </systemProperty>
+                        <systemProperty>
                             <name>Xmx</name>
                             <value>600m</value>
                         </systemProperty>
                     </systemProperties>
+                    <webApp>
+                        <contextPath>/reserve-collections</contextPath>
+                        <descriptor>${project.basedir}/src/main/webapp/WEB-INF/web.xml</descriptor>
+                        <jettyEnvXml>${project.basedir}/src/main/webapp/WEB-INF/jetty-env.xml</jettyEnvXml>
+                    </webApp>
                 </configuration>
             </plugin>
 
