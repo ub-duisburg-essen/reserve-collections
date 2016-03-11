@@ -30,7 +30,7 @@
                 </t:if>
                 <p>
                     <t:if test="journalArticle.volume">${journalArticle.volume}</t:if>
-                    <t:if test="journalArticle.issue">${journalArticle.issue}</t:if>
+                    <t:if test="journalArticle.issue"> / ${journalArticle.issue}</t:if>
                 </p>
                 <p>
                     <t:if
