@@ -36,23 +36,9 @@
         <type>1</type>
     </defaultSetting>
     <defaultSetting>
-        <label>Verzeichnis in dem Miless Legal Entities gespeichert sind</label>
-        <key>legal.entity.basedir</key>
-        <value>${collection.home}/legalentities</value>
-        <format></format>
-        <type>1</type>
-    </defaultSetting>
-    <defaultSetting>
         <label>Streaming Protokoll für MP4</label>
         <key>stream.format.protocol.mp4</key>
         <value>rtmp</value>
-        <format></format>
-        <type>1</type>
-    </defaultSetting>
-    <defaultSetting>
-        <label>Piwik Tracking URL</label>
-        <key>piwik.tracking.url</key>
-        <value></value>
         <format></format>
         <type>1</type>
     </defaultSetting>
@@ -64,30 +50,30 @@
         <type>1</type>
     </defaultSetting>
     <defaultSetting>
-        <label>CAS Server URL</label>
-        <key>cas.server.url</key>
-        <value>https://cas.uni-duisburg-essen.de/cas</value>
+        <label>LDAP Security principal</label>
+        <key>ldap.security.principal</key>
+        <value>comeon</value>
         <format></format>
         <type>1</type>
     </defaultSetting>
     <defaultSetting>
-        <label>UDE OpenID IDP URL</label>
-        <key>ude.openid.idp.url</key>
-        <value>https://benutzerverwaltung.uni-due.de</value>
+        <label>LDAP Passwort</label>
+        <key>ldap.security.credentials</key>
+        <value>asdf</value>
         <format></format>
         <type>1</type>
     </defaultSetting>
     <defaultSetting>
-        <label>UDE OpenID URL Prefix</label>
-        <key>ude.openid.url.prefix</key>
-        <value>https://openid.uni-due.de/</value>
+        <label>LDAP Identity provider URL</label>
+        <key>ldap.provider.url</key>
+        <value>ldap://some.ldap.provider</value>
         <format></format>
         <type>1</type>
     </defaultSetting>
     <defaultSetting>
-        <label>OpenID Callback URL</label>
-        <key>openid.callback.url</key>
-        <value></value>
+        <label>LDAP Basis DN</label>
+        <key>ldap.base.dn</key>
+        <value>id=%s\,ou=leutz,dc=ip</value>
         <format></format>
         <type>1</type>
     </defaultSetting>
@@ -123,13 +109,6 @@
         <label>DuEPublico A-Z URL</label>
         <key>duepublico.az.url</key>
         <value>${duepublico.url}/about/abisz.xml</value>
-        <format></format>
-        <type>1</type>
-    </defaultSetting>
-    <defaultSetting>
-        <label>Piwik Auth Token</label>
-        <key>piwik.auth.token</key>
-        <value></value>
         <format></format>
         <type>1</type>
     </defaultSetting>
@@ -172,20 +151,6 @@
         <label>Ansprechpartner URL</label>
         <key>duepublico.contact.url</key>
         <value>${duepublico.url}/authoring/ansprechpartner.xml</value>
-        <format></format>
-        <type>1</type>
-    </defaultSetting>
-    <defaultSetting>
-        <label>URL der alten Semesterapparate</label>
-        <key>duepublico.legacy.collections.url</key>
-        <value>${duepublico.url}/servlets/SemAppListEditor?action=show</value>
-        <format></format>
-        <type>1</type>
-    </defaultSetting>
-    <defaultSetting>
-        <label>Piwik Tracking ID</label>
-        <key>piwik.tracking.id</key>
-        <value></value>
         <format></format>
         <type>1</type>
     </defaultSetting>
@@ -302,16 +267,16 @@
         <type>1</type>
     </defaultSetting>
     <defaultSetting>
-        <label>Recaptcha Public Key</label>
-        <key>recaptcha.public.key</key>
-        <value>6LeGeeMSAAAAALHwR9USXRQ2iCIOJWvemVz_QoUu</value>
+        <label>Recaptcha Private Key</label>
+        <key>recaptcha.private.key</key>
+        <value>someprivatekey</value>
         <format></format>
         <type>1</type>
     </defaultSetting>
     <defaultSetting>
-        <label>Recaptcha Private Key</label>
-        <key>recaptcha.private.key</key>
-        <value>someprivatekey</value>
+        <label>Recaptcha Public Key</label>
+        <key>recaptcha.public.key</key>
+        <value>6LeGeeMSAAAAALHwR9USXRQ2iCIOJWvemVz_QoUu</value>
         <format></format>
         <type>1</type>
     </defaultSetting>
@@ -333,34 +298,6 @@
         <label>LDAP Mapping Email</label>
         <key>ldap.mapping.email</key>
         <value>mail</value>
-        <format></format>
-        <type>1</type>
-    </defaultSetting>
-    <defaultSetting>
-        <label>LDAP Identity provider URL</label>
-        <key>ldap.provider.url</key>
-        <value>ldap://some.ldap.provider</value>
-        <format></format>
-        <type>1</type>
-    </defaultSetting>
-    <defaultSetting>
-        <label>LDAP Basis DN</label>
-        <key>ldap.base.dn</key>
-        <value>id=%s\,ou=leutz,dc=ip</value>
-        <format></format>
-        <type>1</type>
-    </defaultSetting>i
-    <defaultSetting>
-        <label>LDAP Security principal</label>
-        <key>ldap.security.principal</key>
-        <value>comeon</value>
-        <format></format>
-        <type>1</type>
-    </defaultSetting>
-    <defaultSetting>
-        <label>LDAP Passwort</label>
-        <key>ldap.security.credentials</key>
-        <value>asdf</value>
         <format></format>
         <type>1</type>
     </defaultSetting>
@@ -517,8 +454,22 @@
         <type>1</type>
     </defaultSetting>
     <defaultSetting>
+        <label>Verwendung von Authentifizierung (true|false)</label>
+        <key>mail.smtp.auth</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
         <label>SMTP Port</label>
         <key>mail.smtp.port</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>smtp oder smtps</label>
+        <key>mail.smtp.protocol</key>
         <value></value>
         <format></format>
         <type>1</type>
@@ -629,6 +580,13 @@
         <label>URL zur Liste der aktiven Semesterapparate</label>
         <key>legacy.slot.url</key>
         <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Verzeichnis in dem Miless Legal Entities gespeichert sind</label>
+        <key>legal.entity.basedir</key>
+        <value>${collection.home}/legalentities</value>
         <format></format>
         <type>1</type>
     </defaultSetting>

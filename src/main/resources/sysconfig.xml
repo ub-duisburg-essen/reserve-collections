@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <defaultSettingsList>
     <defaultSetting>
+        <label>Basisverzeichnis der Anwendung</label>
+        <key>collection.home</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
         <label>Streaming Port für HTTP</label>
         <key>stream.protocol.port.http</key>
         <value>4887</value>
@@ -43,29 +50,29 @@
         <type>1</type>
     </defaultSetting>
     <defaultSetting>
-        <label>CAS Server URL</label>
-        <key>cas.server.url</key>
-        <value>https://cas.uni-duisburg-essen.de/cas</value>
+        <label>LDAP Security principal</label>
+        <key>ldap.security.principal</key>
+        <value></value>
         <format></format>
         <type>1</type>
     </defaultSetting>
     <defaultSetting>
-        <label>UDE OpenID IDP URL</label>
-        <key>ude.openid.idp.url</key>
-        <value>https://benutzerverwaltung.uni-due.de</value>
+        <label>LDAP Passwort</label>
+        <key>ldap.security.credentials</key>
+        <value></value>
         <format></format>
         <type>1</type>
     </defaultSetting>
     <defaultSetting>
-        <label>UDE OpenID URL Prefix</label>
-        <key>ude.openid.url.prefix</key>
-        <value>https://openid.uni-due.de/</value>
+        <label>LDAP Identity provider URL</label>
+        <key>ldap.provider.url</key>
+        <value></value>
         <format></format>
         <type>1</type>
     </defaultSetting>
     <defaultSetting>
-        <label>OpenID Callback URL</label>
-        <key>openid.callback.url</key>
+        <label>LDAP Basis DN</label>
+        <key>ldap.base.dn</key>
         <value></value>
         <format></format>
         <type>1</type>
@@ -144,13 +151,6 @@
         <label>Ansprechpartner URL</label>
         <key>duepublico.contact.url</key>
         <value>${duepublico.url}/authoring/ansprechpartner.xml</value>
-        <format></format>
-        <type>1</type>
-    </defaultSetting>
-    <defaultSetting>
-        <label>URL der alten Semesterapparate</label>
-        <key>duepublico.legacy.collections.url</key>
-        <value>${duepublico.url}/servlets/SemAppListEditor?action=show</value>
         <format></format>
         <type>1</type>
     </defaultSetting>
@@ -263,6 +263,13 @@
         <label>Time in milli seconds after current time when a cookie expires</label>
         <key>tapestry.default-cookie-max-age</key>
         <value>31536000000</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Recaptcha private key</label>
+        <key>recaptcha.private.key</key>
+        <value></value>
         <format></format>
         <type>1</type>
     </defaultSetting>
@@ -447,8 +454,22 @@
         <type>1</type>
     </defaultSetting>
     <defaultSetting>
+        <label>Verwendung von Authentifizierung (true|false)</label>
+        <key>mail.smtp.auth</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
         <label>SMTP Port</label>
         <key>mail.smtp.port</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>smtp oder smtps</label>
+        <key>mail.smtp.protocol</key>
         <value></value>
         <format></format>
         <type>1</type>
@@ -558,6 +579,13 @@
     <defaultSetting>
         <label>URL zur Liste der aktiven Semesterapparate</label>
         <key>legacy.slot.url</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Verzeichnis in dem Miless Legal Entities gespeichert sind</label>
+        <key>legal.entity.basedir</key>
         <value></value>
         <format></format>
         <type>1</type>
