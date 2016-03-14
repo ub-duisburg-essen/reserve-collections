@@ -187,7 +187,7 @@ public class TestReserveCollection extends SeleniumTestCase {
 
             @Override
             public boolean until() {
-                return isElementPresent("css=div[class=\"list-highlight toc\"] ul li:nth-of-type(1) " +
+                return isElementPresent("css=div[class=\"list-highlight toc t-zone\"] ul li:nth-of-type(1) " +
                         "a[href=\"#" + headline1.getEntry().getId() + "\"]");
             }
         }.wait("error should be visible", 5000);
@@ -201,7 +201,7 @@ public class TestReserveCollection extends SeleniumTestCase {
 
             @Override
             public boolean until() {
-                return isElementPresent("css=div[class=\"list-highlight toc\"] ul li:nth-of-type(2) " +
+                return isElementPresent("css=div[class=\"list-highlight toc t-zone\"] ul li:nth-of-type(2) " +
                         "a[href=\"#" + headline2.getEntry().getId() + "\"]");
             }
         }.wait("error should be visible", 5000);
