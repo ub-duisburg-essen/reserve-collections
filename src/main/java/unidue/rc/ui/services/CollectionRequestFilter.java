@@ -174,10 +174,11 @@ public class CollectionRequestFilter implements ComponentRequestFilter {
 
     private AuthCheckResult checkAuthorityToPage(String requestedPageName, EventContext activationContext) {
         Component page = componentSource.getPage(requestedPageName);
-        boolean protectedPage = page.getClass().getAnnotation(ProtectedPage.class) != null;
+        ProtectedPage protectedPage = page.getClass().getAnnotation(ProtectedPage.class);
+        boolean isPageProtected = protectedPage != null;
 
         // If page is public (ie. not protected), then everyone is authorised to it so allow access
-        if (!protectedPage)
+        if (!isPageProtected)
             return AuthCheckResult.AUTHORISED;
 
         // If request is AJAX with no session, return an AJAX response that forces reload of the page
@@ -186,7 +187,7 @@ public class CollectionRequestFilter implements ComponentRequestFilter {
         }
 
         // If user has not been authenticated, disallow.
-        if (securityService.getCurrentUser() == null) {
+        if (protectedPage.isAuthenticationNeeded() &&  securityService.getCurrentUser() == null) {
             return AuthCheckResult.AUTHENTICATE;
         }
 

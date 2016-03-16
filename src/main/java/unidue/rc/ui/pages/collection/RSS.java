@@ -46,7 +46,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created by nils on 20.10.15.
  */
-@ProtectedPage
+@ProtectedPage(isAuthenticationNeeded = false)
 public class RSS implements SecurityContextPage {
 
     @Inject

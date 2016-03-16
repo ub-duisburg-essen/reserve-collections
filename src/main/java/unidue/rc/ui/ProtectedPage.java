@@ -36,4 +36,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface ProtectedPage {
+
+    boolean isAuthenticationNeeded() default true;
 }
