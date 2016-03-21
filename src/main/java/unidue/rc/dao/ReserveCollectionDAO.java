@@ -23,11 +23,9 @@ package unidue.rc.dao;
  */
 
 import miless.model.User;
-import unidue.rc.model.ActionDefinition;
-import unidue.rc.model.LibraryLocation;
-import unidue.rc.model.ReserveCollection;
-import unidue.rc.model.Role;
+import unidue.rc.model.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -65,4 +63,15 @@ public interface ReserveCollectionDAO extends BaseDAO {
      * @return all evaluated collections or an empty list
      */
     List<ReserveCollection> getCollections(User user, ActionDefinition action);
+
+    /**
+     * Returns a list of collections that expire in a certain amount of days given by a base date. Collections
+     * that contain a date to dissolve are excluded.
+     *
+     * @param baseDate            base operation date used to detect expiration
+     * @param daysUntilExpiration days until expiration of the collection
+     * @param status              status of the collection
+     * @return a list with all collections that matches the conditions or an empty list.
+     */
+    List<ReserveCollection> getExpiringCollections(LocalDate baseDate, int daysUntilExpiration, ReserveCollectionStatus status);
 }

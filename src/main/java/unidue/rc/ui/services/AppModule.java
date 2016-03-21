@@ -205,6 +205,12 @@ public class AppModule {
         return cayenneService.getInjector().getInstance(AlephDAO.class);
     }
 
+    @ServiceId(WarningDAO.SERVICE_NAME)
+    public static WarningDAO buildWarningDAO(@InjectService("CayenneService") CayenneService
+                                                         cayenneService) {
+        return cayenneService.getInjector().getInstance(WarningDAOImpl.class);
+    }
+
     public static BookService buildBookService(@InjectService("CayenneService") CayenneService
                                                        cayenneService) {
         return cayenneService.getInjector().getInstance(BookService.class);

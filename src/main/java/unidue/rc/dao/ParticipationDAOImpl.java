@@ -42,6 +42,7 @@ import miless.model.User;
 import org.apache.cayenne.BaseContext;
 import org.apache.cayenne.Cayenne;
 import org.apache.cayenne.ObjectContext;
+import org.apache.cayenne.exp.Expression;
 import org.apache.cayenne.exp.ExpressionFactory;
 import org.apache.cayenne.query.NamedQuery;
 import org.apache.cayenne.query.SelectQuery;
@@ -49,6 +50,7 @@ import org.apache.cayenne.validation.ValidationException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import unidue.rc.model.DefaultRole;
 import unidue.rc.model.Participation;
 import unidue.rc.model.ReserveCollection;
 import unidue.rc.model.Role;
@@ -56,6 +58,7 @@ import unidue.rc.model.Role;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Nils Verheyen
@@ -127,6 +130,24 @@ public class ParticipationDAOImpl extends BaseDAOImpl implements ParticipationDA
         return participations != null
                 ? participations
                 : Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<Participation> getActiveParticipations(List<ReserveCollection> collections, Role role) {
+        SelectQuery query = new SelectQuery(Participation.class);
+
+        Expression qualifier = ExpressionFactory.matchExp(Participation.ROLE_PROPERTY, role)
+                .andExp(ExpressionFactory.matchExp(Participation.END_DATE_PROPERTY, null))
+                .andExp(ExpressionFactory.inExp(Participation.RESERVE_COLLECTION_PROPERTY, collections));
+
+        query.setQualifier(qualifier);
+
+        ObjectContext context = BaseContext.getThreadObjectContext();
+
+        List<Participation> docentParticipations = context.performQuery(query);
+        return docentParticipations.stream()
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     @Override

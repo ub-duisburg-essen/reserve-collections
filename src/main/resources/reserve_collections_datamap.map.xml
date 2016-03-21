@@ -489,6 +489,7 @@
 	</obj-entity>
 	<obj-entity name="Participation" className="unidue.rc.model.Participation" dbEntityName="PARTICIPATION">
 		<obj-attribute name="accessKey" type="String" db-attribute-path="accesskey"/>
+		<obj-attribute name="collectionID" type="java.lang.Integer" db-attribute-path="reserveCollectionId"/>
 		<obj-attribute name="endDate" type="java.util.Date" db-attribute-path="endDate"/>
 		<obj-attribute name="startDate" type="java.util.Date" db-attribute-path="startDate"/>
 		<obj-attribute name="userId" type="java.lang.Integer" db-attribute-path="userId"/>
@@ -572,6 +573,10 @@
 		<obj-attribute name="reservecollectionCount" type="java.lang.Integer" db-attribute-path="reservecollectionCount"/>
 		<obj-attribute name="totalFilesCount" type="java.lang.Integer" db-attribute-path="totalFilesCount"/>
 		<obj-attribute name="weblinkCount" type="java.lang.Integer" db-attribute-path="weblinkCount"/>
+	</obj-entity>
+	<obj-entity name="Warning" className="unidue.rc.model.Warning" dbEntityName="WARNING_MAIL">
+		<obj-attribute name="calculatedFor" type="java.util.Date" db-attribute-path="calculatedFor"/>
+		<obj-attribute name="userID" type="java.lang.Integer" db-attribute-path="userID"/>
 	</obj-entity>
 	<obj-entity name="WebLink" className="unidue.rc.model.WebLink" dbEntityName="WEB_LINK">
 		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
@@ -688,6 +693,9 @@
 	<db-relationship name="migrationFk" source="MAIL" target="MIGRATION_MAIL" toMany="true">
 		<db-attribute-pair source="id" target="mailID"/>
 	</db-relationship>
+	<db-relationship name="warningMailFk" source="MAIL" target="WARNING_MAIL" toDependentPK="true" toMany="true">
+		<db-attribute-pair source="id" target="mailID"/>
+	</db-relationship>
 	<db-relationship name="mailFk" source="MAIL_NODE" target="MAIL" toMany="false">
 		<db-attribute-pair source="mailID" target="id"/>
 	</db-relationship>
@@ -741,6 +749,9 @@
 	</db-relationship>
 	<db-relationship name="participationFk" source="RESERVE_COLLECTION" target="PARTICIPATION" toMany="true">
 		<db-attribute-pair source="id" target="reserveCollectionId"/>
+	</db-relationship>
+	<db-relationship name="warningMailFk" source="RESERVE_COLLECTION" target="WARNING_MAIL" toDependentPK="true" toMany="true">
+		<db-attribute-pair source="id" target="collectionID"/>
 	</db-relationship>
 	<db-relationship name="reserveCollectionFk" source="RESERVE_COLLECTION_NUMBER" target="RESERVE_COLLECTION" toMany="true">
 		<db-attribute-pair source="number" target="rcNumberId"/>
@@ -802,6 +813,12 @@
 	<db-relationship name="scanJobFk" source="SCAN_JOB_JOURNAL_ARTICLE" target="SCAN_JOB" toMany="false">
 		<db-attribute-pair source="scanJobID" target="id"/>
 	</db-relationship>
+	<db-relationship name="mailFk" source="WARNING_MAIL" target="MAIL" toMany="false">
+		<db-attribute-pair source="mailID" target="id"/>
+	</db-relationship>
+	<db-relationship name="reserveCollectionFk" source="WARNING_MAIL" target="RESERVE_COLLECTION" toMany="false">
+		<db-attribute-pair source="collectionID" target="id"/>
+	</db-relationship>
 	<db-relationship name="entryFk" source="WEB_LINK" target="ENTRY" toMany="false">
 		<db-attribute-pair source="id" target="id"/>
 	</db-relationship>
@@ -852,6 +869,7 @@
 	<obj-relationship name="migration" source="ReserveCollection" target="Migration" deleteRule="Nullify" db-relationship-path="migrationFk"/>
 	<obj-relationship name="number" source="ReserveCollection" target="ReserveCollectionNumber" deleteRule="Nullify" db-relationship-path="numberFk"/>
 	<obj-relationship name="participations" source="ReserveCollection" target="Participation" deleteRule="Cascade" db-relationship-path="participationFk"/>
+	<obj-relationship name="warnings" source="ReserveCollection" target="Warning" deleteRule="Cascade" db-relationship-path="warningMailFk"/>
 	<obj-relationship name="collections" source="ReserveCollectionNumber" target="ReserveCollection" deleteRule="Deny" db-relationship-path="reserveCollectionFk"/>
 	<obj-relationship name="book" source="Resource" target="Book" deleteRule="Nullify" db-relationship-path="bookFk"/>
 	<obj-relationship name="bookChapter" source="Resource" target="BookChapter" deleteRule="Nullify" db-relationship-path="bookChapterFk"/>
@@ -866,6 +884,8 @@
 	<obj-relationship name="comments" source="ScanJob" target="JobComment" deleteRule="Cascade" db-relationship-path="scanJobCommentFk.commentFk"/>
 	<obj-relationship name="journalArticle" source="ScanJob" target="JournalArticle" deleteRule="Nullify" db-relationship-path="journalArticleFk.journalArticleFk"/>
 	<obj-relationship name="location" source="ScanJob" target="LibraryLocation" db-relationship-path="locationFk"/>
+	<obj-relationship name="mail" source="Warning" target="Mail" deleteRule="Nullify" db-relationship-path="mailFk"/>
+	<obj-relationship name="reserveCollection" source="Warning" target="ReserveCollection" deleteRule="Nullify" db-relationship-path="reserveCollectionFk"/>
 	<obj-relationship name="entry" source="WebLink" target="Entry" deleteRule="Nullify" db-relationship-path="entryFk"/>
 	<query name="check_if_daily_stat_already_exists" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="obj-entity" root-name="Statistic">
 		<sql><![CDATA[Select * from statistic s 

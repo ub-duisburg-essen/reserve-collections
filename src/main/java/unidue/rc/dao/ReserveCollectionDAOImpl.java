@@ -25,6 +25,7 @@ package unidue.rc.dao;
 import miless.model.User;
 import org.apache.cayenne.BaseContext;
 import org.apache.cayenne.ObjectContext;
+import org.apache.cayenne.exp.Expression;
 import org.apache.cayenne.exp.ExpressionFactory;
 import org.apache.cayenne.query.NamedQuery;
 import org.apache.cayenne.query.Query;
@@ -32,7 +33,9 @@ import org.apache.cayenne.query.SelectQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import unidue.rc.model.*;
+import unidue.rc.system.DateConvertUtils;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -63,6 +66,20 @@ public class ReserveCollectionDAOImpl extends BaseDAOImpl implements ReserveColl
         String[] keys = {"resource", "name", "userID"};
         String[] values = {action.getResource(), action.getName(), user.getId().toString()};
         NamedQuery query = new NamedQuery(ReserveCollectionsDatamap.SELECT_COLLECTIONS_BY_PERMISSION_QUERYNAME, keys, values);
+
+        return getCollections(query);
+    }
+
+    @Override
+    public List<ReserveCollection> getExpiringCollections(LocalDate baseDate, int daysUntilExpiration, ReserveCollectionStatus status) {
+
+        SelectQuery query = new SelectQuery(ReserveCollection.class);
+
+        Expression qualifier = ExpressionFactory.matchExp(ReserveCollection.STATUS_PROPERTY, status)
+                .andExp(ExpressionFactory.lessOrEqualExp(ReserveCollection.VALID_TO_PROPERTY, DateConvertUtils.asUtilDate(baseDate.plusDays(daysUntilExpiration))))
+                .andExp(ExpressionFactory.matchExp(ReserveCollection.DISSOLVE_AT_PROPERTY, null));
+
+        query.setQualifier(qualifier);
 
         return getCollections(query);
     }

@@ -43,13 +43,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import unidue.rc.dao.DatabaseException;
 import unidue.rc.migration.MigrationCodeCronJob;
-import unidue.rc.plugins.alephsync.AlephSynchronizer;
 import unidue.rc.statistic.*;
 import unidue.rc.system.CayenneService;
 import unidue.rc.system.CayenneServiceImpl;
 import unidue.rc.system.MailCronJob;
 import unidue.rc.system.QuartzService;
 import unidue.rc.system.SystemConfigurationService;
+import unidue.rc.workflow.CollectionWarningCronJob;
 import unidue.rc.workflow.ScanJobSyncCronJob;
 
 import java.util.Arrays;
@@ -176,6 +176,10 @@ public class WebModule {
                 createCronJobTrigger(SimpleScheduleBuilder.simpleSchedule()
                         .repeatForever()
                         .withIntervalInMinutes(30)));
+
+        // send warning mails
+        quartzService.add(createCronJob(CollectionWarningCronJob.class, jobMapData),
+                createCronJobTrigger(CronScheduleBuilder.dailyAtHourAndMinute(10, 0)));
     }
 
     private static JobDetail createCronJob(Class clazz, Map<String, Object> mapData) {

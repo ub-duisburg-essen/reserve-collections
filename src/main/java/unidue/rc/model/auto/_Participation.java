@@ -16,6 +16,7 @@ import unidue.rc.model.Role;
 public abstract class _Participation extends CayenneDataObject {
 
     public static final String ACCESS_KEY_PROPERTY = "accessKey";
+    public static final String COLLECTION_ID_PROPERTY = "collectionID";
     public static final String END_DATE_PROPERTY = "endDate";
     public static final String START_DATE_PROPERTY = "startDate";
     public static final String USER_ID_PROPERTY = "userId";
@@ -29,6 +30,13 @@ public abstract class _Participation extends CayenneDataObject {
     }
     public String getAccessKey() {
         return (String)readProperty(ACCESS_KEY_PROPERTY);
+    }
+
+    public void setCollectionID(Integer collectionID) {
+        writeProperty(COLLECTION_ID_PROPERTY, collectionID);
+    }
+    public Integer getCollectionID() {
+        return (Integer)readProperty(COLLECTION_ID_PROPERTY);
     }
 
     public void setEndDate(Date endDate) {

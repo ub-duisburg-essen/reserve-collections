@@ -106,6 +106,16 @@ public interface ParticipationDAO extends BaseDAO {
     List<Participation> getActiveParticipations(ReserveCollection collection);
 
     /**
+     * Returns a {@link java.util.List} of active participations that users have on a list of collections with a
+     * specific {@link Role}.
+     *
+     * @param collections collections that users participates.
+     * @param role        role to use
+     * @return all active participations or an empty list
+     */
+    List<Participation> getActiveParticipations(List<ReserveCollection> collections, Role role);
+
+    /**
      * Creates a new {@link unidue.rc.model.Participation} with target user, collection and role under which it
      * participates.
      *
