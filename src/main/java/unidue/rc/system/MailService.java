@@ -105,8 +105,8 @@ public interface MailService {
      * <li>context</li>
      * </ul>
      *
-     * @param velocityTemplate name of the template that should be used
+     * @param templateName name of the html template that should be used
      * @return the new mail builder
      */
-    MailServiceImpl.MailBuilder builder(String velocityTemplate);
+    MailServiceImpl.MailBuilder builder(String templateName);
 }

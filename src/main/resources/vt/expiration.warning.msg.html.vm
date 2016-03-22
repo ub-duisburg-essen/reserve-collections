@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    #include("mail.style.vm")
+</head>
+<body>
+<p>Sehr geehrte/r Benutzer/in,</p>
+#if($collection)
+<p>ihr Semesterapparat <strong>$collection.Title - Nr. $collection.Number.Number
+    - $collection.LibraryLocation.Name</strong>
+    wird am $dateformatter.format($collection.ValidTo) ablaufen.</p>
+<p>Wenn Sie den Apparat verl&auml;ngern oder zu einem sp&auml;teren Zeitpunkt aufl&ouml;sen lassen m&ouml;chten, klicken Sie auf den folgenden Link:</p>
+<div class="alert alert-info">
+    <a href="$prolongLink">$prolongLink</a>
+</div>
+#elseif($collections)
+<p>einige Ihrer Semesterapparate werden demn&auml;chst ablaufen. Wenn Sie Ihre Apparate verl&auml;ngern oder zu einem sp&auml;teren Zeitpunkt aufl&ouml;sen lassen m&ouml;chten, klicken Sie bitte auf die folgenden Links:</p>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Ort</th>
+        <th>Nummer</th>
+        <th>Titel</th>
+        <th>G&uuml;ltig bis</th>
+        <th>Verl&auml;ngern / Aufl&ouml;sen</th>
+    </tr>
+    </thead>
+    <tbody>
+    #foreach($c in $collections.keySet())
+    <tr>
+        <td>$c.LibraryLocation.Name</td>
+        <td>$c.Number.Number</td>
+        <td>$c.Title</td>
+        <td>$dateformatter.format($c.ValidTo)</td>
+        <td><a href="$collections.get($c)">$collections.get($c)</a></td>
+    </tr>
+    #end
+    </tbody>
+</table>
+#end
+
+
+<h4>Ansprechpartner f&uuml;r die physischen Semesterapparate:</h4>
+<div>FB GW/GSW, MNT Essen: Nadine Jamrath</div>
+<div>Tel.: 0201/183-3726</div>
+<div>FB LK, BA, MC Duisburg: Pia Klar</div>
+<div>Tel.: 0203/379-2086</div>
+<div>FB Medizin Essen: Heike Krengel</div>
+<div>0201/723-3332 (extern) oder 71-3332 (intern)</div>
+
+<h4>Ansprechpartner f&uuml;r die Online-Semesterapparate:</h4>
+<div>Sonja Hendriks</div>
+<div>Tel.: 0203/379-2027</div>
+<div>Winnie Eickholt</div>
+<div>Tel.: 0203/379-1486</div>
+
+<p>E-Mail: semapp@uni-due.de</p>
+<p>E-Mails an die oben angegebene Adresse werden immer an die anwesenden Bearbeiter weitergeleitet.</p>
+
+<p>Mit freundlichen Gr&uuml;&szlig;en</p>
+<p>Ihr SemApp-Team</p>
+</body>
+</html>

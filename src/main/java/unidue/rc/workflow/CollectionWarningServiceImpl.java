@@ -24,21 +24,25 @@ package unidue.rc.workflow;
 
 import miless.model.User;
 import org.apache.cayenne.di.Inject;
-import org.apache.cayenne.exp.Expression;
-import org.apache.cayenne.exp.ExpressionFactory;
-import org.apache.cayenne.query.SelectQuery;
 import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.mail.EmailException;
+import org.apache.velocity.VelocityContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import unidue.rc.dao.*;
 import unidue.rc.model.*;
-import unidue.rc.system.DateConvertUtils;
-import unidue.rc.system.SystemConfigurationService;
+import unidue.rc.system.*;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -47,6 +51,8 @@ import java.util.stream.Collectors;
 public class CollectionWarningServiceImpl implements CollectionWarningService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CollectionWarningServiceImpl.class);
+
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd. MMMM yyyy");
 
     @Inject
     private SystemConfigurationService config;
@@ -65,6 +71,15 @@ public class CollectionWarningServiceImpl implements CollectionWarningService {
 
     @Inject
     private WarningDAO warningDAO;
+
+    @Inject
+    private MailService mailService;
+
+    @Inject
+    private BaseURLService urlService;
+
+    @Inject
+    private SystemMessageService messages;
 
     private Integer daysUntilFirstWarning;
     private Integer daysUntilSecondWarning;
@@ -99,10 +114,65 @@ public class CollectionWarningServiceImpl implements CollectionWarningService {
         // send warnings
         for (CollectionsByUser cd : data) {
             LOG.info(String.format("%s", cd.docent));
-            for (ReserveCollection collection : cd.collections) {
-                LOG.info(String.format("    %1$s", collection));
+            try {
+                Mail mail = sendWarning(cd.docent, cd.collections);
+                for (ReserveCollection collection : cd.collections) {
+                    LOG.info(String.format("    %1$s", collection));
+                    saveWarning(mail, collection, cd.docent);
+                }
+            } catch (EmailException e) {
+                LOG.error("could not send mail", e);
             }
         }
+    }
+
+    private Warning saveWarning(Mail mail, ReserveCollection collection, User user) {
+        try {
+
+            return warningDAO.create(mail, collection, user, calculateWarningDate(collection));
+        } catch (CommitException e) {
+            LOG.error("could not create warning for " + mail + "; " + collection + "; " + user);
+            return null;
+        }
+    }
+
+    private Mail sendWarning(User docent, List<ReserveCollection> collections) throws EmailException {
+        VelocityContext context = new VelocityContext();
+
+        String subject = messages.get("mail.subject.expiring.collections");
+        if (collections.size() == 1) {
+
+            ReserveCollection collection = collections.get(0);
+            context.put("collection", collection);
+            context.put("prolongLink", urlService.getProlongLink(collection));
+        } else if (collections.size() > 1) {
+
+            Map<ReserveCollection, String> collectionsParam = collections.stream()
+                    .collect(Collectors.toMap(Function.identity(), c -> urlService.getProlongLink(c)));
+
+            context.put("collections", collectionsParam);
+            context.put("strformatter", new StringFormatter());
+        }
+        context.put("dateformatter", DATE_FORMAT);
+        String recipient = docent.getEmail();
+        String from = config.getString("mail.from");
+
+        try {
+            MailServiceImpl.MailBuilder mailBuilder = mailService.builder("/vt/expiration.warning.msg.html.vm")
+                    .from(from)
+                    .subject(subject.toString())
+                    .addBcc(config.getString("system.mail"))
+                    .textTemplateName("/vt/expiration.warning.msg.text.vm")
+                    .context(context)
+                    .addRecipients(recipient);
+
+            Mail mail = mailBuilder.create();
+            mailService.sendMail(mail);
+            return mail;
+        } catch (IOException e) {
+            LOG.error("could not create mail", e);
+        }
+        return null;
     }
 
     private List<CollectionsByUser> filter(List<CollectionsByUser> data) {
@@ -115,6 +185,10 @@ public class CollectionWarningServiceImpl implements CollectionWarningService {
 
         data = data.stream()
                 .filter(d -> d.collections != null && !d.collections.isEmpty())
+                .filter(d -> {
+                    LOG.warn("docent " + d.docent.getUserid() + " has no email address");
+                    return StringUtils.isNotBlank(d.docent.getEmail());
+                })
                 .collect(Collectors.toList());
         return data;
     }
@@ -190,6 +264,15 @@ public class CollectionWarningServiceImpl implements CollectionWarningService {
 
     private static boolean isAfterOrEqual(LocalDate date, LocalDate comparator) {
         return date.isAfter(comparator) || date.isEqual(comparator);
+    }
+
+    public static class StringFormatter {
+
+        public String format(String value, String format) {
+            return value != null
+                   ? String.format(value, format)
+                   : null;
+        }
     }
 
     private static class CollectionsByUser {

@@ -1,0 +1,40 @@
+#set($locationLength = 8)
+#set($numberLength = 5)
+Sehr geehrte/r Benutzer/in,
+
+#if($collection)
+ihr Semesterapparat $collection.Title - Nr. $collection.Number.Number - $collection.LibraryLocation.Name wird am $dateformatter.format($collection.ValidTo) ablaufen.
+Wenn Sie den Apparat verlängern oder zu einem späteren Zeitpunkt auflösen lassen möchten, klicken Sie auf den folgenden Link:
+
+$prolongLink
+#elseif($collections)
+einige Ihrer Semesterapparate werden demnächst ablaufen. Wenn Sie Ihre Apparate verlängern oder zu einem späteren Zeitpunkt auflösen lassen möchten, klicken Sie bitte auf die folgenden Links:
+
+#foreach($c in $collections.keySet())
+$c.Title
+    $strformatter.format($c.LibraryLocation.Name, "%1$8s") - Nr. $strformatter.format($c.Number.Number, "%1$5d") - Gültig bis $dateformatter.format($c.ValidTo)
+    $collections.get($c)
+
+#end
+#end
+----------------------------------------------------
+
+Ansprechpartner für die physischen Semesterapparate:
+FB GW/GSW, MNT Essen: Nadine Jamrath
+Tel.: 0201/183-3726
+FB LK, BA, MC Duisburg: Pia Klar
+Tel.: 0203/379-2086
+FB Medizin Essen: Heike Krengel
+0201/723-3332 (extern) oder 71-3332 (intern)
+
+Ansprechpartner für die Online-Semesterapparate:
+Sonja Hendriks
+Tel.: 0203/379-2027
+Winnie Eickholt
+Tel.: 0203/379-1486
+
+E-Mail: semapp@uni-due.de
+E-Mails an die oben angegebene Adresse werden immer an die anwesenden Bearbeiter weitergeleitet.
+
+Mit freundlichen Grüßen
+Ihr SemApp-Team

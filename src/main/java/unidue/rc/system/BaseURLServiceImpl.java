@@ -77,6 +77,14 @@ public class BaseURLServiceImpl implements BaseURLService {
                 resource.getId());
     }
 
+    @Override
+    public String getProlongLink(ReserveCollection collection) {
+        return String.format("%s/collection/prolong/%d/%s",
+                getApplicationURL(),
+                collection.getId(),
+                collection.getProlongCode());
+    }
+
     /**
      * Retrieves the application path which is used by the web container to address the web application
      * if one is needed, an empty string otherwise.

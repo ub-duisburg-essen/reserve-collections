@@ -70,4 +70,12 @@ public interface BaseURLService {
      * @return see description
      */
     String getDownloadLink(Resource resource);
+
+    /**
+     * Returns the url with which a user is able to prolong a collection.
+     *
+     * @param collection see description
+     * @return a url in string form that points to the prolong page
+     */
+    String getProlongLink(ReserveCollection collection);
 }

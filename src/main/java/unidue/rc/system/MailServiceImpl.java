@@ -31,8 +31,6 @@ import org.apache.cayenne.di.Inject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
-import org.apache.tapestry5.Link;
-import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -42,7 +40,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import unidue.rc.dao.*;
 import unidue.rc.model.*;
-import unidue.rc.ui.pages.collection.ViewCollection;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -319,20 +316,21 @@ public class MailServiceImpl implements MailService {
         }
     }
 
-    public MailBuilder builder(String velocityTemplate) {
-        return new MailBuilder(velocityTemplate);
+    public MailBuilder builder(String templateName) {
+        return new MailBuilder(templateName);
     }
 
     public static class MailBuilder {
 
         private final Mail mail;
         private final List<MailNode> nodes;
-        private final String velocityTemplate;
+        private final String templateName;
+        private String textTemplateName;
 
-        public MailBuilder(String velocityTemplate) {
+        public MailBuilder(String templateName) {
             this.mail = new Mail();
             this.nodes = new ArrayList<>();
-            this.velocityTemplate = velocityTemplate;
+            this.templateName = templateName;
         }
 
         public MailBuilder from(String from) {
@@ -346,14 +344,23 @@ public class MailServiceImpl implements MailService {
         }
 
         public MailBuilder context(VelocityContext context) throws ResourceNotFoundException, ParseErrorException, IOException {
-            StringWriter writer = new StringWriter();
 
             // create template
-            Template template = Velocity.getTemplate(velocityTemplate, "UTF-8");
-            template.merge(context, writer);
-            mail.setMailBody(writer.toString());
-            writer.close();
+            mail.setMailBody(merge(templateName, context));
+
+            if (textTemplateName != null) {
+                mail.setTextMailBody(merge(textTemplateName, context));
+            }
             return this;
+        }
+
+        private String merge(String templateFile, VelocityContext context) throws IOException {
+            StringWriter writer = new StringWriter();
+            Template template = Velocity.getTemplate(templateFile, "UTF-8");
+            template.merge(context, writer);
+            String result = writer.toString();
+            writer.close();
+            return result;
         }
 
         public MailBuilder addRecipient(String recipient) {
@@ -402,6 +409,11 @@ public class MailServiceImpl implements MailService {
             node.setType(MailNodeType.REPLY_TO);
             node.setValue(replyTo);
             nodes.add(node);
+            return this;
+        }
+
+        public MailBuilder textTemplateName(String textTemplateName) {
+            this.textTemplateName = textTemplateName;
             return this;
         }
 
