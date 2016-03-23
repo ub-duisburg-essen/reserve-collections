@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>unidue</groupId>
     <artifactId>reserve-collections</artifactId>
@@ -11,23 +12,23 @@
             <artifactId>cayenne-server</artifactId>
             <version>${cayenne-server-version}</version>
         </dependency>
-        <!-- Too set up an application with a database, change the artifactId below
-            to tapestry-hibernate, and add a dependency on your JDBC driver. You'll also need
-            to add Hibernate configuration files, such as hibernate.cfg.xml. -->
+        <!-- Too set up an application with a database, change the artifactId 
+            below to tapestry-hibernate, and add a dependency on your JDBC driver. You'll 
+            also need to add Hibernate configuration files, such as hibernate.cfg.xml. -->
         <dependency>
             <groupId>org.apache.tapestry</groupId>
             <artifactId>tapestry-core</artifactId>
             <version>${tapestry-release-version}</version>
         </dependency>
-        <!-- <dependency> <groupId>com.github.lltyk</groupId> <artifactId>tapestry5-jquery</artifactId>
+        <!-- <dependency> <groupId>com.github.lltyk</groupId> <artifactId>tapestry5-jquery</artifactId> 
             <version>3.2.0</version> </dependency> -->
-        <!-- This adds automatic compression of JavaScript and CSS when in production
-            mode. -->
+        <!-- This adds automatic compression of JavaScript and CSS when in 
+            production mode. -->
         <dependency>
             <groupId>org.apache.tapestry</groupId>
             <artifactId>tapestry-yuicompressor</artifactId>
             <version>${tapestry-release-version}</version>
-            <!-- yui compressor build within tapestry causes an StringArrayIndexOutOfBoundsException
+            <!-- yui compressor build within tapestry causes an StringArrayIndexOutOfBoundsException 
                 and must excluded and replaced with the compressor provided by yahoo itself. -->
             <exclusions>
                 <exclusion>
@@ -100,10 +101,10 @@
             <artifactId>tapestry-breadcrumbs</artifactId>
             <version>${tapestry-breadcrumb-version}</version>
         </dependency>
-        <!-- A dependency on either JUnit or TestNG is required, or the surefire
-           plugin (which runs the tests) will fail, preventing Maven from packaging the WAR.
-           Tapestry includes a large number of testing facilities designed for use with TestNG
-           (http://testng.org/), so it's recommended. -->
+        <!-- A dependency on either JUnit or TestNG is required, or the surefire 
+            plugin (which runs the tests) will fail, preventing Maven from packaging 
+            the WAR. Tapestry includes a large number of testing facilities designed 
+            for use with TestNG (http://testng.org/), so it's recommended. -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
@@ -153,8 +154,8 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Provided by the servlet container, but sometimes referenced in the application
-            code. -->
+        <!-- Provided by the servlet container, but sometimes referenced 
+            in the application code. -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -162,8 +163,8 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Provide dependency to the Tapestry javadoc taglet which replaces the
-            Maven component report -->
+        <!-- Provide dependency to the Tapestry javadoc taglet which replaces 
+            the Maven component report -->
         <dependency>
             <groupId>org.apache.tapestry</groupId>
             <artifactId>tapestry-javadoc</artifactId>
@@ -331,158 +332,161 @@
 
     <build>
         <finalName>reserve-collections</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <optimize>true</optimize>
-                </configuration>
-            </plugin>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.3.2</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                        <optimize>true</optimize>
+                    </configuration>
+                </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5</version>
-                <configuration>
-                    <tagBase>https://source.ub.uni-due.de/svn/ude-reserve-collections/tags</tagBase>
-                </configuration>
-            </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.5</version>
+                    <configuration>
+                        <tagBase>https://source.ub.uni-due.de/svn/ude-reserve-collections/tags</tagBase>
+                    </configuration>
+                </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.2</version>
-            </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+                </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.3</version>
-            </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.10.3</version>
+                </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.8.1</version>
-                <configuration>
-                    <systemPropertyVariables>
-                        <tapestry.execution-mode>test</tapestry.execution-mode>
-                    </systemPropertyVariables>
-                    <suiteXmlFiles>
-                        <suiteXmlFile>src/test/conf/testng.xml</suiteXmlFile>
-                    </suiteXmlFiles>
-                </configuration>
-            </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.8.1</version>
+                    <configuration>
+                        <systemPropertyVariables>
+                            <tapestry.execution-mode>test</tapestry.execution-mode>
+                        </systemPropertyVariables>
+                        <suiteXmlFiles>
+                            <suiteXmlFile>src/test/conf/testng.xml</suiteXmlFile>
+                        </suiteXmlFiles>
+                    </configuration>
+                </plugin>
 
-            <!-- Run the application using "mvn jetty:run" -->
-            <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
+                <!-- Run the application using "mvn jetty:run" -->
+                <plugin>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-maven-plugin</artifactId>
 
-                <!-- Do NOT change version simply to jetty >= 7 as some migration
-                    has to be done (http://wiki.eclipse.org/Jetty/Howto/Upgrade_from_Jetty_6_to_Jetty_7) -->
-                <version>9.3.7.v20160115</version>
-                <configuration>
-                    <stopKey>exit</stopKey>
-                    <stopPort>32154</stopPort>
-                    <!-- Log to the console. -->
-                    <requestLog implementation="org.eclipse.jetty.server.NCSARequestLog">
-                        <!-- This doesn't do anything for Jetty, but is a workaround
-                            for a Maven bug that prevents the requestLog from being set. -->
-                        <append>true</append>
-                    </requestLog>
-                    <systemProperties>
-                        <systemProperty>
-                            <name>tapestry.execution-mode</name>
-                            <value>development</value>
-                        </systemProperty>
-                        <systemProperty>
-                            <name>tapestry.service-reloading-enabled</name>
-                            <value>true</value>
-                        </systemProperty>
-                        <systemProperty>
-                            <name>tapestry.production-mode</name>
-                            <value>false</value>
-                        </systemProperty>
-                        <systemProperty>
-                            <name>Xmx</name>
-                            <value>600m</value>
-                        </systemProperty>
-                    </systemProperties>
-                    <webApp>
-                        <contextPath>/reserve-collections</contextPath>
-                        <descriptor>${project.basedir}/src/main/webapp/WEB-INF/web.xml</descriptor>
-                        <jettyEnvXml>${project.basedir}/src/main/webapp/WEB-INF/jetty-env.xml</jettyEnvXml>
-                    </webApp>
-                </configuration>
-            </plugin>
+                    <!-- Do NOT change version simply to jetty >= 7 as some 
+                        migration has to be done (http://wiki.eclipse.org/Jetty/Howto/Upgrade_from_Jetty_6_to_Jetty_7) -->
+                    <version>9.3.7.v20160115</version>
+                    <configuration>
+                        <stopKey>exit</stopKey>
+                        <stopPort>32154</stopPort>
+                        <!-- Log to the console. -->
+                        <requestLog
+                            implementation="org.eclipse.jetty.server.NCSARequestLog">
+                            <!-- This doesn't do anything for Jetty, but 
+                                is a workaround for a Maven bug that prevents the requestLog from being set. -->
+                            <append>true</append>
+                        </requestLog>
+                        <systemProperties>
+                            <systemProperty>
+                                <name>tapestry.execution-mode</name>
+                                <value>development</value>
+                            </systemProperty>
+                            <systemProperty>
+                                <name>tapestry.service-reloading-enabled</name>
+                                <value>true</value>
+                            </systemProperty>
+                            <systemProperty>
+                                <name>tapestry.production-mode</name>
+                                <value>false</value>
+                            </systemProperty>
+                            <systemProperty>
+                                <name>Xmx</name>
+                                <value>600m</value>
+                            </systemProperty>
+                        </systemProperties>
+                        <webApp>
+                            <contextPath>/reserve-collections</contextPath>
+                            <descriptor>${project.basedir}/src/main/webapp/WEB-INF/web.xml</descriptor>
+                            <jettyEnvXml>${project.basedir}/src/main/webapp/WEB-INF/jetty-env.xml</jettyEnvXml>
+                        </webApp>
+                    </configuration>
+                </plugin>
 
-            <!-- download sources and javadoc of dependencies -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <configuration>
-                    <downloadSources>true</downloadSources>
-                    <downloadJavadocs>true</downloadJavadocs>
-                </configuration>
-                <version>2.9</version>
-            </plugin>
+                <!-- download sources and javadoc of dependencies -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-eclipse-plugin</artifactId>
+                    <configuration>
+                        <downloadSources>true</downloadSources>
+                        <downloadJavadocs>true</downloadJavadocs>
+                    </configuration>
+                    <version>2.9</version>
+                </plugin>
 
-            <plugin>
-                <groupId>org.apache.cayenne.plugins</groupId>
-                <artifactId>maven-cayenne-modeler-plugin</artifactId>
-                <version>${cayenne-server-version}</version>
-                <configuration>
-                    <modelFile>src/main/resources/cayenne-unidue-reserve-collections.xml</modelFile>
-                </configuration>
-            </plugin>
+                <plugin>
+                    <groupId>org.apache.cayenne.plugins</groupId>
+                    <artifactId>maven-cayenne-modeler-plugin</artifactId>
+                    <version>${cayenne-server-version}</version>
+                    <configuration>
+                        <modelFile>src/main/resources/cayenne-unidue-reserve-collections.xml</modelFile>
+                    </configuration>
+                </plugin>
 
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>1.7</version>
-                <configuration>
-                    <verbose>false</verbose>
-                    <addSvnKeyWords>true</addSvnKeyWords>
-                    <licenseName>apache_v2</licenseName>
-                    <roots>
-                        <root>src/main/java</root>
-                        <root>src/main/resources/unidue/rc/ui/components</root>
-                        <root>src/main/webapp/css</root>
-                        <root>src/main/webapp/js</root>
-                        <root>src/main/webapp/WEB-INF</root>
-                        <root>src/test</root>
-                    </roots>
-                    <excludes>
-                        <exclude>**/auto/*.java</exclude>
-                    </excludes>
-                    <includes>
-                        <include>Layout.tml</include>
-                        <include>**/*.java</include>
-                    </includes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>update-file-header</id>
-                        <goals>
-                            <goal>update-file-header</goal>
-                        </goals>
-                        <phase>process-sources</phase>
-                    </execution>
-                    <execution>
-                        <id>download-licenses</id>
-                        <goals>
-                            <goal>download-licenses</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>1.7</version>
+                    <configuration>
+                        <verbose>false</verbose>
+                        <addSvnKeyWords>true</addSvnKeyWords>
+                        <licenseName>apache_v2</licenseName>
+                        <roots>
+                            <root>src/main/java</root>
+                            <root>src/main/resources/unidue/rc/ui/components</root>
+                            <root>src/main/webapp/css</root>
+                            <root>src/main/webapp/js</root>
+                            <root>src/main/webapp/WEB-INF</root>
+                            <root>src/test</root>
+                        </roots>
+                        <excludes>
+                            <exclude>**/auto/*.java</exclude>
+                        </excludes>
+                        <includes>
+                            <include>Layout.tml</include>
+                            <include>**/*.java</include>
+                        </includes>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>update-file-header</id>
+                            <goals>
+                                <goal>update-file-header</goal>
+                            </goals>
+                            <phase>process-sources</phase>
+                        </execution>
+                        <execution>
+                            <id>download-licenses</id>
+                            <goals>
+                                <goal>download-licenses</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
 
-        </plugins>
+            </plugins>
+        </pluginManagement>
 
         <extensions>
             <extension>
@@ -497,8 +501,8 @@
 
     <repositories>
 
-        <!-- This repository is only needed when the Tapestry version is a preview
-            release, rather than a final release. -->
+        <!-- This repository is only needed when the Tapestry version is 
+            a preview release, rather than a final release. -->
         <repository>
             <id>ub-repo</id>
             <url>https://source.ub.uni-due.de/artifactory/repo</url>
