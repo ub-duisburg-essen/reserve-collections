@@ -656,6 +656,13 @@
         <type>2</type>
     </defaultSetting>
     <defaultSetting>
+        <label>Automatischer Versand von Mails an Dozenten deren Semesterapparate ablaufen</label>
+        <key>send.expiration.warnings</key>
+        <value>false</value>
+        <format>(true|false)</format>
+        <type>2</type>
+    </defaultSetting>
+    <defaultSetting>
         <label>URL Pfad der Statistik-XML</label>
         <key>stats.xml.source</key>
         <value></value>

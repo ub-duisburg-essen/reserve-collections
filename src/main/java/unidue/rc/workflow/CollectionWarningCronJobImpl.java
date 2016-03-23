@@ -27,6 +27,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import unidue.rc.system.BaseCronJob;
+import unidue.rc.system.SystemConfigurationService;
 
 import java.time.LocalDate;
 
@@ -38,16 +39,22 @@ public class CollectionWarningCronJobImpl extends BaseCronJob implements Collect
     @Inject
     private CollectionWarningService warningService;
 
+    @Inject
+    private SystemConfigurationService config;
+
     private LocalDate baseDate;
 
     @Override
     protected void run(JobExecutionContext jobContext) throws JobExecutionException {
 
-        baseDate = LocalDate.now();
-        try {
-            warningService.sendWarnings(baseDate);
-        } catch (ConfigurationException e) {
-            throw new JobExecutionException(e);
+        boolean sendWarnings = config.getBoolean("send.expiration.warnings", true);
+        if (sendWarnings) {
+            baseDate = LocalDate.now();
+            try {
+                warningService.sendWarnings(baseDate);
+            } catch (ConfigurationException e) {
+                throw new JobExecutionException(e);
+            }
         }
     }
 }
