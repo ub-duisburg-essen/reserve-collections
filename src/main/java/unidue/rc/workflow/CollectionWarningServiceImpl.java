@@ -186,8 +186,10 @@ public class CollectionWarningServiceImpl implements CollectionWarningService {
         data = data.stream()
                 .filter(d -> d.collections != null && !d.collections.isEmpty())
                 .filter(d -> {
-                    LOG.warn("docent " + d.docent.getUserid() + " has no email address");
-                    return StringUtils.isNotBlank(d.docent.getEmail());
+                    boolean isMailGiven = StringUtils.isNotBlank(d.docent.getEmail());
+                    if (!isMailGiven)
+                        LOG.warn("docent " + d.docent.getUserid() + " has no email address");
+                    return isMailGiven;
                 })
                 .collect(Collectors.toList());
         return data;
