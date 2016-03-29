@@ -244,9 +244,8 @@ public class ScanJobServiceImpl implements ScanJobService {
                     .subject(subject.toString())
                     .context(contextBuilder.build())
                     .addRecipients(recipients.stream().toArray(String[]::new));
-            if (currentUser != null)
-                if (!StringUtils.isEmpty(currentUser.getEmail()))
-                    mailBuilder.from(currentUser.getEmail());
+            if (currentUser != null && StringUtils.isNotBlank(currentUser.getEmail()))
+                mailBuilder.addReplyTo(currentUser.getEmail());
 
             Mail mail = mailBuilder.create();
 
