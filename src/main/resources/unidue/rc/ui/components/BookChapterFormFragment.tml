@@ -64,30 +64,31 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-3 control-label" for="bookplace">${message:book-place-label}</label>
+                <label class="col-md-3 control-label" for="placeofpublication">${message:book-place-label}</label>
 
                 <div class="col-md-6">
-                    <input t:type="TextField" t:id="bookplace" id="bookplace" class="form-control"
+                    <input t:type="TextField" t:id="placeofpublication" id="placeofpublication" class="form-control"
                            value="chapter.placeOfPublication" placeholder="${message:book-place-placeholder}"/>
-                    <t:error for="bookplace"/>
+                    <t:error for="placeofpublication"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-3 control-label " for="bookpublisher">${message:book-publisher-label}</label>
+                <label class="col-md-3 control-label " for="publisher">${message:book-publisher-label}</label>
 
                 <div class="col-md-6">
-                    <input t:type="TextField" t:id="bookpublisher" id="bookpublisher" class="form-control"
+                    <input t:type="TextField" t:id="publisher" id="publisher" class="form-control"
                            value="chapter.publisher" placeholder="${message:book-publisher-placeholder}"/>
-                    <t:error for="bookpublisher"/>
+                    <t:error for="publisher"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-3 control-label " for="bookyearofpublication">${message:book-year-label}</label>
+                <label class="col-md-3 control-label " for="yearofpublication">${message:book-year-label}</label>
 
                 <div class="col-md-6">
-                    <input t:type="TextField" t:id="bookyearofpublication" id="bookyearofpublication" class="form-control"
-                           value="chapter.yearOfPublication" placeholder="${message:book-year-placeholder}"/>
-                    <t:error for="bookyearofpublication"/>
+                    <input t:type="TextField" t:id="yearofpublication" id="yearofpublication" class="form-control"
+                           value="chapter.yearOfPublication" placeholder="${message:book-year-placeholder}"
+                           type="number"/>
+                    <t:error for="yearofpublication"/>
                 </div>
             </div>
             <div class="form-group">
@@ -100,12 +101,12 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-3 control-label " for="booksignature">${message:book-signature-label}</label>
+                <label class="col-md-3 control-label " for="signature">${message:book-signature-label}</label>
 
                 <div class="col-md-6">
-                    <input t:type="TextField" t:id="booksignature" id="booksignature" class="form-control"
+                    <input t:type="TextField" t:id="signature" id="signature" class="form-control"
                            value="chapter.signature" placeholder="${message:book-signature-placeholder}"/>
-                    <t:error for="booksignature"/>
+                    <t:error for="signature"/>
                 </div>
             </div>
             <h4>${message:chapter-pageinfo-label}</h4>
