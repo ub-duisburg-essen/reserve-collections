@@ -20,7 +20,7 @@
     }
 
     table td {
-        padding: 8px;
+        padding: 2px 8px;
     }
 
     td:first-child {
