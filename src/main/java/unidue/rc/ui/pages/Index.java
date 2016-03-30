@@ -174,10 +174,18 @@ public class Index {
     void init() {
 
         query = null;
+        initFilter();
+        initSortStack();
+    }
+
+    private void initFilter() {
         if (appliedFilter == null) {
             appliedFilter = new ArrayList<>();
             appliedFilter.add(ReserveCollectionFilter.QUERY_FILTER);
         }
+    }
+
+    private void initSortStack() {
         sortStack = new Stack<>();
         sortStack.add(new SolrSortField(SORT_FIELD_TITLE));
         sortStack.add(new SolrSortField(SORT_FIELD_LOCATION));
@@ -229,19 +237,25 @@ public class Index {
 
     Object onQueryChanged() {
         query = request.getParameter("param");
-        return request.isXHR() ? reserveCollectionZone.getBody() : null;
+        return request.isXHR() && appliedFilter != null
+               ? reserveCollectionZone.getBody()
+               : this;
     }
 
     @OnEvent(value = EventConstants.VALUE_CHANGED, component = "locationFilter")
     Object onValueChangedFromLocationFilter(LibraryLocation location) {
         locationFilter = location;
-        return request.isXHR() ? reserveCollectionZone.getBody() : null;
+        return request.isXHR() && appliedFilter != null
+               ? reserveCollectionZone.getBody()
+               : this;
     }
 
     @OnEvent(value = EventConstants.VALUE_CHANGED, component = "collectionStatusFilter")
     Object onValueChangedFromCollectionStatusFilter(ReserveCollectionStatus status) {
         collectionStatusFilter = status;
-        return request.isXHR() ? reserveCollectionZone.getBody() : null;
+        return request.isXHR() && appliedFilter != null
+               ? reserveCollectionZone.getBody()
+               : this;
     }
 
     @OnEvent("sort")
