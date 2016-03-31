@@ -57,20 +57,20 @@ public class StatisticCronJobImpl extends BaseCronJob implements StatisticCronJo
         LOG.debug("Running StatisticCronJob");
 
         Calendar cal = new GregorianCalendar();
-        Setting importXMLuntil = config.getSetting("stats.import.xmlstats.until");
+        Setting importXMLsince = config.getSetting("stats.import.xml.since");
         SimpleDateFormat format = new SimpleDateFormat();
-        String pattern = importXMLuntil.getFormat();
+        String pattern = importXMLsince.getFormat();
         format.applyPattern(pattern);
-        java.util.Date untilDate;
+        java.util.Date startDate;
         try {
-            untilDate = format.parse(importXMLuntil.getValue());
+            startDate = format.parse(importXMLsince.getValue());
             SemAppStatistics statistics;
-            if (cal.getTime().compareTo(untilDate) < 0) {
-                LOG.debug("Actual Date (" + cal.getTime() + ") is before Changeover-Date (" + untilDate + ") using " +
+            if (cal.getTime().compareTo(startDate) < 0) {
+                LOG.debug("Actual Date (" + cal.getTime() + ") is before Changeover-Date (" + startDate + ") using " +
                         "XML source");
                 statistics = statisticDAO.getXMLStats(config.getString("stats.xml.source"));
             } else {
-                LOG.debug("Actual Date (" + cal.getTime() + ") is after Changeover-Date (" + untilDate + ") using " +
+                LOG.debug("Actual Date (" + cal.getTime() + ") is after Changeover-Date (" + startDate + ") using " +
                         "database");
                 statistics = new SemAppStatistics();
                 SemAppStatistic newDailyStat = new SemAppStatistic();

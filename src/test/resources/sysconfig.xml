@@ -650,10 +650,10 @@
     </defaultSetting>
     <defaultSetting>
         <label>Datum bis zu dem die allgemeinen Statistiken aus XML importiert werden sollen</label>
-        <key>stats.import.xmlstats.until</key>
+        <key>stats.import.xml.since</key>
         <value>01.09.2015</value>
         <format>dd.MM.yyyy</format>
-        <type>2</type>
+        <type>1</type>
     </defaultSetting>
     <defaultSetting>
         <label>Automatischer Versand von Mails an Dozenten deren Semesterapparate ablaufen</label>
