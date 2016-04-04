@@ -620,7 +620,7 @@ public class MigrationServiceImpl implements MigrationService, MigrationVisitor 
 
             String[] filePathValues = filePath.split(FILE_PATH_DIVIDER);
             File oldFile = new File(filePathValues[0]);//new File(oldFileStoragePath, filePath);
-            File newFile = FileUtils.getFile(newFileStoragePath, collection.getId().toString(), entryID.toString(),
+            File newFile = FileUtils.getFile(newFileStoragePath, collection.getId().toString(), resourceId.toString(),
                     filePathValues[1]);
 
             try {
