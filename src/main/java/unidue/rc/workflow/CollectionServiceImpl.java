@@ -71,7 +71,9 @@ import unidue.rc.system.SystemMessageService;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Nils Verheyen
@@ -88,6 +90,8 @@ public class CollectionServiceImpl implements CollectionService {
     private static final String CONFIG_SEMESTER_END_WINTER = "winter.semester.end";
     private static final String CONFIG_DAYS_TO_FIRST_WARNING = "days.until.first.warning";
     private static final String CONFIG_DAYS_TO_SECOND_WARNING = "days.until.second.warning";
+    private static final String CONFIG_PROLONG_DATES = "prolong.dates";
+    private static final String PROLONG_DATES_SEPARATOR = "(\\s)*,(\\s)*";
 
     private static final Logger LOG = LoggerFactory.getLogger(CollectionServiceImpl.class);
 
@@ -322,8 +326,8 @@ public class CollectionServiceImpl implements CollectionService {
     public void createParticipation(User user, ReserveCollection collection, String accessKey) throws CommitException, DeleteException {
 
         Role role = accessKey.equals(collection.getWriteKey())
-                ? roleDAO.getRole(DefaultRole.ASSISTANT)
-                : roleDAO.getRole(DefaultRole.STUDENT);
+                    ? roleDAO.getRole(DefaultRole.ASSISTANT)
+                    : roleDAO.getRole(DefaultRole.STUDENT);
 
         setParticipation(user, collection, role);
 
@@ -432,15 +436,40 @@ public class CollectionServiceImpl implements CollectionService {
     @Override
     public Map<Calendar, String> getCollectionProlongDates() throws ConfigurationException {
 
-        Optional<Pair<DateTime, String>> nextLectureEnd = getEndDate(1, DateTime.now(), CONFIG_LECTURE_END_SUMMER, CONFIG_LECTURE_END_WINTER);
-        Optional<Pair<DateTime, String>> nextSemesterEnd = getEndDate(1, DateTime.now(), CONFIG_SEMESTER_END_SUMMER, CONFIG_SEMESTER_END_WINTER);
+        String prolongDatesSetting = config.getString(CONFIG_PROLONG_DATES);
+        List<DateTime> prolongDates = Collections.EMPTY_LIST;
+        if (StringUtils.isNotBlank(prolongDatesSetting)) {
+            Pattern pattern = Pattern.compile(PROLONG_DATES_SEPARATOR);
+            prolongDates = pattern.splitAsStream(prolongDatesSetting)
+                    .map(date -> DateTime.parse(date, DateTimeFormat.forPattern("dd.MM.yyyy")))
+                    .collect(Collectors.toList());
+        }
+
+        List<Optional<Pair<DateTime, String>>> endDates = Stream.of(CONFIG_LECTURE_END_SUMMER, CONFIG_LECTURE_END_WINTER, CONFIG_SEMESTER_END_WINTER, CONFIG_SEMESTER_END_SUMMER)
+                .map(key -> getEndDate(0, new DateTime(0), key))
+                .filter(p -> p.isPresent())
+                .collect(Collectors.toList());
+
 
         Map<Calendar, String> result = new LinkedHashMap<>();
-        if (nextLectureEnd.isPresent())
-            result.put(nextLectureEnd.get().getLeft().toGregorianCalendar(), nextLectureEnd.get().getRight());
-        if (nextSemesterEnd != null)
-            result.put(nextSemesterEnd.get().getLeft().toGregorianCalendar(), nextSemesterEnd.get().getRight());
+        for (DateTime prolongDate : prolongDates) {
+            Optional<Pair<DateTime, String>> endDate = findEndDate(prolongDate, endDates);
+            if (endDate.isPresent()) {
+                Pair<DateTime, String> pair = endDate.get();
+                result.put(pair.getLeft().toGregorianCalendar(), pair.getRight());
+            } else {
+                result.put(prolongDate.toGregorianCalendar(), StringUtils.EMPTY);
+            }
+        }
         return result;
+    }
+
+    private Optional<Pair<DateTime, String>> findEndDate(DateTime dateTime, List<Optional<Pair<DateTime, String>>> dates) {
+        return dates.stream()
+                .filter(o -> o.isPresent())
+                .map(o -> o.get())
+                .filter(p -> p.getLeft().equals(dateTime))
+                .findAny();
     }
 
     @Override
@@ -469,27 +498,28 @@ public class CollectionServiceImpl implements CollectionService {
     public Calendar getNextLectureEnd() throws ConfigurationException {
         Optional<Pair<DateTime, String>> endDate = getEndDate(1, DateTime.now(), CONFIG_LECTURE_END_SUMMER, CONFIG_LECTURE_END_WINTER);
         return endDate.isPresent()
-                ? endDate.get().getLeft().toGregorianCalendar()
-                : null;
+               ? endDate.get().getLeft().toGregorianCalendar()
+               : null;
     }
 
     @Override
     public Calendar getNextSemesterEnd() throws ConfigurationException {
         Optional<Pair<DateTime, String>> endDate = getEndDate(1, DateTime.now(), CONFIG_SEMESTER_END_SUMMER, CONFIG_SEMESTER_END_WINTER);
         return endDate.isPresent()
-                ? endDate.get().getLeft().toGregorianCalendar()
-                : null;
+               ? endDate.get().getLeft().toGregorianCalendar()
+               : null;
     }
 
     /**
      * Returns the n-th {@link DateTime} and its configuration key that is after given base, where n is the given index.
-     * @param index
-     * @param base
-     * @param configKeys
-     * @return
-     * @throws ConfigurationException
+     *
+     * @param index      n-th time found after given base
+     * @param base       start date for calculation
+     * @param configKeys config keys that point to dates that are checked for result
+     * @return optional pair of datetime and its according config key that were calculated or null if no value could be found
+     * @see #getDateTime(String)
      */
-    private Optional<Pair<DateTime, String>> getEndDate(int index, DateTime base, String...configKeys) {
+    private Optional<Pair<DateTime, String>> getEndDate(int index, DateTime base, String... configKeys) {
         return Arrays.stream(configKeys)
                 .map(key -> {
                     try {
@@ -504,7 +534,7 @@ public class CollectionServiceImpl implements CollectionService {
                 .filter(p -> p.getLeft().isAfter(base))
                 .sorted((p1, p2) -> p1.getLeft().compareTo(p2.getLeft()))
                 .skip(index)
-            .findFirst();
+                .findFirst();
     }
 
     @Override
@@ -515,8 +545,8 @@ public class CollectionServiceImpl implements CollectionService {
                 .map(participation -> {
                     User user = userDAO.getUserById(participation.getUserId());
                     return user != null
-                            ? user.getRealname()
-                            : null;
+                           ? user.getRealname()
+                           : null;
                 })
                 .filter(realname -> !StringUtils.isEmpty(realname))
                 .collect(Collectors.toList());

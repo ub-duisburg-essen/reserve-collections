@@ -22,11 +22,14 @@ package unidue.rc.ui.selectmodel;
  * #L%
  */
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tapestry5.OptionGroupModel;
 import org.apache.tapestry5.OptionModel;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.util.AbstractSelectModel;
 
+import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +64,9 @@ public class ExpirySelectModel extends AbstractSelectModel {
 
             @Override
             public String getLabel() {
-                return messages.format(label, value);
+                return messages.contains(label)
+                       ? messages.format(label, value)
+                       : DateFormat.getDateInstance().format(value.getTime());
             }
 
             @Override

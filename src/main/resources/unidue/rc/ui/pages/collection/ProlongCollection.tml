@@ -72,7 +72,7 @@
                     <label class="col-md-3 control-label" for="expiry">${message:prolong-to-label}</label>
 
                     <div class="col-md-6">
-                        <select t:id="expiry" id="expiry" class="form-control" t:type="Select" t:mixins="chosenSelect"
+                        <select t:id="expiry" id="expiry" class="form-control" t:type="Select"
                                 model="expirySelectModel" value="expiry" t:encoder="timeEncoder"/>
                         <t:error for="expiry"/>
                     </div>

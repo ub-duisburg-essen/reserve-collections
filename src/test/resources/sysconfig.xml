@@ -366,6 +366,13 @@
         <format>dd.MM.yyyy</format>
         <type>2</type>
     </defaultSetting>
+    <defaultSetting>
+        <label>Verlängerungsdaten bis zu denen Semesterapparate verlängert werden können</label>
+        <key>prolong.dates</key>
+        <value>${lecture.end.summer}\,${semester.end.summer}</value>
+        <format>(dd\.MM\.yyyy)(\,dd\.MM\.yyyy)*</format>
+        <type>2</type>
+    </defaultSetting>
 
     <defaultSetting>
         <label>Verzeichnis in der öffentliche Schlüssel für externe Dienste gespeichert werden</label>
