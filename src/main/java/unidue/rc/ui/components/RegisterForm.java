@@ -144,8 +144,8 @@ public class RegisterForm {
     @OnEvent(value = EventConstants.VALIDATE, component = "registerForm")
     void onValidateForm() throws ValidationException {
 
-        if (StringUtils.isEmpty(newUsername))
-            form.recordError(usernameField, messages.get("username-required-message"));
+        if (!securityService.isUsernameValid(newUsername))
+            form.recordError(usernameField, messages.get("username-invalid-message"));
 
         if (securityService.exists(newUsername))
             form.recordError(usernameField, messages.get("user.already.exists"));

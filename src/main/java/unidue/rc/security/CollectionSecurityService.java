@@ -49,6 +49,8 @@ import unidue.rc.model.DefaultRole;
 import unidue.rc.model.ReserveCollection;
 import unidue.rc.model.Role;
 
+import javax.annotation.Nullable;
+
 
 /**
  * A <code>CollectionSecurityService</code> is able to check security issues against actions regarding {@link
@@ -229,4 +231,12 @@ public interface CollectionSecurityService {
      * @see unidue.rc.ui.services.AppModule#addRealms
      */
     boolean exists(String username);
+
+    /**
+     * Returns <code>true</code> if target username is a valid username to the system
+     *
+     * @param username username may be null
+     * @return <code>true</code> if the username is valid
+     */
+    boolean isUsernameValid(@Nullable String username);
 }

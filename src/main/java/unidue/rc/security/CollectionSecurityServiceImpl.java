@@ -60,6 +60,7 @@ import unidue.rc.dao.*;
 import unidue.rc.model.*;
 import unidue.rc.system.SystemConfigurationService;
 
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -76,6 +77,8 @@ public class CollectionSecurityServiceImpl implements CollectionSecurityService 
     private static final Logger LOG = LoggerFactory.getLogger(CollectionSecurityServiceImpl.class);
 
     private static final String USE_SECURITY_CHECKS_SETTINGS_KEY = "use.security.checks";
+
+    private static final String USERNAME_PATTERN = "(\\S)*";
 
     @Inject
     private SystemConfigurationService config;
@@ -334,6 +337,11 @@ public class CollectionSecurityServiceImpl implements CollectionSecurityService 
     public boolean exists(String username) {
         username = userDAO.normalizeUsername(username);
         return localRealm.exists(username) || ldapRealm.exists(username);
+    }
+
+    @Override
+    public boolean isUsernameValid(@Nullable String username) {
+        return StringUtils.isNotBlank(username) && username.matches(USERNAME_PATTERN);
     }
 
     private void tryClearAuthCache(int userID) {
