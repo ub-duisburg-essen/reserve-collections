@@ -1,0 +1,11 @@
+<html t:type="adminlayout" title="${message:scan.jobs.page.title}"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-md-8">hallo welt</div>
+        <div class="col-md-4">some content</div>
+    </div>
+</div>
+</html>
