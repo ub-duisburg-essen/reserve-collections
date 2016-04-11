@@ -5,6 +5,7 @@
     <version>0.3-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Semesterapparate</name>
+    <inceptionYear>2014</inceptionYear>
     <dependencies>
         <dependency>
             <groupId>org.apache.cayenne</groupId>
@@ -442,44 +443,45 @@
             </plugin>
 
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
-                <version>1.7</version>
+                <version>${license-maven-plugin-version}</version>
                 <configuration>
-                    <verbose>false</verbose>
-                    <addSvnKeyWords>true</addSvnKeyWords>
-                    <licenseName>apache_v2</licenseName>
-                    <roots>
-                        <root>src/main/java</root>
-                        <root>src/main/resources/unidue/rc/ui/components</root>
-                        <root>src/main/webapp/css</root>
-                        <root>src/main/webapp/js</root>
-                        <root>src/main/webapp/WEB-INF</root>
-                        <root>src/test</root>
-                    </roots>
+                    <mapping>
+                        <tml>XML_STYLE</tml>
+                    </mapping>
+                    <header>src/main/resources/APACHE-2.txt</header>
+                    <properties>
+                        <owner>Universitaet Duisburg-Essen</owner>
+                        <year>2016</year>
+                        <email>semapp|uni-due.de</email>
+                    </properties>
+                    <includes>
+                        <include>**/*.java</include>
+                        <include>Layout.tml</include>
+                        <include>**/*.css</include>
+                        <include>**/*.js</include>
+                    </includes>
                     <excludes>
                         <exclude>**/auto/*.java</exclude>
+                        <exclude>src/main/webapp/vendor/**</exclude>
                     </excludes>
-                    <includes>
-                        <include>Layout.tml</include>
-                        <include>**/*.java</include>
-                    </includes>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>update-file-header</id>
                         <goals>
-                            <goal>update-file-header</goal>
-                        </goals>
-                        <phase>process-sources</phase>
-                    </execution>
-                    <execution>
-                        <id>download-licenses</id>
-                        <goals>
-                            <goal>download-licenses</goal>
+                            <goal>check</goal>
                         </goals>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.mycila</groupId>
+                        <artifactId>license-maven-plugin-git</artifactId>
+                        <!-- make sure you use the same version as license-maven-plugin -->
+                        <version>${license-maven-plugin-version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
         </plugins>
@@ -535,6 +537,7 @@
         <jdom2-version>2.0.6</jdom2-version>
         <jodatime-version>2.2</jodatime-version>
         <json-simple-version>1.1.1</json-simple-version>
+        <license-maven-plugin-version>2.10</license-maven-plugin-version>
         <mysql-connector-version>5.1.21</mysql-connector-version>
         <oracle-jdbc-version>14</oracle-jdbc-version>
         <pac4j-openid-version>1.7.0</pac4j-openid-version>
@@ -558,10 +561,5 @@
         <ude-tapestry-ajaxupload-version>0.1.1</ude-tapestry-ajaxupload-version>
         <yahoo-yuicompressor-version>2.4.7</yahoo-yuicompressor-version>
         <zxing-version>2.3.0</zxing-version>
-
-        <!-- license properties -->
-        <license.inceptionYear>2014</license.inceptionYear>
-        <license.organizationName>Universitaet Duisburg Essen</license.organizationName>
-        <license.licenseName>apache_v2</license.licenseName>
     </properties>
 </project>
