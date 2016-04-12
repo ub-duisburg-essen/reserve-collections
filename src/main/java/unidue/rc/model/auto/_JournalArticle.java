@@ -1,5 +1,7 @@
 package unidue.rc.model.auto;
 
+import java.util.Date;
+
 import org.apache.cayenne.CayenneDataObject;
 
 import unidue.rc.model.Entry;
@@ -20,6 +22,7 @@ public abstract class _JournalArticle extends CayenneDataObject {
     public static final String ISSN_PROPERTY = "issn";
     public static final String ISSUE_PROPERTY = "issue";
     public static final String JOURNAL_TITLE_PROPERTY = "journalTitle";
+    public static final String MODIFIED_PROPERTY = "modified";
     public static final String PAGE_END_PROPERTY = "pageEnd";
     public static final String PAGE_START_PROPERTY = "pageStart";
     public static final String PLACE_OF_PUBLICATION_PROPERTY = "placeOfPublication";
@@ -73,6 +76,13 @@ public abstract class _JournalArticle extends CayenneDataObject {
     }
     public String getJournalTitle() {
         return (String)readProperty(JOURNAL_TITLE_PROPERTY);
+    }
+
+    public void setModified(Date modified) {
+        writeProperty(MODIFIED_PROPERTY, modified);
+    }
+    public Date getModified() {
+        return (Date)readProperty(MODIFIED_PROPERTY);
     }
 
     public void setPageEnd(String pageEnd) {

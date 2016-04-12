@@ -1,5 +1,7 @@
 package unidue.rc.model.auto;
 
+import java.util.Date;
+
 import org.apache.cayenne.CayenneDataObject;
 
 import unidue.rc.model.Entry;
@@ -18,6 +20,7 @@ public abstract class _Reference extends CayenneDataObject {
     public static final String COMMENT_PROPERTY = "comment";
     public static final String EDITION_PROPERTY = "edition";
     public static final String ISBN_PROPERTY = "isbn";
+    public static final String MODIFIED_PROPERTY = "modified";
     public static final String PLACE_OF_PUBLICATION_PROPERTY = "placeOfPublication";
     public static final String PUBLISHER_PROPERTY = "publisher";
     public static final String SIGNATURE_PROPERTY = "signature";
@@ -63,6 +66,13 @@ public abstract class _Reference extends CayenneDataObject {
     }
     public String getIsbn() {
         return (String)readProperty(ISBN_PROPERTY);
+    }
+
+    public void setModified(Date modified) {
+        writeProperty(MODIFIED_PROPERTY, modified);
+    }
+    public Date getModified() {
+        return (Date)readProperty(MODIFIED_PROPERTY);
     }
 
     public void setPlaceOfPublication(String placeOfPublication) {

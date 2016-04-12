@@ -1,5 +1,7 @@
 package unidue.rc.model.auto;
 
+import java.util.Date;
+
 import org.apache.cayenne.CayenneDataObject;
 
 import unidue.rc.model.Entry;
@@ -22,6 +24,7 @@ public abstract class _BookChapter extends CayenneDataObject {
     public static final String EDITION_PROPERTY = "edition";
     public static final String EDITOR_PROPERTY = "editor";
     public static final String ISBN_PROPERTY = "isbn";
+    public static final String MODIFIED_PROPERTY = "modified";
     public static final String PAGE_END_PROPERTY = "pageEnd";
     public static final String PAGE_START_PROPERTY = "pageStart";
     public static final String PLACE_OF_PUBLICATION_PROPERTY = "placeOfPublication";
@@ -89,6 +92,13 @@ public abstract class _BookChapter extends CayenneDataObject {
     }
     public String getIsbn() {
         return (String)readProperty(ISBN_PROPERTY);
+    }
+
+    public void setModified(Date modified) {
+        writeProperty(MODIFIED_PROPERTY, modified);
+    }
+    public Date getModified() {
+        return (Date)readProperty(MODIFIED_PROPERTY);
     }
 
     public void setPageEnd(String pageEnd) {

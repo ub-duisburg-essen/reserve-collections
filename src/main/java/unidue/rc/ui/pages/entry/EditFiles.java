@@ -43,6 +43,7 @@ import unidue.rc.ui.pages.collection.ViewCollection;
 import unidue.rc.ui.valueencoder.BaseValueEncoder;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -130,6 +131,7 @@ public class EditFiles {
         for (File file : files) {
             log.debug("submitted file " + file);
             try {
+                file.setModified(new Date());
                 entryDAO.update(file);
 
             } catch (CommitException e) {

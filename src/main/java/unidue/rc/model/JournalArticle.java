@@ -64,6 +64,7 @@ public class JournalArticle extends _JournalArticle implements LibraryItem, Scan
         article.setSignature(getSignature());
         article.setVolume(getVolume());
         article.setReferenceNumber(getReferenceNumber());
+        article.setModified(getModified());
         return article;
     }
 

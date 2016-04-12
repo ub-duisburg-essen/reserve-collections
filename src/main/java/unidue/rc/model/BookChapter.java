@@ -63,6 +63,7 @@ public class BookChapter extends _BookChapter implements LibraryItem, Scannable,
         chapter.setSignature(getSignature());
         chapter.setYearOfPublication(getYearOfPublication());
         chapter.setReferenceNumber(getReferenceNumber());
+        chapter.setModified(getModified());
         return chapter;
     }
 

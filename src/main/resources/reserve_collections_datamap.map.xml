@@ -32,6 +32,7 @@
 		<db-attribute name="edition" type="VARCHAR" length="256"/>
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
 		<db-attribute name="isbn" type="VARCHAR" length="256"/>
+		<db-attribute name="modified" type="TIMESTAMP"/>
 		<db-attribute name="placeOfPublication" type="VARCHAR" length="512"/>
 		<db-attribute name="publisher" type="VARCHAR" length="512"/>
 		<db-attribute name="resourceID" type="INTEGER"/>
@@ -52,6 +53,7 @@
 		<db-attribute name="editor" type="VARCHAR" length="512"/>
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
 		<db-attribute name="isbn" type="VARCHAR" length="24"/>
+		<db-attribute name="modified" type="TIMESTAMP"/>
 		<db-attribute name="pageEnd" type="VARCHAR" isMandatory="true" length="16"/>
 		<db-attribute name="pageStart" type="VARCHAR" isMandatory="true" length="16"/>
 		<db-attribute name="placeOfPublication" type="VARCHAR" length="512"/>
@@ -86,6 +88,7 @@
 	<db-entity name="FILE">
 		<db-attribute name="description" type="VARCHAR" length="1024"/>
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="modified" type="TIMESTAMP"/>
 		<db-attribute name="resourceID" type="INTEGER"/>
 	</db-entity>
 	<db-entity name="FILE_ACCESS">
@@ -102,10 +105,12 @@
 	</db-entity>
 	<db-entity name="HEADLINE">
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="modified" type="TIMESTAMP"/>
 		<db-attribute name="text" type="VARCHAR" isMandatory="true" length="512"/>
 	</db-entity>
 	<db-entity name="HTML">
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="modified" type="TIMESTAMP"/>
 		<db-attribute name="text" type="CLOB" isMandatory="true"/>
 	</db-entity>
 	<db-entity name="JOB_COMMENT">
@@ -127,6 +132,7 @@
 		<db-attribute name="issn" type="VARCHAR" length="64"/>
 		<db-attribute name="issue" type="VARCHAR" length="512"/>
 		<db-attribute name="journalTitle" type="VARCHAR" isMandatory="true" length="1024"/>
+		<db-attribute name="modified" type="TIMESTAMP"/>
 		<db-attribute name="pageEnd" type="VARCHAR" isMandatory="true" length="16"/>
 		<db-attribute name="pageStart" type="VARCHAR" isMandatory="true" length="16"/>
 		<db-attribute name="placeOfPublication" type="VARCHAR" length="512"/>
@@ -239,6 +245,7 @@
 		<db-attribute name="edition" type="VARCHAR" length="256"/>
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
 		<db-attribute name="isbn" type="VARCHAR" length="256"/>
+		<db-attribute name="modified" type="TIMESTAMP"/>
 		<db-attribute name="placeOfPublication" type="VARCHAR" length="512"/>
 		<db-attribute name="publisher" type="VARCHAR" length="512"/>
 		<db-attribute name="resourceID" type="INTEGER"/>
@@ -358,6 +365,7 @@
 	</db-entity>
 	<db-entity name="WEB_LINK">
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="modified" type="TIMESTAMP"/>
 		<db-attribute name="name" type="VARCHAR" length="1024"/>
 		<db-attribute name="url" type="VARCHAR" isMandatory="true" length="1024"/>
 	</db-entity>
@@ -381,6 +389,7 @@
 		<obj-attribute name="comment" type="java.lang.String" db-attribute-path="comment"/>
 		<obj-attribute name="edition" type="java.lang.String" db-attribute-path="edition"/>
 		<obj-attribute name="isbn" type="java.lang.String" db-attribute-path="isbn"/>
+		<obj-attribute name="modified" type="java.util.Date" db-attribute-path="modified"/>
 		<obj-attribute name="placeOfPublication" type="java.lang.String" db-attribute-path="placeOfPublication"/>
 		<obj-attribute name="publisher" type="java.lang.String" db-attribute-path="publisher"/>
 		<obj-attribute name="resourceType" type="java.lang.String" db-attribute-path="resourceType"/>
@@ -405,6 +414,7 @@
 		<obj-attribute name="edition" type="java.lang.String" db-attribute-path="edition"/>
 		<obj-attribute name="editor" type="java.lang.String" db-attribute-path="editor"/>
 		<obj-attribute name="isbn" type="java.lang.String" db-attribute-path="isbn"/>
+		<obj-attribute name="modified" type="java.util.Date" db-attribute-path="modified"/>
 		<obj-attribute name="pageEnd" type="java.lang.String" db-attribute-path="pageEnd"/>
 		<obj-attribute name="pageStart" type="java.lang.String" db-attribute-path="pageStart"/>
 		<obj-attribute name="placeOfPublication" type="java.lang.String" db-attribute-path="placeOfPublication"/>
@@ -427,6 +437,7 @@
 	</obj-entity>
 	<obj-entity name="File" className="unidue.rc.model.File" dbEntityName="FILE">
 		<obj-attribute name="description" type="java.lang.String" db-attribute-path="description"/>
+		<obj-attribute name="modified" type="java.util.Date" db-attribute-path="modified"/>
 	</obj-entity>
 	<obj-entity name="FileAccess" className="unidue.rc.model.FileAccess" dbEntityName="FILE_ACCESS">
 		<obj-attribute name="accessDate" type="java.util.Date" db-attribute-path="accessDate"/>
@@ -434,9 +445,11 @@
 		<obj-attribute name="userhash" type="java.lang.String" db-attribute-path="userhash"/>
 	</obj-entity>
 	<obj-entity name="Headline" className="unidue.rc.model.Headline" dbEntityName="HEADLINE">
+		<obj-attribute name="modified" type="java.util.Date" db-attribute-path="modified"/>
 		<obj-attribute name="text" type="java.lang.String" db-attribute-path="text"/>
 	</obj-entity>
 	<obj-entity name="Html" className="unidue.rc.model.Html" dbEntityName="HTML">
+		<obj-attribute name="modified" type="java.util.Date" db-attribute-path="modified"/>
 		<obj-attribute name="text" type="java.lang.String" db-attribute-path="text"/>
 	</obj-entity>
 	<obj-entity name="JobComment" className="unidue.rc.model.JobComment" dbEntityName="JOB_COMMENT">
@@ -451,6 +464,7 @@
 		<obj-attribute name="issn" type="java.lang.String" db-attribute-path="issn"/>
 		<obj-attribute name="issue" type="java.lang.String" db-attribute-path="issue"/>
 		<obj-attribute name="journalTitle" type="java.lang.String" db-attribute-path="journalTitle"/>
+		<obj-attribute name="modified" type="java.util.Date" db-attribute-path="modified"/>
 		<obj-attribute name="pageEnd" type="java.lang.String" db-attribute-path="pageEnd"/>
 		<obj-attribute name="pageStart" type="java.lang.String" db-attribute-path="pageStart"/>
 		<obj-attribute name="placeOfPublication" type="java.lang.String" db-attribute-path="placeOfPublication"/>
@@ -508,6 +522,7 @@
 		<obj-attribute name="comment" type="java.lang.String" db-attribute-path="comment"/>
 		<obj-attribute name="edition" type="java.lang.String" db-attribute-path="edition"/>
 		<obj-attribute name="isbn" type="java.lang.String" db-attribute-path="isbn"/>
+		<obj-attribute name="modified" type="java.util.Date" db-attribute-path="modified"/>
 		<obj-attribute name="placeOfPublication" type="java.lang.String" db-attribute-path="placeOfPublication"/>
 		<obj-attribute name="publisher" type="java.lang.String" db-attribute-path="publisher"/>
 		<obj-attribute name="signature" type="java.lang.String" db-attribute-path="signature"/>
@@ -579,6 +594,7 @@
 		<obj-attribute name="userID" type="java.lang.Integer" db-attribute-path="userID"/>
 	</obj-entity>
 	<obj-entity name="WebLink" className="unidue.rc.model.WebLink" dbEntityName="WEB_LINK">
+		<obj-attribute name="modified" type="java.util.Date" db-attribute-path="modified"/>
 		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
 		<obj-attribute name="url" type="java.lang.String" db-attribute-path="url"/>
 	</obj-entity>

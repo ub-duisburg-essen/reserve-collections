@@ -1,5 +1,7 @@
 package unidue.rc.model.auto;
 
+import java.util.Date;
+
 import org.apache.cayenne.CayenneDataObject;
 
 import unidue.rc.model.Entry;
@@ -12,10 +14,18 @@ import unidue.rc.model.Entry;
  */
 public abstract class _Html extends CayenneDataObject {
 
+    public static final String MODIFIED_PROPERTY = "modified";
     public static final String TEXT_PROPERTY = "text";
     public static final String ENTRY_PROPERTY = "entry";
 
     public static final String ID_PK_COLUMN = "id";
+
+    public void setModified(Date modified) {
+        writeProperty(MODIFIED_PROPERTY, modified);
+    }
+    public Date getModified() {
+        return (Date)readProperty(MODIFIED_PROPERTY);
+    }
 
     public void setText(String text) {
         writeProperty(TEXT_PROPERTY, text);

@@ -49,6 +49,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -133,6 +134,7 @@ public class EditFile implements SecurityContextPage {
             resource.setCopyrightReviewStatus(copyrightStatus);
             resourceDAO.update(resource);
 
+            file.setModified(new Date());
             resourceDAO.update(file);
             log.info("file entry for " + collection + " saved");
             if (headline != null)

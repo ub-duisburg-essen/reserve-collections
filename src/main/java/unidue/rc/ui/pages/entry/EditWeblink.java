@@ -49,6 +49,7 @@ import unidue.rc.workflow.EntryService;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 
 @BreadCrumb(titleKey = "edit.weblink")
 @ProtectedPage
@@ -122,6 +123,7 @@ public class EditWeblink implements SecurityContextPage {
     Object afterFormSubmit() {
 
         try {
+            weblink.setModified(new Date());
             baseDAO.update(weblink);
             log.info("weblink entry for " + weblink + " updated");
             if (headline != null)

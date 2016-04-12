@@ -24,6 +24,8 @@ import unidue.rc.dao.CommitException;
 import unidue.rc.dao.DeleteException;
 import unidue.rc.model.*;
 
+import java.util.Date;
+
 /**
  * @author Nils Verheyen
  * @since 05.12.13 09:27
@@ -70,6 +72,7 @@ public class BookServiceImpl implements BookService {
             resource = resourceService.create(fullTextURL, book);
             book.setResource(resource);
         }
+        book.setModified(new Date());
         bookDAO.update(book);
 
         resource.setFullTextURL(fullTextURL);

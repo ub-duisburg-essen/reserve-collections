@@ -32,6 +32,7 @@ import unidue.rc.search.SolrService;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -93,9 +94,9 @@ public class ScannableServiceImpl implements ScannableService {
 
             resource = resourceService.create(fullTextURL, scannable);
             scannable.setResource(resource);
-            update(scannable);
         }
 
+        update(scannable);
         resource.setFullTextURL(fullTextURL);
         resourceService.update(resource);
         scanJobService.onScannableUpdated(scannable);
@@ -110,13 +111,14 @@ public class ScannableServiceImpl implements ScannableService {
         else
             resourceService.update(resource, filename, input);
 
+        update(scannable);
         scanJobService.onScannableUpdated(scannable);
         return resource;
     }
 
     @Override
     public void update(Scannable scannable) throws CommitException {
-        entryDAO.update(scannable);
+        scannable.setModified(new Date());
         scanJobService.onScannableUpdated(scannable);
     }
 

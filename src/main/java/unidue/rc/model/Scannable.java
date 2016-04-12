@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2014 - 2016 Universitaet Duisburg-Essen (semapp|uni-due.de)
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,6 +15,8 @@
  */
 package unidue.rc.model;
 
+
+import java.util.Date;
 
 /**
  * @author Nils Verheyen
@@ -93,6 +95,13 @@ public interface Scannable extends EntryValue, ResourceContainer, Cloneable {
      * @see unidue.rc.model.BookChapter#setResource(Resource)
      */
     void setResource(Resource resource);
+
+    /**
+     * Sets the modified date of this scannable instance
+     *
+     * @param modified  date which is set
+     */
+    void setModified(Date modified);
 
     /**
      * Clones this scannable with all metadata, but does not preserve any relationship to other objects.

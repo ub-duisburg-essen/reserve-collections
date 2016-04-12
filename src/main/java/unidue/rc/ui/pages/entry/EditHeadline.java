@@ -44,6 +44,7 @@ import unidue.rc.ui.pages.collection.ViewCollection;
 import unidue.rc.workflow.EntryService;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -107,6 +108,7 @@ public class EditHeadline implements SecurityContextPage {
             if (arrangingHeadline != null)
                 move();
 
+            headline.setModified(new Date());
             headlineDAO.update(headline);
             log.info("headline entry for " + headline + " updated");
 

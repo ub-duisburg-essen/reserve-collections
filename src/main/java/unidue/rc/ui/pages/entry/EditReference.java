@@ -43,6 +43,7 @@ import unidue.rc.workflow.EntryService;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 
 /**
  * Created by nils on 30.06.15.
@@ -134,6 +135,7 @@ public class EditReference  implements SecurityContextPage {
                 resource.setFullTextURL(fullTextURL);
             }
 
+            reference.setModified(new Date());
             entryDAO.update(reference);
             if (headline != null)
                 headlineDAO.move(reference.getEntry(), headline);

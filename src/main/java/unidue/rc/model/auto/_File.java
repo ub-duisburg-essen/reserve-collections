@@ -1,5 +1,7 @@
 package unidue.rc.model.auto;
 
+import java.util.Date;
+
 import org.apache.cayenne.CayenneDataObject;
 
 import unidue.rc.model.Entry;
@@ -14,6 +16,7 @@ import unidue.rc.model.Resource;
 public abstract class _File extends CayenneDataObject {
 
     public static final String DESCRIPTION_PROPERTY = "description";
+    public static final String MODIFIED_PROPERTY = "modified";
     public static final String ENTRY_PROPERTY = "entry";
     public static final String RESOURCE_PROPERTY = "resource";
 
@@ -24,6 +27,13 @@ public abstract class _File extends CayenneDataObject {
     }
     public String getDescription() {
         return (String)readProperty(DESCRIPTION_PROPERTY);
+    }
+
+    public void setModified(Date modified) {
+        writeProperty(MODIFIED_PROPERTY, modified);
+    }
+    public Date getModified() {
+        return (Date)readProperty(MODIFIED_PROPERTY);
     }
 
     public void setEntry(Entry entry) {

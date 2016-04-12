@@ -42,6 +42,8 @@ import unidue.rc.ui.SecurityContextPage;
 import unidue.rc.ui.pages.collection.ViewCollection;
 import unidue.rc.workflow.EntryService;
 
+import java.util.Date;
+
 /**
  * Within this page a Text / HTML Entry can be added to an existing  {@link unidue.rc.model.ReserveCollection}.
  *
@@ -103,6 +105,7 @@ public class EditHTML implements SecurityContextPage {
     Object onHTMLSubmitted() {
 
         try {
+            html.setModified(new Date());
             entryDAO.update(html);
             log.info("html entry " + html + " updated");
             if (headline != null)
