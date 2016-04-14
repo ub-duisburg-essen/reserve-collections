@@ -52,7 +52,7 @@ public class CollectionJsonReader extends StdDeserializer<ReserveCollection> {
             // CREATED_PROPERTY
             // DO_WARNING_PROPERTY
             // ID_PROPERTY
-            // MODIFIED_PROPERTY
+            // JOB_MODIFIED_PROPERTY
             // ORIGIN_ID_PROPERTY
             // PERMALINK_PROPERTY
             // PIWIK_ID_PROPERTY

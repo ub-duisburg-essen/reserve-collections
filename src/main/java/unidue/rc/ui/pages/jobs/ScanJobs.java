@@ -68,19 +68,19 @@ public class ScanJobs {
 
     /* sort fields for table */
     @Property(write = false)
-    private final String SORT_FIELD_NUMBER = SolrScanJobView.COLLECTION_NUMBER_NUMERIC_PROPERTY;
+    private final String SORT_FIELD_NUMBER = SolrScanJobView.COLLECTION_NUMBER_PROPERTY;
 
     @Property(write = false)
-    private final String SORT_FIELD_ENTRY_ID = SolrScanJobView.ENTRY_ID_NUMERIC_PROPERTY;
+    private final String SORT_FIELD_ENTRY_ID = SolrScanJobView.ENTRY_ID_PROPERTY;
 
     @Property(write = false)
     private final String SORT_FIELD_MODIFIED = SolrScanJobView.SCANNABLE_MODIFIED_PROPERTY;
 
     @Property(write = false)
-    private final String SORT_FIELD_SIGNATURE = SolrScanJobView.JOURNAL_SIGNATURE_PROPERTY;
+    private final String SORT_FIELD_SIGNATURE = SolrScanJobView.SIGNATURE_PROPERTY;
 
     @Property(write = false)
-    private final String SORT_FIELD_TITLE = SolrScanJobView.JOURNAL_TITLE_PROPERTY;
+    private final String SORT_FIELD_TITLE = SolrScanJobView.TITLE_PROPERTY;
 
     @Property(write = false)
     private final String SORT_FIELD_STATUS = SolrScanJobView.JOB_STATUS_PROPERTY;
@@ -323,7 +323,9 @@ public class ScanJobs {
             // filter by query string
             SolrQueryBuilder queryBuilder = solrService.createQueryBuilder();
             if (query != null && appliedFilter.contains(ScanJobsFilter.QUERY_FILTER)) {
-                queryBuilder.singleCondition(SolrScanJobView.SEARCH_FIELD_PROPERTY, this.query);
+                String[] parts = query.split("\\s+");
+                for (String p : parts)
+                    queryBuilder.singleCondition(SolrScanJobView.SEARCH_FIELD_PROPERTY, p);
             }
 
             // apply select filters

@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2014 - 2016 Universitaet Duisburg-Essen (semapp|uni-due.de)
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,12 +16,15 @@
 package unidue.rc.search;
 
 
+import org.apache.commons.lang3.CharEncoding;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * A <code>SolrQueryBuilder</code> is a convenience class to build {@link org.apache.solr.client.solrj.SolrQuery}.
@@ -34,6 +37,9 @@ public class SolrQueryBuilder {
 
     private static final Logger LOG = LoggerFactory.getLogger(SolrQueryBuilder.class);
 
+    private static final String DIVIDER = ":";
+    private static final String WILDCARD_SIGN = "*";
+
     private Map<String, SolrQuery.ORDER> sortFields = new LinkedHashMap<>();
 
     private SolrQuery query;
@@ -42,10 +48,6 @@ public class SolrQueryBuilder {
 
     public SolrQueryBuilder() {
         query = new SolrQuery();
-    }
-
-    public SolrQueryBuilder(String field, String value) {
-        addLike(field, value);
     }
 
     public SolrQueryBuilder addSortField(String field, SolrQuery.ORDER order) {
@@ -203,21 +205,31 @@ public class SolrQueryBuilder {
         }
         query.setQuery(queryStringBuilder.toString());
         if (queryStringBuilder.length() == 0)
-            query.setQuery("*");
+            query.setQuery(WILDCARD_SIGN);
 
         return query;
     }
 
     private void addLike(String field, String value) {
         queryStringBuilder.append(field);
-        queryStringBuilder.append(":*");
-        queryStringBuilder.append(value);
-        queryStringBuilder.append("*");
+        queryStringBuilder.append(DIVIDER);
+        queryStringBuilder.append(WILDCARD_SIGN);
+        queryStringBuilder.append(trimSearchValue(value));
+        queryStringBuilder.append(WILDCARD_SIGN);
     }
 
     private void addEquals(String field, String value) {
         queryStringBuilder.append(field);
-        queryStringBuilder.append(":");
+        queryStringBuilder.append(DIVIDER);
         queryStringBuilder.append(value);
+    }
+
+    private String trimSearchValue(String value) {
+        if (value == null)
+            return null;
+
+        value = StringUtils.removePattern(value, "^([\\s\\" + WILDCARD_SIGN + "])*");
+        value = StringUtils.removePattern(value, "([\\s\\" + WILDCARD_SIGN + "])*$");
+        return value;
     }
 }

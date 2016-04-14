@@ -60,6 +60,13 @@ public interface Scannable extends EntryValue, ResourceContainer, Cloneable {
     String getTitle();
 
     /**
+     * Returns the signature of the scannable.
+     *
+     * @return see description
+     */
+    String getSignature();
+
+    /**
      * Returns the {@link unidue.rc.model.ScanJob} associated or <code>null</code> if there is none.
      *
      * @return see description

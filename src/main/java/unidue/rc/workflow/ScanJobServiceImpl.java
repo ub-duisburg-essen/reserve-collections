@@ -295,20 +295,8 @@ public class ScanJobServiceImpl implements ScanJobService {
         try {
             SolrScanJobView view = solrService.getById(SolrScanJobView.class, job.getId().toString());
 
-            BookChapter chapter = job.getBookChapter();
-
-            if (chapter != null) {
-
-                oldPageStart = view.getChapterPageStart();
-                oldPageEnd = view.getChapterPageEnd();
-            }
-            JournalArticle article = job.getJournalArticle();
-            if (article != null) {
-
-                oldPageStart = view.getArticlePageStart();
-                oldPageEnd = view.getArticlePageEnd();
-            }
-
+            oldPageStart = view.getPageStart();
+            oldPageEnd = view.getPageEnd();
 
         } catch (SolrServerException e) {
             LOG.warn("could not find scan job view with id " + job.getId());
@@ -331,49 +319,39 @@ public class ScanJobServiceImpl implements ScanJobService {
 
     private void commitScanJobToSolr(ScanJob job) {
 
-        ReserveCollection rc;
-        Entry entry;
 
         SolrScanJobView view = new SolrScanJobView();
 
-        BookChapter chapter = job.getBookChapter();
-        if (chapter != null) {
-            rc = chapter.getReserveCollection();
-            entry = chapter.getEntry();
+        Scannable scannable = job.getScannable();
+        if (scannable != null) {
 
-            view.setBookTitle(chapter.getBookTitle());
-            view.setBookSignature(chapter.getSignature());
-            view.setChapterPageStart(chapter.getPageStart());
-            view.setChapterPageEnd(chapter.getPageEnd());
+            ReserveCollection rc = scannable.getReserveCollection();
+            Entry entry = scannable.getEntry();
 
+            view.setTitle(scannable.getTitle());
+            view.setSignature(scannable.getSignature());
+            view.setPageStart(scannable.getPageStart());
+            view.setPageEnd(scannable.getPageEnd());
+            view.setScannableType(scannable.getClass().getSimpleName());
+            view.setJobID(job.getId());
+            view.setReserveCollectionID(rc.getId());
+            view.setCollectionNumber(rc.getNumber().getNumber());
+            view.setEntryID(entry.getId());
+            view.setJobModified(job.getModified());
+            view.setScannableModified(entry.getModified());
+            view.setStatus(job.getStatus().getValue());
+            view.setLocation(rc.getLibraryLocation().getName());
+            view.setLocationID(rc.getLibraryLocation().getId());
+
+            if (job.getLocation() != null) {
+                view.setReviser(job.getLocation().getName());
+                view.setReviserID(job.getLocation().getId());
+            }
+
+            solrService.addBean(view, SolrService.Core.ScanJob);
         } else {
-            JournalArticle article = job.getJournalArticle();
-            rc = article.getReserveCollection();
-            entry = article.getEntry();
-
-            view.setJournalTitle(article.getJournalTitle());
-            view.setJournalSignature(article.getSignature());
-            view.setArticlePageStart(article.getPageStart());
-            view.setArticlePageEnd(article.getPageEnd());
+            LOG.warn("scan job " + job + " does not belong to a scannable");
         }
-        view.setJobID(job.getId());
-        view.setReserveCollectionID(rc.getId());
-        view.setCollectionNumber(rc.getNumber().getNumber().toString());
-        view.setCollectionNumberNumeric(rc.getNumber().getNumber());
-        view.setEntryID(entry.getId().toString());
-        view.setEntryIDNumeric(entry.getId());
-        view.setModified(job.getModified());
-        view.setScannableModified(entry.getModified());
-        view.setStatus(job.getStatus().getValue());
-        view.setLocation(rc.getLibraryLocation().getName());
-        view.setLocationID(rc.getLibraryLocation().getId());
-
-        if (job.getLocation() != null) {
-            view.setReviser(job.getLocation().getName());
-            view.setReviserID(job.getLocation().getId());
-        }
-
-        solrService.addBean(view, SolrService.Core.ScanJob);
     }
 
     private void deleteScanJobFromSolr(ScanJob job) {
