@@ -340,6 +340,7 @@ public class ScanJobServiceImpl implements ScanJobService {
             view.setJobModified(job.getModified());
             view.setScannableModified(entry.getModified());
             view.setStatus(job.getStatus().getValue());
+            view.setStatusLabel(messages.get("scan.job.status." + job.getStatus().getValue()));
             view.setLocation(rc.getLibraryLocation().getName());
             view.setLocationID(rc.getLibraryLocation().getId());
 

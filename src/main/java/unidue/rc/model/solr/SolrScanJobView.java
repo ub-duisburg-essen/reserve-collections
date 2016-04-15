@@ -36,6 +36,7 @@ public class SolrScanJobView {
     public static final String SIGNATURE_PROPERTY = "signature";
     public static final String TITLE_PROPERTY = "title";
     public static final String JOB_STATUS_PROPERTY = "jobStatus";
+    public static final String JOB_STATUS_LABEL_PROPERTY = "jobStatusLabel";
     public static final String LOCATION_PROPERTY = "locationName";
     public static final String LOCATION_ID_PROPERTY = "locationID";
     public static final String REVISER_PROPERTY = "reviser";
@@ -99,10 +100,16 @@ public class SolrScanJobView {
     private String title;
 
     /**
-     * Contains the job status of the {@link unidue.rc.model.BookJob}.
+     * Contains the job status of the {@link unidue.rc.model.ScanJob}.
      */
     @Field(JOB_STATUS_PROPERTY)
     private int status;
+
+    /**
+     * Contains the job status of the {@link unidue.rc.model.ScanJob}.
+     */
+    @Field(JOB_STATUS_LABEL_PROPERTY)
+    private String statusLabel;
 
     /**
      * Contains the location name of the reserve collection.
@@ -196,6 +203,14 @@ public class SolrScanJobView {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getStatusLabel() {
+        return statusLabel;
+    }
+
+    public void setStatusLabel(String statusLabel) {
+        this.statusLabel = statusLabel;
     }
 
     public String getLocation() {
