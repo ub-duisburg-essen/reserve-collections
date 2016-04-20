@@ -216,7 +216,7 @@ public class CollectionRSSWriterImpl implements CollectionRSSWriter, CollectionV
 
     @Override
     public void visit(BookChapter chapter) {
-        currentItem.setTitle(chapter.getTitle());
+        currentItem.setTitle(chapter.getWorkTitle());
 
         String description = buildDescription(
                 buildDescriptionEntry("authors", chapter.getBookAuthors()),

@@ -65,7 +65,7 @@
                     </t:secureblock>
                 </dd>
                 <dt>${message:journal}</dt>
-                <dd>${journalArticle.title}</dd>
+                <dd>${journalArticle.articleTitle}</dd>
                 <t:if test="journalArticle.authors">
                     <dt>${message:article-authors-label}</dt>
                     <dd>${journalArticle.authors}</dd>

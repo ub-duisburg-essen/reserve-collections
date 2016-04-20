@@ -21,15 +21,13 @@ import unidue.rc.model.auto._Book;
 
 import java.util.Date;
 
-public class Book extends _Book implements LibraryItem, EntryValue, IntPrimaryKey, CollectionVisitable {
+public class Book extends _Book implements EntryValue, IntPrimaryKey, CollectionVisitable, ResourceContainer {
 
     @Override
     public Integer getId() {
         return CayenneUtils.getID(this, ID_PK_COLUMN);
     }
 
-
-    @Override
     public ReserveCollection getReserveCollection() {
         return getEntry().getReserveCollection();
     }

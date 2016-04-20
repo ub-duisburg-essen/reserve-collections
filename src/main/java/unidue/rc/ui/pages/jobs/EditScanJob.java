@@ -107,7 +107,7 @@ public class EditScanJob {
     private CollectionSecurityService securityService;
 
     @Property
-    private LibraryItem libraryItem;
+    private Scannable scannable;
 
     @SetupRender
     @RequiresActionPermission(ActionDefinition.EDIT_SCAN_JOBS)
@@ -118,7 +118,7 @@ public class EditScanJob {
     @OnEvent(value = EventConstants.ACTIVATE)
     void onActivate(Integer scanJobID) {
         this.scanJob = scanJobDAO.get(ScanJob.class, scanJobID);
-        this.libraryItem = scanJobDAO.getLibraryItem(scanJob);
+        this.scannable = scanJobDAO.getScannable(scanJob);
 
         List<Integer> annotatorIDs = new ArrayList<>(scanJob.getComments().size());
         for (JobComment comment : scanJob.getComments())
@@ -155,13 +155,13 @@ public class EditScanJob {
             scanJobDAO.update(scanJob);
         } catch (CommitException e) {
             articleScanJobForm.recordError(messages.format("error.msg.could.not.commit.scanjob",
-                    libraryItem.getTitle()));
+                    scannable.getWorkTitle()));
         }
         try {
-            scanJobDAO.update(libraryItem);
+            scanJobDAO.update(scannable);
         } catch (CommitException e) {
             articleScanJobForm.recordError(messages.format("error.msg.could.not.commit.journal",
-                    libraryItem.getTitle()));
+                    scannable.getWorkTitle()));
         }
     }
 
@@ -193,16 +193,16 @@ public class EditScanJob {
     }
 
     public Block getFormBlock() {
-        return libraryItem instanceof JournalArticle
+        return scannable instanceof JournalArticle
                 ? journalArticleFormBlock
                 : bookChapterFormBlock;
     }
 
     public JournalArticle getJournalArticle() {
-        return (JournalArticle) libraryItem;
+        return (JournalArticle) scannable;
     }
 
     public BookChapter getBookChapter() {
-        return (BookChapter) libraryItem;
+        return (BookChapter) scannable;
     }
 }

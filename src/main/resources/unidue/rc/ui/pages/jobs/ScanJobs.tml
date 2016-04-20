@@ -93,7 +93,7 @@
                             </td>
                             <td>${scanJob.signature}</td>
                             <td>
-                                <span title="${scanJob.title}" class="shortentext"> ${scanJob.title}</span>
+                                <span title="${scanJob.workTitle}" class="shortentext"> ${scanJob.workTitle}</span>
                             </td>
                             <td>
                                 <div class="circle-container">

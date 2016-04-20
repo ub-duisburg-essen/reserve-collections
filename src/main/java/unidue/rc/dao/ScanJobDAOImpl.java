@@ -24,13 +24,7 @@ import org.apache.cayenne.query.RelationshipQuery;
 import org.apache.cayenne.query.SelectQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import unidue.rc.model.BookChapter;
-import unidue.rc.model.JournalArticle;
-import unidue.rc.model.LibraryItem;
-import unidue.rc.model.LibraryLocation;
-import unidue.rc.model.ReserveCollection;
-import unidue.rc.model.ReserveCollectionsDatamap;
-import unidue.rc.model.ScanJob;
+import unidue.rc.model.*;
 
 import java.util.Collections;
 import java.util.Date;
@@ -77,8 +71,7 @@ public class ScanJobDAOImpl extends BaseDAOImpl implements ScanJobDAO {
     }
 
     @Override
-    public LibraryItem getLibraryItem(ScanJob scanJob) {
-
+    public Scannable getScannable(ScanJob scanJob) {
         RelationshipQuery query = new RelationshipQuery(scanJob.getObjectId(), ScanJob.JOURNAL_ARTICLE_PROPERTY);
         ObjectContext context = BaseContext.getThreadObjectContext();
         JournalArticle article = (JournalArticle) Cayenne.objectForQuery(context, query);

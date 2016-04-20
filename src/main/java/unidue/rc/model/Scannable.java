@@ -53,11 +53,32 @@ public interface Scannable extends EntryValue, ResourceContainer, Cloneable {
     String getPageEnd();
 
     /**
-     * Returns the title of scannable, either a JournalArticle title or a BookChapter title.
+     * Returns the title of the work of a scannable, ex. the title of a book.
      *
      * @return see description
      */
-    String getTitle();
+    String getWorkTitle();
+
+    /**
+     * Returns the authors of the work of a scannable, ex. the authors of a book.
+     *
+     * @return see description
+     */
+    String getWorkAuthors();
+
+    /**
+     * Returns the title of the part of a scannable, ex. the title of a chapter.
+     *
+     * @return see description
+     */
+    String getPartTitle();
+
+    /**
+     * Returns the authors of the part of a scannable, ex. the authors of a chapter.
+     *
+     * @return see description
+     */
+    String getPartAuthors();
 
     /**
      * Returns the signature of the scannable.

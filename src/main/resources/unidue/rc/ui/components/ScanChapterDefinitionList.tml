@@ -64,8 +64,8 @@
                                     anchor="${bookChapter.id}">${prop:bookChapter.id}</t:pagelink>
                     </t:secureblock>
                 </dd>
-                <dt>${message:journal}</dt>
-                <dd>${bookChapter.title}</dd>
+                <dt>${message:book.chapter}</dt>
+                <dd>${bookChapter.chapterTitle}</dd>
                 <t:if test="bookChapter.bookAuthors">
                     <dt>${message:book-authors-label}</dt>
                     <dd>${bookChapter.bookAuthors}</dd>

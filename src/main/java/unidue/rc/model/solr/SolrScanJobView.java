@@ -34,7 +34,10 @@ public class SolrScanJobView {
     public static final String SCANNABLE_MODIFIED_PROPERTY = "scannableModified";
     public static final String SCANNABLE_TYPE_PROPERTY = "scannableType";
     public static final String SIGNATURE_PROPERTY = "signature";
-    public static final String TITLE_PROPERTY = "title";
+    public static final String WORK_TITLE_PROPERTY = "workTitle";
+    public static final String WORK_AUTHORS_PROPERTY = "workAuthors";
+    public static final String PART_TITLE_PROPERTY = "partTitle";
+    public static final String PART_AUTHORS_PROPERTY = "partAuthors";
     public static final String JOB_STATUS_PROPERTY = "jobStatus";
     public static final String LOCATION_PROPERTY = "locationName";
     public static final String LOCATION_ID_PROPERTY = "locationID";
@@ -93,10 +96,28 @@ public class SolrScanJobView {
     private String signature;
 
     /**
-     * Contains the title of the {@link unidue.rc.model.ScanJob}.
+     * Contains the title of the work of the {@link unidue.rc.model.ScanJob}.
      */
-    @Field(TITLE_PROPERTY)
-    private String title;
+    @Field(WORK_TITLE_PROPERTY)
+    private String workTitle;
+
+    /**
+     * Contains the authors of the work of the {@link unidue.rc.model.ScanJob}.
+     */
+    @Field(WORK_AUTHORS_PROPERTY)
+    private String workAuthors;
+
+    /**
+     * Contains the title of the part of the {@link unidue.rc.model.ScanJob}.
+     */
+    @Field(PART_TITLE_PROPERTY)
+    private String partTitle;
+
+    /**
+     * Contains the authors of the part of the {@link unidue.rc.model.ScanJob}.
+     */
+    @Field(PART_AUTHORS_PROPERTY)
+    private String partAuthors;
 
     /**
      * Contains the job status of the {@link unidue.rc.model.ScanJob}.
@@ -182,12 +203,36 @@ public class SolrScanJobView {
         this.signature = signature;
     }
 
-    public String getTitle() {
-        return title;
+    public String getWorkTitle() {
+        return workTitle;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setWorkTitle(String workTitle) {
+        this.workTitle = workTitle;
+    }
+
+    public String getWorkAuthors() {
+        return workAuthors;
+    }
+
+    public void setWorkAuthors(String workAuthors) {
+        this.workAuthors = workAuthors;
+    }
+
+    public String getPartTitle() {
+        return partTitle;
+    }
+
+    public void setPartTitle(String partTitle) {
+        this.partTitle = partTitle;
+    }
+
+    public String getPartAuthors() {
+        return partAuthors;
+    }
+
+    public void setPartAuthors(String partAuthors) {
+        this.partAuthors = partAuthors;
     }
 
     public int getStatus() {
@@ -286,9 +331,9 @@ public class SolrScanJobView {
         if (signature != null
             ? !signature.equals(that.signature)
             : that.signature != null) return false;
-        if (title != null
-            ? !title.equals(that.title)
-            : that.title != null) return false;
+        if (workTitle != null
+            ? !workTitle.equals(that.workTitle)
+            : that.workTitle != null) return false;
         if (location != null
             ? !location.equals(that.location)
             : that.location != null) return false;
@@ -320,8 +365,8 @@ public class SolrScanJobView {
         result = 31 * result + (signature != null
                                 ? signature.hashCode()
                                 : 0);
-        result = 31 * result + (title != null
-                                ? title.hashCode()
+        result = 31 * result + (workTitle != null
+                                ? workTitle.hashCode()
                                 : 0);
         result = 31 * result + status;
         result = 31 * result + (location != null
@@ -346,7 +391,7 @@ public class SolrScanJobView {
         final StringBuilder sb = new StringBuilder("SolrScanJobView{");
         sb.append("jobID=").append(jobID);
         sb.append(", entryID='").append(entryID).append('\'');
-        sb.append(", title='").append(title).append('\'');
+        sb.append(", title='").append(workTitle).append('\'');
         sb.append(", status=").append(status);
         sb.append('}');
         return sb.toString();

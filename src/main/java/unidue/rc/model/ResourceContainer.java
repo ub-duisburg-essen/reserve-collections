@@ -21,9 +21,9 @@ package unidue.rc.model;
  */
 public interface ResourceContainer {
 
-    public Resource getResource();
+    Resource getResource();
 
-    public void setResource(Resource resource);
+    void setResource(Resource resource);
 
-    public Entry getEntry();
+    Entry getEntry();
 }

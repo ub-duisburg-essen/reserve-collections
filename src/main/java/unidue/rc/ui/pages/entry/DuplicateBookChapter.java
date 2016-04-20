@@ -113,7 +113,7 @@ public class DuplicateBookChapter implements SecurityContextPage {
             }
         } catch (CommitException e) {
             log.error("could not create chapter " + duplicate, e);
-            chapterForm.recordError(messages.format("error.msg.could.not.commit.chapter", duplicate.getTitle()));
+            chapterForm.recordError(messages.format("error.msg.could.not.commit.chapter", duplicate.getWorkTitle()));
         }
         Headline headline = chapterFormFragment.getHeadline();
         if (headline != null)
@@ -121,7 +121,7 @@ public class DuplicateBookChapter implements SecurityContextPage {
                 headlineDAO.move(duplicate.getEntry(), headline);
             } catch (CommitException e) {
                 log.error("could not move chapter " + duplicate, e);
-                chapterForm.recordError(messages.format("error.msg.could.not.commit.chapter", duplicate.getTitle()));
+                chapterForm.recordError(messages.format("error.msg.could.not.commit.chapter", duplicate.getWorkTitle()));
             }
 
     }

@@ -16,10 +16,7 @@
 package unidue.rc.dao;
 
 
-import unidue.rc.model.LibraryItem;
-import unidue.rc.model.LibraryLocation;
-import unidue.rc.model.ReserveCollection;
-import unidue.rc.model.ScanJob;
+import unidue.rc.model.*;
 
 import java.util.List;
 
@@ -32,7 +29,7 @@ import java.util.List;
  */
 public interface ScanJobDAO extends BaseDAO {
 
-    static final String SERVICE_NAME = "ScanJobDAO";
+    String SERVICE_NAME = "ScanJobDAO";
 
     /**
      * Retrieves a {@link java.util.List} of all available {@link unidue.rc.model.ScanJob} objects in backend.
@@ -42,12 +39,12 @@ public interface ScanJobDAO extends BaseDAO {
     List<ScanJob> getJobs();
 
     /**
-     * Returns the {@link unidue.rc.model.LibraryItem} that is assigned to target scan job.
+     * Returns the {@link unidue.rc.model.Scannable} that is assigned to target scan job.
      *
      * @param scanJob scan job of the item
-     * @return returns the library target job is assigned to, <code>null</code> otherwise.
+     * @return returns the scannable object that the job is assigned to, <code>null</code> otherwise.
      * @see unidue.rc.model.JournalArticle
      * @see unidue.rc.model.BookChapter
      */
-    LibraryItem getLibraryItem(ScanJob scanJob);
+    Scannable getScannable(ScanJob scanJob);
 }

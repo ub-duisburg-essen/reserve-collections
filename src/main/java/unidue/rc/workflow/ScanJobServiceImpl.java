@@ -328,7 +328,10 @@ public class ScanJobServiceImpl implements ScanJobService {
             ReserveCollection rc = scannable.getReserveCollection();
             Entry entry = scannable.getEntry();
 
-            view.setTitle(scannable.getTitle());
+            view.setWorkTitle(scannable.getWorkTitle());
+            view.setWorkAuthors(scannable.getWorkAuthors());
+            view.setPartTitle(scannable.getPartTitle());
+            view.setPartAuthors(scannable.getPartAuthors());
             view.setSignature(scannable.getSignature());
             view.setPageStart(scannable.getPageStart());
             view.setPageEnd(scannable.getPageEnd());

@@ -80,7 +80,7 @@ public class ScanJobs {
     private final String SORT_FIELD_SIGNATURE = SolrScanJobView.SIGNATURE_PROPERTY;
 
     @Property(write = false)
-    private final String SORT_FIELD_TITLE = SolrScanJobView.TITLE_PROPERTY;
+    private final String SORT_FIELD_TITLE = SolrScanJobView.WORK_TITLE_PROPERTY;
 
     @Property(write = false)
     private final String SORT_FIELD_STATUS = SolrScanJobView.JOB_STATUS_PROPERTY;

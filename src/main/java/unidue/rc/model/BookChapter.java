@@ -21,7 +21,7 @@ import unidue.rc.model.auto._BookChapter;
 
 import java.util.Date;
 
-public class BookChapter extends _BookChapter implements LibraryItem, Scannable, IntPrimaryKey, CollectionVisitable {
+public class BookChapter extends _BookChapter implements Scannable, IntPrimaryKey, CollectionVisitable {
 
     @Override
     public Boolean isContentAvailable() {
@@ -31,8 +31,23 @@ public class BookChapter extends _BookChapter implements LibraryItem, Scannable,
     }
 
     @Override
-    public String getTitle() {
+    public String getWorkTitle() {
+        return getBookTitle();
+    }
+
+    @Override
+    public String getWorkAuthors() {
+        return getBookAuthors();
+    }
+
+    @Override
+    public String getPartTitle() {
         return getChapterTitle();
+    }
+
+    @Override
+    public String getPartAuthors() {
+        return getChapterAuthors();
     }
 
     @Override

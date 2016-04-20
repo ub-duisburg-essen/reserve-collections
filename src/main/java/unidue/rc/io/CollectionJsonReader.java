@@ -58,7 +58,7 @@ public class CollectionJsonReader extends StdDeserializer<ReserveCollection> {
             // PIWIK_ID_PROPERTY
             // READ_KEY_PROPERTY
             // STATUS_PROPERTY
-            // TITLE_PROPERTY
+            // WORK_TITLE_PROPERTY
             // VALID_TO_PROPERTY
             // WRITE_KEY_PROPERTY
             switch (field) {

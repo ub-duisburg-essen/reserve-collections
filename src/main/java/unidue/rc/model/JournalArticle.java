@@ -21,7 +21,7 @@ import unidue.rc.model.auto._JournalArticle;
 
 import java.util.Date;
 
-public class JournalArticle extends _JournalArticle implements LibraryItem, Scannable, IntPrimaryKey, CollectionVisitable {
+public class JournalArticle extends _JournalArticle implements Scannable, IntPrimaryKey, CollectionVisitable {
 
     @Override
     public Boolean isContentAvailable() {
@@ -85,7 +85,22 @@ public class JournalArticle extends _JournalArticle implements LibraryItem, Scan
     }
 
     @Override
-    public String getTitle() {
+    public String getWorkTitle() {
+        return getJournalTitle();
+    }
+
+    @Override
+    public String getWorkAuthors() {
+        return StringUtils.EMPTY;
+    }
+
+    @Override
+    public String getPartTitle() {
         return getArticleTitle();
+    }
+
+    @Override
+    public String getPartAuthors() {
+        return getAuthors();
     }
 }

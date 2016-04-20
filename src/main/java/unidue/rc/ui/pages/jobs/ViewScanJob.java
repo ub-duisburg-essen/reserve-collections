@@ -74,7 +74,7 @@ public class ViewScanJob {
     private BreadCrumbList breadCrumbList;
 
     @Property
-    private LibraryItem libraryItem;
+    private Scannable scannable;
 
     @SetupRender
     @RequiresActionPermission(ActionDefinition.EDIT_SCAN_JOBS)
@@ -85,7 +85,7 @@ public class ViewScanJob {
     @OnEvent(value = EventConstants.ACTIVATE)
     void onActivate(Integer scanJobID) {
         this.scanJob = scanJobDAO.get(ScanJob.class, scanJobID);
-        this.libraryItem = scanJobDAO.getLibraryItem(scanJob);
+        this.scannable = scanJobDAO.getScannable(scanJob);
 
         List<Integer> annotatorIDs = new ArrayList<>(scanJob.getComments().size());
         for (JobComment comment : scanJob.getComments())
@@ -110,23 +110,23 @@ public class ViewScanJob {
     }
 
     public String getBarcodeContent() {
-        return libraryItem.getReserveCollection().getId() + "_" + libraryItem.getId();
+        return scannable.getReserveCollection().getId() + "_" + scannable.getId();
     }
 
     public Boolean getIsJournalArticle() {
-        return libraryItem instanceof JournalArticle;
+        return scannable instanceof JournalArticle;
     }
 
     public Boolean getIsBookChapter() {
-        return libraryItem instanceof BookChapter;
+        return scannable instanceof BookChapter;
     }
 
     public BookChapter getBookChapter() {
-        return (BookChapter) libraryItem;
+        return (BookChapter) scannable;
     }
 
     public JournalArticle getJournalArticle() {
-        return (JournalArticle) libraryItem;
+        return (JournalArticle) scannable;
     }
 
 }
