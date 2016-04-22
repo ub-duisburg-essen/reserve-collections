@@ -4,8 +4,143 @@
 <div class="container-fluid">
     <div class="row">
 
-        <div class="col-md-8">hallo welt</div>
-        <div class="col-md-4">some content</div>
+        <div class="col-md-8">
+            <t:zone t:id="jobsZone">
+                <form t:type="Form" t:id="scanjob_form" t:clientValidation="none">
+                <fieldset>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>${message:entry}</th>
+                        <th>${message:number-label}</th>
+                        <th>${message:libraryLocation-label}</th>
+                        <th>${message:reviser}</th>
+                        <th>${message:signature}</th>
+                        <th>${message:author-label}</th>
+                        <th>${message:page.start}</th>
+                        <th>${message:page.end}</th>
+                        <th>${message:job}</th>
+                        <th>${message:scannable.type}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <t:loop source="scanJobs.items" value="scanJob">
+                            <tr style="color: ${prop:statusColor};">
+                                <td>
+                                    <t:checkbox value="action"/>
+                                </td>
+                                <td>${scanJob.entryID}</td>
+                                <td>${scanJob.collectionNumber}</td>
+                                <td>${scanJob.location}</td>
+                                <td>${scanJob.reviser}</td>
+                                <td>${scanJob.signature}</td>
+                                <td>
+                                    <ul>
+                                    <t:loop source="scanJob.docents" value="docent">
+                                        <li>${docent}</li>
+                                    </t:loop>
+                                    </ul>
+                                </td>
+                                <td>${scanJob.pageStart}</td>
+                                <td>${scanJob.pageEnd}</td>
+                                <td>${statusLabel}</td>
+                                <td>${scannableTypeLabel}</td>
+                                <td>
+                                    <t:eventlink zone="^" event="editJob" context="scanJob.jobID">
+                                        <span class="glyphicon glyphicon-chevron-right"></span>
+                                    </t:eventlink>
+                                </td>
+                            </tr>
+                        </t:loop>
+                    </tbody>
+                </table>
+                </fieldset>
+                </form>
+            </t:zone>
+        </div>
+        <div class="col-md-4">
+            <t:zone t:id="editJobZone" id="editJobZone" update="none" class="row">
+                <t:if test="editingJob">
+
+                <form t:type="form" class="form-horizontal shadow-left" t:clientValidation="none" t:id="edit_scan_job_form"
+                      t:zone="^">
+                    <h3>${message:job}</h3>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">${message:entry}</label>
+
+                            <div class="col-md-6">
+                                <div class="form-control-static">
+
+                                    <t:pagelink page="collection/viewcollection"
+                                                context="editingJob.reserveCollectionID"
+                                                anchor="${editingJob.entryID}">${editingJob.entryID}</t:pagelink>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="signature" class="col-md-3 control-label">${message:signature}</label>
+
+                            <div class="col-md-6">
+                                <input t:type="textfield" t:id="signature" id="signature" value="editingJob.signature"
+                                       class="form-control"/>
+                                <t:error for="signature"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="pageStart" class="col-md-3 control-label">${message:page.start}</label>
+
+                            <div class="col-md-6">
+                                <input t:type="textfield" t:id="pageStart" id="pageStart" value="editingJob.pageStart"
+                                       class="form-control"/>
+                                <t:error for="pageStart"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="pageEnd" class="col-md-3 control-label">${message:page.end}</label>
+
+                            <div class="col-md-6">
+                                <input t:type="textfield" t:id="pageEnd" id="pageEnd" value="editingJob.pageEnd"
+                                       class="form-control"/>
+                                <t:error for="pageEnd"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="reviser" class="col-md-3 control-label">${message:reviser}</label>
+
+                            <div class="col-md-6">
+
+                                <select t:type="Select" t:id="reviser" id="reviser" t:value="reviser"
+                                        model="reviserModel"
+                                        data-placeholder="${message:chosen-placeholder-label}"
+                                        t:blankOption="ALWAYS" class="form-control"/>
+                                <t:error for="reviser"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="jobStatus" class="col-md-3 control-label">${message:status}</label>
+
+                            <div class="col-md-6">
+
+                                <select t:type="Select" t:id="jobStatus" id="jobStatus" t:value="editingJobStatus"
+                                        data-placeholder="${message:chosen-placeholder-label}"
+                                        t:blankOption="NEVER" class="form-control"/>
+                                <t:error for="jobStatus"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-9">
+                                <input type="submit" value="${message:form-submit-label}"/>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+                </t:if>
+            </t:zone>
+        </div>
     </div>
 </div>
 </html>

@@ -259,7 +259,9 @@ public enum ActionDefinition {
     /**
      * Defines the action if a {@link miless.model.User} wants to edit user details
      */
-    EDIT_USER(Resource.USER, Name.UPDATE)
+    EDIT_USER(Resource.USER, Name.UPDATE),
+
+    VIEW_ADMIN_PANEL(Resource.ADMIN_DASHBOARD, Name.READ)
     ;
 
     private String resource;
@@ -306,6 +308,7 @@ public enum ActionDefinition {
         public static final String COLLECTION_SETTINGS = "collection-settings";
         public static final String MIGRATE = "migrate";
         public static final String USER = "user";
+        public static final String ADMIN_DASHBOARD = "admin-dashboard";
     }
 
     public static class Name {

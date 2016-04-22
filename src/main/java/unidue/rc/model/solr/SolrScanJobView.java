@@ -19,6 +19,7 @@ package unidue.rc.model.solr;
 import org.apache.solr.client.solrj.beans.Field;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Nils Verheyen
@@ -46,6 +47,7 @@ public class SolrScanJobView {
     public static final String SEARCH_FIELD_PROPERTY = "text";
     public static final String PAGE_START_FIELD_PROPERTY = "pageStart";
     public static final String PAGE_END_FIELD_PROPERTY = "pageEnd";
+    public static final String DOCENTS_PROPERTY = "docents";
 
     /**
      * Contains the id of the job.
@@ -154,6 +156,9 @@ public class SolrScanJobView {
 
     @Field(PAGE_END_FIELD_PROPERTY)
     private String pageEnd;
+
+    @Field(DOCENTS_PROPERTY)
+    private List<String> docents;
 
     public int getJobID() {
         return jobID;
@@ -307,6 +312,14 @@ public class SolrScanJobView {
         this.pageEnd = pageEnd;
     }
 
+    public List<String> getDocents() {
+        return docents;
+    }
+
+    public void setDocents(List<String> docents) {
+        this.docents = docents;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -343,9 +356,12 @@ public class SolrScanJobView {
         if (pageStart != null
             ? !pageStart.equals(that.pageStart)
             : that.pageStart != null) return false;
-        return pageEnd != null
-               ? pageEnd.equals(that.pageEnd)
-               : that.pageEnd == null;
+        if (pageEnd != null
+            ? !pageEnd.equals(that.pageEnd)
+            : that.pageEnd != null) return false;
+        return docents != null
+               ? docents.equals(that.docents)
+               : that.docents == null;
 
     }
 
@@ -382,6 +398,9 @@ public class SolrScanJobView {
                                 : 0);
         result = 31 * result + (pageEnd != null
                                 ? pageEnd.hashCode()
+                                : 0);
+        result = 31 * result + (docents != null
+                                ? docents.hashCode()
                                 : 0);
         return result;
     }

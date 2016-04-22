@@ -703,11 +703,6 @@ img.t-error-icon {
     width: 50%;
 }
 
-.collection-table ul {
-    padding: 0;
-    margin: 0;
-}
-
 .entry {
     display: block;
     margin-bottom: .75em;
@@ -1140,6 +1135,8 @@ parent element of the tooltip, here the anchor.
 
 .table ul {
     list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .toc {

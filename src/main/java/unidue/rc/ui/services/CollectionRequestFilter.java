@@ -191,7 +191,10 @@ public class CollectionRequestFilter implements ComponentRequestFilter {
                         Arrays.stream(permission.value())
                                 .forEach(definition -> {
                                     LOG.debug("checking permission for " + method.getDeclaringClass().getName() + "." + method.getName() + " with context id " + objectID);
-                                    securityService.checkPermission(definition, objectID);
+                                    if (objectID == null)
+                                        securityService.checkPermission(definition);
+                                    else
+                                        securityService.checkPermission(definition, objectID);
                                 });
                     } catch (AuthorizationException e) {
                         // user ist not authorized

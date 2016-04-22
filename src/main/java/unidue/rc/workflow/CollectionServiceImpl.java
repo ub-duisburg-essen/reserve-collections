@@ -614,7 +614,8 @@ public class CollectionServiceImpl implements CollectionService {
         List<Participation> participations = participationDAO.getActiveParticipations(roleDAO.getRole(DefaultRole.DOCENT), reserveCollection);
         List<String> docentNames = participations.stream()
                 .map(participation -> userDAO.getUserById(participation.getUserId()))
-                .map(user1 -> user1.getRealname())
+                .filter(user -> user != null)
+                .map(user -> user.getRealname())
                 .collect(Collectors.toList());
         SolrCollectionView view = new SolrCollectionView();
         view.setCollectionID(reserveCollection.getId().toString());
