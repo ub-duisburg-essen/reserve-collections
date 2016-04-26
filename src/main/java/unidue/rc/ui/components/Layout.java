@@ -46,6 +46,7 @@ import unidue.rc.system.SystemConfigurationService;
 @Import(stylesheet = {
         "context:vendor/bootstrap/css/bootstrap.min.css",
         "context:vendor/jquery-ui/css/ude-reserve-collections/jquery-ui-1.10.2.custom.min.css",
+        "context:vendor/toastr/toastr.min.css",
         "context:css/main.css"
 }, library = {
         "context:js/main.js",

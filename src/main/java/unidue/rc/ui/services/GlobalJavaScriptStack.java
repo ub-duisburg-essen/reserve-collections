@@ -25,6 +25,8 @@ import unidue.rc.ui.components.Layout;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The <code>GlobalJavaScriptStack</code> provides all javascript files, which
@@ -44,25 +46,24 @@ public class GlobalJavaScriptStack implements JavaScriptStack {
 
     @Override
     public List<String> getStacks() {
-        return Collections.<String>emptyList();
+        return Collections.emptyList();
     }
 
     @Override
     public List<Asset> getJavaScriptLibraries() {
 
-        List<Asset> result = new ArrayList<>();
-
-        result.add(assetSource.getContextAsset("vendor/jquery-1.11.2.min.js", null));
-        result.add(assetSource.getContextAsset("vendor/jquery-ui/js/jquery-ui-1.10.3.custom.min.js", null));
-        result.add(assetSource.getContextAsset("vendor/modernizr-2.6.2-respond-1.1.0.min.js", null));
-        result.add(assetSource.getContextAsset("vendor/bootstrap/js/bootstrap.js", null));
-
-        return result;
+        return Stream.of(
+                assetSource.getContextAsset("vendor/jquery-1.11.2.min.js", null),
+                assetSource.getContextAsset("vendor/jquery-ui/js/jquery-ui-1.10.3.custom.min.js", null),
+                assetSource.getContextAsset("vendor/modernizr-2.6.2-respond-1.1.0.min.js", null),
+                assetSource.getContextAsset("vendor/bootstrap/js/bootstrap.js", null),
+                assetSource.getContextAsset("vendor/toastr/toastr.min.js", null))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<StylesheetLink> getStylesheets() {
-        return Collections.<StylesheetLink>emptyList();
+        return Collections.EMPTY_LIST;
     }
 
     @Override
