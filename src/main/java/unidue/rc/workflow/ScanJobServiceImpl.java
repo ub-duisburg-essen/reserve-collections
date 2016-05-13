@@ -24,10 +24,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.velocity.VelocityContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import unidue.rc.dao.CommitException;
-import unidue.rc.dao.DeleteException;
-import unidue.rc.dao.RoleDAO;
-import unidue.rc.dao.ScanJobDAO;
+import unidue.rc.dao.*;
 import unidue.rc.model.BookChapter;
 import unidue.rc.model.Entry;
 import unidue.rc.model.JournalArticle;
@@ -83,7 +80,16 @@ public class ScanJobServiceImpl implements ScanJobService {
     private RoleDAO roleDAO;
 
     @Inject
+    private UserDAO userDAO;
+
+    @Inject
     private SystemMessageService messages;
+
+    @Override
+    public void update(ScanJob scanJob) throws CommitException {
+        scanJobDAO.update(scanJob);
+        updateScanJobView(scanJob);
+    }
 
     @Override
     public void onScannableCreated(Scannable scannable) throws CommitException {
@@ -103,12 +109,8 @@ public class ScanJobServiceImpl implements ScanJobService {
 
                 scanJob.setStatus(ScanJobStatus.DONE);
                 scanJobDAO.update(scanJob);
-                deleteScanJobFromSolr(scanJob);
-            } else {
-
-                // if scan job is present but no content given do just an update
-                updateScanJobView(scanJob);
             }
+            updateScanJobView(scanJob);
         } else if (isScanJobNeeded(scannable)) {
             // if no scan job is present but needed create one
             createScanJob(scannable);
@@ -348,9 +350,13 @@ public class ScanJobServiceImpl implements ScanJobService {
             view.setLocation(rc.getLibraryLocation().getName());
             view.setLocationID(rc.getLibraryLocation().getId());
 
-            if (job.getLocation() != null) {
-                view.setReviser(job.getLocation().getName());
-                view.setReviserID(job.getLocation().getId());
+            Integer reviserID = job.getReviserID();
+            if (reviserID != null) {
+                User reviser = userDAO.getUserById(reviserID);
+                if (reviser != null) {
+                    view.setReviser(reviser.getRealname());
+                    view.setReviserID(reviserID);
+                }
             }
 
             solrService.addBean(view, SolrService.Core.ScanJob);

@@ -8,7 +8,6 @@ import org.apache.cayenne.CayenneDataObject;
 import unidue.rc.model.BookChapter;
 import unidue.rc.model.JobComment;
 import unidue.rc.model.JournalArticle;
-import unidue.rc.model.LibraryLocation;
 import unidue.rc.model.ScanJobStatus;
 
 /**
@@ -20,11 +19,11 @@ import unidue.rc.model.ScanJobStatus;
 public abstract class _ScanJob extends CayenneDataObject {
 
     public static final String MODIFIED_PROPERTY = "modified";
+    public static final String REVISER_ID_PROPERTY = "reviserID";
     public static final String STATUS_PROPERTY = "status";
     public static final String BOOK_CHAPTER_PROPERTY = "bookChapter";
     public static final String COMMENTS_PROPERTY = "comments";
     public static final String JOURNAL_ARTICLE_PROPERTY = "journalArticle";
-    public static final String LOCATION_PROPERTY = "location";
 
     public static final String ID_PK_COLUMN = "id";
 
@@ -33,6 +32,13 @@ public abstract class _ScanJob extends CayenneDataObject {
     }
     public Date getModified() {
         return (Date)readProperty(MODIFIED_PROPERTY);
+    }
+
+    public void setReviserID(Integer reviserID) {
+        writeProperty(REVISER_ID_PROPERTY, reviserID);
+    }
+    public Integer getReviserID() {
+        return (Integer)readProperty(REVISER_ID_PROPERTY);
     }
 
     public void setStatus(ScanJobStatus status) {
@@ -69,15 +75,6 @@ public abstract class _ScanJob extends CayenneDataObject {
 
     public JournalArticle getJournalArticle() {
         return (JournalArticle)readProperty(JOURNAL_ARTICLE_PROPERTY);
-    }
-
-
-    public void setLocation(LibraryLocation location) {
-        setToOneTarget(LOCATION_PROPERTY, location, true);
-    }
-
-    public LibraryLocation getLocation() {
-        return (LibraryLocation)readProperty(LOCATION_PROPERTY);
     }
 
 

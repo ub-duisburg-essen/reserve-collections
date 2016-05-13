@@ -779,17 +779,17 @@ img.t-error-icon {
     content: ":";
 }
 
-.paper label.sub {
+label.sub {
     color: rgba(0, 0, 0, 0.5);
     font-weight: lighter;
     font-style: italic;
 }
 
-.paper label.sub:after {
+label.sub:after {
     content: ")";
 }
 
-.paper label.sub:before {
+label.sub:before {
     content: " (";
 }
 

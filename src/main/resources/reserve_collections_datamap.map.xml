@@ -315,8 +315,8 @@
 	</db-entity>
 	<db-entity name="SCAN_JOB">
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
-		<db-attribute name="locationId" type="INTEGER"/>
 		<db-attribute name="modified" type="TIMESTAMP"/>
+		<db-attribute name="reviserID" type="INTEGER"/>
 		<db-attribute name="status" type="INTEGER"/>
 		<db-key-generator>
 			<db-generator-type>ORACLE</db-generator-type>
@@ -567,6 +567,7 @@
 	</obj-entity>
 	<obj-entity name="ScanJob" className="unidue.rc.model.ScanJob" dbEntityName="SCAN_JOB">
 		<obj-attribute name="modified" type="java.util.Date" db-attribute-path="modified"/>
+		<obj-attribute name="reviserID" type="java.lang.Integer" db-attribute-path="reviserID"/>
 		<obj-attribute name="status" type="unidue.rc.model.ScanJobStatus" db-attribute-path="status"/>
 	</obj-entity>
 	<obj-entity name="Setting" className="unidue.rc.model.Setting" dbEntityName="SETTING">
@@ -700,9 +701,6 @@
 	<db-relationship name="reserveCollectionFk" source="LIBRARY_LOCATION" target="RESERVE_COLLECTION" toMany="true">
 		<db-attribute-pair source="id" target="libraryLocationId"/>
 	</db-relationship>
-	<db-relationship name="scanJobArray" source="LIBRARY_LOCATION" target="SCAN_JOB" toMany="true">
-		<db-attribute-pair source="id" target="locationId"/>
-	</db-relationship>
 	<db-relationship name="mailNodeFk" source="MAIL" target="MAIL_NODE" toMany="true">
 		<db-attribute-pair source="id" target="mailID"/>
 	</db-relationship>
@@ -805,9 +803,6 @@
 	<db-relationship name="journalArticleFk" source="SCAN_JOB" target="SCAN_JOB_JOURNAL_ARTICLE" toDependentPK="true" toMany="false">
 		<db-attribute-pair source="id" target="scanJobID"/>
 	</db-relationship>
-	<db-relationship name="locationFk" source="SCAN_JOB" target="LIBRARY_LOCATION" toMany="false">
-		<db-attribute-pair source="locationId" target="id"/>
-	</db-relationship>
 	<db-relationship name="scanJobCommentFk" source="SCAN_JOB" target="SCAN_JOB_COMMENT" toMany="true">
 		<db-attribute-pair source="id" target="scanJobId"/>
 	</db-relationship>
@@ -899,7 +894,6 @@
 	<obj-relationship name="bookChapter" source="ScanJob" target="BookChapter" deleteRule="Nullify" db-relationship-path="bookChapterFk.bookChapterFk"/>
 	<obj-relationship name="comments" source="ScanJob" target="JobComment" deleteRule="Cascade" db-relationship-path="scanJobCommentFk.commentFk"/>
 	<obj-relationship name="journalArticle" source="ScanJob" target="JournalArticle" deleteRule="Nullify" db-relationship-path="journalArticleFk.journalArticleFk"/>
-	<obj-relationship name="location" source="ScanJob" target="LibraryLocation" db-relationship-path="locationFk"/>
 	<obj-relationship name="mail" source="Warning" target="Mail" deleteRule="Nullify" db-relationship-path="mailFk"/>
 	<obj-relationship name="reserveCollection" source="Warning" target="ReserveCollection" deleteRule="Nullify" db-relationship-path="reserveCollectionFk"/>
 	<obj-relationship name="entry" source="WebLink" target="Entry" deleteRule="Nullify" db-relationship-path="entryFk"/>

@@ -146,15 +146,4 @@ public class _ReserveCollectionsDatamap {
         return context.performQuery(new NamedQuery("select_scan_jobs_by_collection", parameters, values));
     }
 
-    public List<ScanJob> performSelectScanJobsByLocation(ObjectContext context , Integer locationID) {
-        String[] parameters = {
-            "locationID",
-        };
-
-        Object[] values = {
-            locationID,
-        };
-
-        return context.performQuery(new NamedQuery("select_scan_jobs_by_location", parameters, values));
-    }
 }

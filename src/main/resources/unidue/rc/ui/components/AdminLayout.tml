@@ -31,26 +31,31 @@
 
 <body>
 
-<div class="body">
 
-    <nav class="admin-nav">
-        <div id="home">
-            <t:pagelink page="index">
-                <span class="glyphicon glyphicon-home"></span>
-                ${message:reserve-collections}
-            </t:pagelink>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-1">
+
+            <nav class="admin-nav">
+                <div id="home">
+                    <t:pagelink page="index">
+                        <span class="glyphicon glyphicon-home"></span>
+                        ${message:reserve-collections}
+                    </t:pagelink>
+                </div>
+                <ul>
+                    <li class="${prop:getClassForLink('admin/scanjobs')}">
+                        <t:pagelink page="admin/scanjobs">${message:nav.item.scan.jobs}</t:pagelink>
+                    </li>
+                    <li >
+                        <a href="#">${message:nav.item.book.jobs}</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
-        <ul>
-            <li class="${prop:getClassForLink('admin/scanjobs')}">
-                <t:pagelink page="admin/scanjobs">${message:nav.item.scan.jobs}</t:pagelink>
-            </li>
-            <li >
-                <a href="#">${message:nav.item.book.jobs}</a>
-            </li>
-        </ul>
-    </nav>
-    <div class="content">
-        <t:body/>
+        <div class="col-lg-11">
+            <t:body/>
+        </div>
     </div>
 </div>
 

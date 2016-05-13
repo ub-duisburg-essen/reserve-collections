@@ -21,12 +21,11 @@
         var hash = jQuery(location).attr('hash');
         if (hash) {
             var offset = jQuery(hash).offset();
-            var actionbar = jQuery('#actionbar:visible');
-            var headerScroll = 0;
-            if (actionbar) {
-                headerScroll = actionbar.outerHeight(true);
-            }
-            var scrollto = offset.top - headerScroll; // minus fixed header height
+            var actionbar = jQuery('#actionbar:visible .ribbon');
+            var headerHeight = actionbar
+                ? actionbar.outerHeight(true)
+                : 0;
+            var scrollto = offset.top - headerHeight; // minus fixed header height
             jQuery('html, body').animate({
                 scrollTop: scrollto
             }, 1000);

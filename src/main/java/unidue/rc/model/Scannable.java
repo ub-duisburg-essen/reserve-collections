@@ -132,6 +132,27 @@ public interface Scannable extends EntryValue, ResourceContainer, Cloneable {
     void setModified(Date modified);
 
     /**
+     * Sets the signature of this scannable
+     *
+     * @param signature  signature to set
+     */
+    void setSignature(String signature);
+
+    /**
+     * Sets the page start of this scannable
+     *
+     * @param pageStart  page start to set
+     */
+    void setPageStart(String pageStart);
+
+    /**
+     * Sets the page end of this scannable
+     *
+     * @param pageEnd  page end to set
+     */
+    void setPageEnd(String pageEnd);
+
+    /**
      * Clones this scannable with all metadata, but does not preserve any relationship to other objects.
      *
      * @return see description

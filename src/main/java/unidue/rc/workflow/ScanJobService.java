@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2014 - 2016 Universitaet Duisburg-Essen (semapp|uni-due.de)
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,6 +25,14 @@ import unidue.rc.model.*;
  * @since 04.12.14 10:45
  */
 public interface ScanJobService {
+
+    /**
+     * Update target {@link ScanJob} in backend.
+     *
+     * @param scanJob  scanjob to update
+     * @throws CommitException  thrown if the job could not be updated
+     */
+    void update(ScanJob scanJob) throws CommitException;
 
     /**
      * Should be called after a {@link Scannable} was created in backend.
