@@ -27,14 +27,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.tapestry5.EventConstants;
-import org.apache.tapestry5.SelectModel;
+import org.apache.tapestry5.*;
 import org.apache.tapestry5.annotations.*;
+import org.apache.tapestry5.corelib.components.ActionLink;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.TextArea;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.apache.tapestry5.services.ajax.JavaScriptCallback;
@@ -52,21 +53,27 @@ import unidue.rc.security.CollectionSecurityService;
 import unidue.rc.security.RequiresActionPermission;
 import unidue.rc.ui.ProtectedPage;
 import unidue.rc.ui.selectmodel.LibraryLocationSelectModel;
+import unidue.rc.ui.valueencoder.LibraryLocationValueEncoder;
 import unidue.rc.workflow.ResourceService;
 import unidue.rc.workflow.ScanJobService;
 import unidue.rc.workflow.ScannableService;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * Created by nils on 07.04.16.
  */
+@Import(library = {
+        "context:js/admin.scanjobs.js"
+})
 @ProtectedPage
 public class ScanJobs {
+
+    private enum BlockDefinition {
+        Batch, EditJob
+    }
 
     @Inject
     private Logger log;
@@ -104,14 +111,61 @@ public class ScanJobs {
     @InjectComponent
     private Zone editJobZone;
 
+    @InjectComponent
+    private Zone batchZone;
+
+    @Inject
+    private PageRenderLinkSource linkSource;
+
+    @Property(write = false)
+    @Inject
+    private Block editJobBlock, queuedJobsBlock;
+
     @Inject
     private Request request;
 
     @Inject
-    private AjaxResponseRenderer ajaxResponseRenderer;
+    private AjaxResponseRenderer ajaxRenderer;
+
+    @Property(write = false)
+    @Persist(PersistenceConstants.FLASH)
+    private BlockDefinition visibleBlock;
+
+    @Property
+    @Persist(PersistenceConstants.FLASH)
+    private SolrResponse<SolrScanJobView> scanJobs;
 
     @Property
     private SolrScanJobView scanJobView;
+
+    // filter
+
+    @Property
+    private String fNumber;
+
+    @Property
+    private LibraryLocation fLocation;
+
+    @Property
+    private String fReviser;
+
+    @Property
+    private String fAuthor;
+
+    @Property
+    private ScanJobStatus fStatus;
+
+    @Property
+    private String fScannableType;
+
+    // queue
+
+    @Property(write = false)
+    @Persist(PersistenceConstants.SESSION)
+    private List<Integer> batchScanJobIDs;
+
+    @Property
+    private Integer batchScanJobID;
 
     // edit scan job form values
 
@@ -173,25 +227,73 @@ public class ScanJobs {
     @InjectComponent("newComment")
     private TextArea newCommentField;
 
-    private boolean inFormSubmission;
-
-    private int rowNum;
+    @SetupRender
+    void onSetupRender() {
+        batchScanJobIDs = new ArrayList<>();
+    }
 
     @RequiresActionPermission(value = ActionDefinition.VIEW_ADMIN_PANEL)
+    @OnEvent(EventConstants.ACTIVATE)
     public void onActivate() {
+        loadScanJobs();
     }
 
     @OnEvent(value = "editJob")
     void onEditJob(int scanJobID) {
         try {
-            loadEditJobData(scanJobID);
 
-            if (request.isXHR())
-                ajaxResponseRenderer.addRender(editJobZone);
+            loadScanJobs();
+            loadEditJobData(scanJobID);
+            visibleBlock = BlockDefinition.EditJob;
+
+            if (request.isXHR()) {
+
+                ajaxRenderer.addRender(batchZone)
+                        .addRender(editJobZone);
+            }
+
 
         } catch (SolrServerException e) {
             log.error("could not get scan job from solr", e);
         }
+    }
+
+    @OnEvent(value = "enqueueJob")
+    void onEnqueueJob(Integer scanJobID) {
+
+        loadScanJobs();
+        batchScanJobIDs.add(scanJobID);
+        visibleBlock = BlockDefinition.Batch;
+
+        if (request.isXHR())
+            ajaxRenderer.addRender(batchZone)
+                    .addRender(editJobZone);
+    }
+
+    @OnEvent(value = "dequeueBatch")
+    void onDequeueJob(Integer scanJobID) {
+
+        loadScanJobs();
+        batchScanJobIDs.remove(scanJobID);
+        visibleBlock = BlockDefinition.Batch;
+
+        if (request.isXHR())
+            ajaxRenderer.addRender(batchZone)
+                    .addRender(editJobZone);
+    }
+
+    @OnEvent(component = "clearBatchList")
+    void onClearBatchJobs() {
+        batchScanJobIDs.clear();
+        visibleBlock = BlockDefinition.Batch;
+
+        if (request.isXHR())
+            ajaxRenderer.addRender(batchZone)
+                    .addRender(editJobZone);
+    }
+
+    @OnEvent(component = "printBatchList")
+    void onPrintBatchJobs() {
 
     }
 
@@ -241,7 +343,7 @@ public class ScanJobs {
                 createComment(scanJob, newComment);
             }
         } catch (CommitException e) {
-            e.printStackTrace();
+            log.error("validation of edif job " + editingJobID + " failed", e);
         }
     }
 
@@ -305,30 +407,75 @@ public class ScanJobs {
 
     @OnEvent(value = EventConstants.SUCCESS, component = "edit_scan_job_form")
     void onEditScanJobSucceeded() {
-        String toastrCallback = "toastr.success('" + messages.get("success.msg.scan.job.updated") + "');";
+        String toastrCallback = "toastrSuccess('" + messages.get("success.msg.scan.job.updated") + "');";
         try {
             loadEditJobData(editingJobID);
         } catch (SolrServerException e) {
             log.error("could not load editing job " + editingJobID, e);
         }
         if (request.isXHR()) {
-            ajaxResponseRenderer.addCallback((JavaScriptCallback) js -> js.addScript(toastrCallback));
-            ajaxResponseRenderer.addRender(jobsZone)
+            ajaxRenderer.addCallback((JavaScriptCallback) js -> js.addScript(toastrCallback));
+            ajaxRenderer.addRender(jobsZone)
                     .addRender(editJobZone);
         }
     }
 
-    public SolrResponse<SolrScanJobView> getScanJobs() {
+    @OnEvent(value = "filterNumberChanged")
+    Object onFilterNumberChanged() {
+        fNumber = request.getParameter("param");
+        log.debug("filter by number: " + fNumber);
 
-        SolrResponse<SolrScanJobView> scanJobs = null;
+        return request.isXHR()
+               ? jobsZone.getBody()
+               : null;
+    }
+
+    @OnEvent(value = EventConstants.VALUE_CHANGED, component = "locationFilter")
+    Object onValueChangedFromLocationFilter(LibraryLocation location) {
+        fLocation = location;
+        log.debug("filter by location: " + location);
+        return request.isXHR()
+               ? jobsZone.getBody()
+               : this;
+    }
+
+    @OnEvent(value = "filterReviserChanged")
+    Object onValueChangedFromReviser() {
+        fReviser = request.getParameter("param");
+        log.debug("filter by reviser: " + fReviser);
+
+        return request.isXHR()
+               ? jobsZone.getBody()
+               : null;
+    }
+
+    @OnEvent(value = "filterAuthorChanged")
+    Object onValueChangedFromAuthor() {
+        fAuthor = request.getParameter("param");
+        log.debug("filter by author: " + fAuthor);
+
+        return request.isXHR()
+               ? jobsZone.getBody()
+               : null;
+    }
+
+    @OnEvent(value = EventConstants.VALUE_CHANGED, component = "fStatus")
+    Object onValueChangedFromStatus(ScanJobStatus status) {
+        fStatus = status;
+        log.debug("filter by status: " + status);
+
+        return request.isXHR()
+               ? jobsZone.getBody()
+               : this;
+    }
+
+    public void loadScanJobs() {
+
         try {
             scanJobs = solrService.query(SolrScanJobView.class, new SolrQuery("*:*"));
         } catch (SolrServerException e) {
             log.error("could not query solr server", e);
         }
-        return scanJobs == null
-               ? new SolrResponse<>()
-               : scanJobs;
     }
 
     public String getStatusLabel() {
@@ -336,10 +483,7 @@ public class ScanJobs {
     }
 
     public String getStatusColor() {
-        ScanJobStatus scanJobStatus = ScanJobStatus.get(scanJobView.getStatus());
-        return scanJobStatus != null
-               ? "#" + scanJobStatus.getColor()
-               : "transparent";
+        return getStatusColor(scanJobView);
     }
 
     public String getScannableTypeLabel() {
@@ -373,13 +517,62 @@ public class ScanJobs {
         return DateFormatUtils.format(comment.getDate(), "dd.MM.yy HH:mm");
     }
 
-    public boolean isAction() {
-        return false;
+    public String getScanJobShortDetails() {
+
+        Optional<SolrScanJobView> jobViewOptional = scanJobs.getItems().stream()
+                .filter(jv -> jv.getJobID() == batchScanJobID)
+                .findFirst();
+        String result = StringUtils.EMPTY;
+
+        if (jobViewOptional.isPresent()) {
+
+            SolrScanJobView jobView = jobViewOptional.get();
+
+            List<String> docents = jobView.getDocents();
+            docents = docents == null
+                      ? Collections.EMPTY_LIST
+                      : docents;
+
+            String location = jobView.getLocation();
+            Integer collectionNumber = jobView.getCollectionNumber();
+            Integer entryID = jobView.getEntryID();
+            String type = messages.get(jobView.getScannableType());
+            String docentsValue = String.join(", ", docents);
+
+            result = String.format("%s - %d - %d: %s [%s]", location, collectionNumber, entryID, type, docentsValue);
+        }
+        return result;
     }
 
-    public void setAction(boolean action) {
-        if (inFormSubmission) {
-            rowNum++;
-        }
+    public String getBatchScanJobColor() {
+
+        Optional<SolrScanJobView> jobViewOptional = scanJobs.getItems().stream()
+                .filter(jv -> jv.getJobID() == batchScanJobID)
+                .findFirst();
+        return jobViewOptional.isPresent()
+               ? getStatusColor(jobViewOptional.get())
+               : "#transparent";
+    }
+
+    public SelectModel getLibraryLocationSelectModel() {
+        return new LibraryLocationSelectModel(libraryLocationDAO);
+    }
+
+    public ValueEncoder<LibraryLocation> getLibraryLocationEncoder() {
+        return new LibraryLocationValueEncoder(libraryLocationDAO);
+    }
+
+    private String getStatusColor(SolrScanJobView scanJobView) {
+        ScanJobStatus scanJobStatus = ScanJobStatus.get(scanJobView.getStatus());
+        return scanJobStatus != null
+               ? "#" + scanJobStatus.getColor()
+               : "transparent";
+    }
+
+    public boolean isBlockVisible(String name) {
+        Optional<BlockDefinition> block = Arrays.stream(BlockDefinition.values())
+                .filter(d -> d.name().equals(name))
+                .findFirst();
+        return block.isPresent() && block.get().equals(visibleBlock);
     }
 }

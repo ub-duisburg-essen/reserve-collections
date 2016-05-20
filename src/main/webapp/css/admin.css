@@ -149,4 +149,8 @@ body {
         border: 0;
         border-right: 2px solid rgb(3, 169, 244);
     }
+
+    .right-content {
+        padding-left: 20px;
+    }
 }

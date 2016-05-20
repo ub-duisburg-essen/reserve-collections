@@ -4,13 +4,12 @@
 <div class="row">
 
     <div class="col-lg-8">
-        <t:zone t:id="jobsZone" id="jobsZone" update="none">
-            <form t:type="Form" t:id="scanjob_form" t:clientValidation="none">
-            <fieldset>
-            <table class="table table-hover">
+        <fieldset>
+        <table class="table table-hover">
+            <t:zone t:id="filterZone" id="filterZone" update="none">
+                <t:form t:id="filterForm" t:clientValidation="none" zone="^">
                 <thead>
                 <tr>
-                    <th></th>
                     <th>${message:entry}</th>
                     <th>${message:number-label}</th>
                     <th>${message:libraryLocation-label}</th>
@@ -22,47 +21,90 @@
                     <th>${message:job}</th>
                     <th>${message:scannable.type}</th>
                     <th></th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th>
+                        <t:textfield value="fNumber" id="fNumber" class="form-control input-sm" t:mixins="zoneUpdater"
+                                     t:clientEvent="keyup" t:event="filterNumberChanged" t:zone="jobsZone"/>
+                    </th>
+                    <th>
+                        <t:select value="fLocation" model="libraryLocationSelectModel"
+                                  t:id="locationFilter"
+                                  id="libraryLocation" zone="jobsZone"
+                                  class="form-control input-sm" encoder="libraryLocationEncoder"
+                                  blankLabel="message:blank-label"/>
+                    </th>
+                    <th>
+                        <t:textfield value="fReviser" id="fReviser" class="form-control input-sm" t:mixins="zoneUpdater"
+                                     t:clientEvent="keyup" t:event="filterReviserChanged" t:zone="jobsZone"/></th>
+                    <th></th>
+                    <th>
+                        <t:textfield value="fAuthor" id="fAuthor" class="form-control input-sm" t:mixins="zoneUpdater"
+                                     t:clientEvent="keyup" t:event="filterAuthorChanged" t:zone="jobsZone"/>
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th>
+                        <select t:type="select" t:id="fStatus" id="fStatus" zone="jobsZone"
+                                class="form-control input-sm"
+                                blankLabel="message:blank-label"/>
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
                 </tr>
                 </thead>
-                <tbody>
-                    <t:loop source="scanJobs.items" value="scanJobView">
-                        <tr style="color: ${prop:statusColor};">
-                            <td>
-                                <t:checkbox value="action"/>
-                            </td>
-                            <td>${scanJobView.entryID}</td>
-                            <td>${scanJobView.collectionNumber}</td>
-                            <td>${scanJobView.location}</td>
-                            <td>${scanJobView.reviser}</td>
-                            <td>${scanJobView.signature}</td>
-                            <td>
-                                <ul>
-                                <t:loop source="scanJobView.docents" value="docent">
-                                    <li>${docent}</li>
-                                </t:loop>
-                                </ul>
-                            </td>
-                            <td>${scanJobView.pageStart}</td>
-                            <td>${scanJobView.pageEnd}</td>
-                            <td>${statusLabel}</td>
-                            <td>${scannableTypeLabel}</td>
-                            <td>
-                                <t:eventlink zone="^" event="editJob" context="scanJobView.jobID">
-                                    <span class="glyphicon glyphicon-edit"></span>
-                                </t:eventlink>
-                            </td>
-                        </tr>
-                    </t:loop>
-                </tbody>
-            </table>
-            </fieldset>
-            </form>
-        </t:zone>
+                </t:form>
+            </t:zone>
+
+            <tbody t:type="zone" t:id="jobsZone" id="jobsZone" t:update="none">
+                <t:loop source="scanJobs.items" value="scanJobView">
+                    <tr style="color: ${prop:statusColor};">
+                        <td>${scanJobView.entryID}</td>
+                        <td>${scanJobView.collectionNumber}</td>
+                        <td>${scanJobView.location}</td>
+                        <td>${scanJobView.reviser}</td>
+                        <td>${scanJobView.signature}</td>
+                        <td>
+                            <ul>
+                            <t:loop source="scanJobView.docents" value="docent">
+                                <li>${docent}</li>
+                            </t:loop>
+                            </ul>
+                        </td>
+                        <td>${scanJobView.pageStart}</td>
+                        <td>${scanJobView.pageEnd}</td>
+                        <td>${statusLabel}</td>
+                        <td>${scannableTypeLabel}</td>
+                        <td>
+                            <t:eventlink zone="jobsZone" event="editJob" context="scanJobView.jobID">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </t:eventlink>
+                        </td>
+                        <td>
+                            <t:eventlink zone="jobsZone" event="enqueueJob" context="scanJobView.jobID">
+                                <span class="glyphicon glyphicon-copy"></span>
+                            </t:eventlink>
+                        </td>
+                    </tr>
+                </t:loop>
+            </tbody>
+        </table>
+        </fieldset>
     </div>
     <div class="col-lg-4">
-        <t:zone t:id="editJobZone" id="editJobZone" update="none" class="row bg-main">
-            <t:if test="editingJobView">
+        <t:delegate to="editJobBlock"/>
+        <t:delegate to="queuedJobsBlock"/>
+    </div>
+</div>
+<a href="#" class="fab hidden-lg"><span class="glyphicon glyphicon-arrow-up"/></a>
 
+<t:block t:id="editJobBlock" id="editJobBlock">
+
+    <t:zone t:id="editJobZone" id="editJobZone" update="none" class="row bg-main">
+        <t:if test="isBlockVisible('EditJob')">
             <form t:type="form" class="form-horizontal shadow-left" t:clientValidation="none" t:id="edit_scan_job_form"
                   t:zone="^">
                 <h3>${message:job}</h3>
@@ -207,10 +249,34 @@
                     </t:loop>
                 </section>
             </div>
-            </t:if>
-        </t:zone>
+        </t:if>
+    </t:zone>
+</t:block>
+<t:block t:id="queuedJobsBlock" id="queuedJobsBlock">
+    <t:zone t:id="batchZone" id="batchZone" update="none" class="row bg-main">
+        <t:if test="isBlockVisible('Batch')">
+            <aside class="shadow-left right-content">
+                <section id="queue">
+                    <h3>${message:stack}</h3>
+                    <ul class="list-group">
+                        <t:loop source="batchScanJobIDs" value="batchScanJobID">
+                            <li class="list-group-item" style="color: ${prop:batchScanJobColor};">
+                                ${scanJobShortDetails}
+                                <t:eventlink event="dequeueBatch" context="batchScanJobID" zone="batchZone"
+                                             class="glyphicon glyphicon-minus-sign"/>
+                            </li>
+                        </t:loop>
+                    </ul>
+                </section>
+                <section>
+                    <div class="btn-group">
+                        <t:actionlink t:id="clearBatchList" class="btn btn-default" zone="batchZone">${message:clear}</t:actionlink>
+                        <t:actionlink t:id="printBatchList" class="btn btn-default" zone="batchZone">${message:print}</t:actionlink>
+                    </div>
+                </section>
+            </aside>
+        </t:if>
+    </t:zone>
+</t:block>
 
-    </div>
-</div>
-<a href="#" class="fab hidden-lg"><span class="glyphicon glyphicon-arrow-up"/></a>
 </html>
