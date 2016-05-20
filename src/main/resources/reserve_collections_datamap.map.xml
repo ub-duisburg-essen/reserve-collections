@@ -77,7 +77,7 @@
 		<db-attribute name="deleted" type="TIMESTAMP"/>
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
 		<db-attribute name="modified" type="TIMESTAMP"/>
-		<db-attribute name="position" type="INTEGER"/>
+		<db-attribute name="position" type="INTEGER" isMandatory="true"/>
 		<db-attribute name="reserveCollectionId" type="INTEGER"/>
 		<db-key-generator>
 			<db-generator-type>ORACLE</db-generator-type>
