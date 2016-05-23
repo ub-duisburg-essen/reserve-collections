@@ -59,6 +59,7 @@ import unidue.rc.statistic.DBStatService;
 import unidue.rc.system.*;
 import unidue.rc.ui.CollectionBaseURLSource;
 import unidue.rc.ui.SystemConfigurationBindingFactory;
+import unidue.rc.ui.components.Toastr;
 import unidue.rc.workflow.*;
 
 import java.io.File;
@@ -417,9 +418,13 @@ public class AppModule {
      * @param configuration configuration to add instances to
      */
     public static void contributeTypeCoercer(Configuration<CoercionTuple> configuration) {
-        configuration.add(CoercionTuple.create(String.class,
-                ActionDefinition.class,
-                StringToEnumCoercion.create(ActionDefinition.class)));
+        add(configuration, ActionDefinition.class);
+        add(configuration, Toastr.Type.class);
+        add(configuration, Toastr.Position.class);
+    }
+
+    private static <T extends Enum> void add(Configuration<CoercionTuple> configuration, Class<T> enumType) {
+        configuration.add(CoercionTuple.create(String.class, enumType, StringToEnumCoercion.create(enumType)));
     }
 
     /**

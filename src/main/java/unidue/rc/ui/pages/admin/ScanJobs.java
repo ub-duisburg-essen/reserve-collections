@@ -1,26 +1,19 @@
-package unidue.rc.ui.pages.admin;
-
-/*
- * #%L
- * Semesterapparate
- * $Id:$
- * $HeadURL:$
- * %%
- * Copyright (C) 2014 - 2016 Universitaet Duisburg Essen
- * %%
+/**
+ * Copyright (C) 2014 - 2016 Universitaet Duisburg-Essen (semapp|uni-due.de)
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * #L%
  */
+package unidue.rc.ui.pages.admin;
 
 import miless.model.User;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +22,6 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.tapestry5.*;
 import org.apache.tapestry5.annotations.*;
-import org.apache.tapestry5.corelib.components.ActionLink;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.TextArea;
 import org.apache.tapestry5.corelib.components.Zone;
