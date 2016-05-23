@@ -155,17 +155,18 @@ public class CreateReference {
         reference.setComment(comment);
         reference.setCollectionNumber(collectionReference);
         reference.setSignature(signature);
-        if (fullTextURL != null) {
-            Resource resource = new Resource();
-            resource.setFullTextURL(fullTextURL);
-            reference.setResource(resource);
-        }
 
         try {
             entryDAO.createEntry(reference, collection);
             if (reference != null && headline != null)
                 headlineDAO.move(reference.getEntry(), headline);
 
+            if (fullTextURL != null) {
+                Resource resource = new Resource();
+                resource.setFullTextURL(fullTextURL);
+                reference.setResource(resource);
+                entryDAO.update(reference);
+            }
             Link viewCollectionLink = linkSource.createPageRenderLinkWithContext(ViewCollection.class,
                     collection.getId());
             return viewCollectionLink;
