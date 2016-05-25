@@ -13,8 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-Toastr = Cleass.create({
-    initialize: function(elementId) {
-        
+Toastr = Class.create({
+    initialize: function(observe, elementId, type, title, options) {
+        this.elementId = elementId;
+        this.type = type;
+        this.title = title;
+        this.options = options;
+        Event.observe($(observe), 'click', this.show.bindAsEventListener())
+    },
+
+    show: function () {
+        var message = $(this.elementId).innerHTML;
+        toastr[this.type](message, this.title, this.options);
     }
-})
+});
+
+Tapestry.Initializer.toastr = function(spec) {
+    new Toastr(spec.observe, spec.elementId, spec.type, spec.title, spec.options);
+}

@@ -22,6 +22,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.tapestry5.*;
 import org.apache.tapestry5.annotations.*;
+import org.apache.tapestry5.corelib.components.EventLink;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.TextArea;
 import org.apache.tapestry5.corelib.components.Zone;
@@ -31,6 +32,7 @@ import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.apache.tapestry5.services.ajax.JavaScriptCallback;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.upload.services.UploadedFile;
 import org.slf4j.Logger;
 import unidue.rc.dao.CommitException;
@@ -44,6 +46,7 @@ import unidue.rc.search.SolrService;
 import unidue.rc.security.CollectionSecurityService;
 import unidue.rc.security.RequiresActionPermission;
 import unidue.rc.ui.ProtectedPage;
+import unidue.rc.ui.components.Toastr;
 import unidue.rc.ui.selectmodel.LibraryLocationSelectModel;
 import unidue.rc.ui.valueencoder.LibraryLocationValueEncoder;
 import unidue.rc.workflow.ResourceService;
@@ -113,8 +116,15 @@ public class ScanJobs {
     @Inject
     private Block editJobBlock, queuedJobsBlock;
 
+    @InjectComponent("editJobLink")
+    @Property(write = false)
+    private EventLink editJobLink;
+
     @Inject
     private Request request;
+
+    @InjectComponent("batchQueueToastr")
+    private Toastr toastr;
 
     @Inject
     private AjaxResponseRenderer ajaxRenderer;
@@ -244,7 +254,6 @@ public class ScanJobs {
                         .addRender(editJobZone);
             }
 
-
         } catch (SolrServerException e) {
             log.error("could not get scan job from solr", e);
         }
@@ -286,6 +295,11 @@ public class ScanJobs {
 
     @OnEvent(component = "printBatchList")
     void onPrintBatchJobs() {
+
+    }
+
+    @OnEvent(component = "show_batch_queue")
+    void onShowBatchQueue() {
 
     }
 
