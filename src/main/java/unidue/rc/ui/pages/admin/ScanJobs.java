@@ -32,7 +32,6 @@ import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.apache.tapestry5.services.ajax.JavaScriptCallback;
-import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.upload.services.UploadedFile;
 import org.slf4j.Logger;
 import unidue.rc.dao.CommitException;
@@ -231,7 +230,8 @@ public class ScanJobs {
 
     @SetupRender
     void onSetupRender() {
-        batchScanJobIDs = new ArrayList<>();
+        if (batchScanJobIDs == null)
+            batchScanJobIDs = new ArrayList<>();
     }
 
     @RequiresActionPermission(value = ActionDefinition.VIEW_ADMIN_PANEL)
@@ -248,11 +248,7 @@ public class ScanJobs {
             loadEditJobData(scanJobID);
             visibleBlock = BlockDefinition.EditJob;
 
-            if (request.isXHR()) {
-
-                ajaxRenderer.addRender(batchZone)
-                        .addRender(editJobZone);
-            }
+            addAjaxRender(batchZone, editJobZone);
 
         } catch (SolrServerException e) {
             log.error("could not get scan job from solr", e);
@@ -266,9 +262,7 @@ public class ScanJobs {
         batchScanJobIDs.add(scanJobID);
         visibleBlock = BlockDefinition.Batch;
 
-        if (request.isXHR())
-            ajaxRenderer.addRender(batchZone)
-                    .addRender(editJobZone);
+        addAjaxRender(batchZone, editJobZone);
     }
 
     @OnEvent(value = "dequeueBatch")
@@ -278,9 +272,7 @@ public class ScanJobs {
         batchScanJobIDs.remove(scanJobID);
         visibleBlock = BlockDefinition.Batch;
 
-        if (request.isXHR())
-            ajaxRenderer.addRender(batchZone)
-                    .addRender(editJobZone);
+        addAjaxRender(batchZone, editJobZone);
     }
 
     @OnEvent(component = "clearBatchList")
@@ -288,9 +280,7 @@ public class ScanJobs {
         batchScanJobIDs.clear();
         visibleBlock = BlockDefinition.Batch;
 
-        if (request.isXHR())
-            ajaxRenderer.addRender(batchZone)
-                    .addRender(editJobZone);
+        addAjaxRender(batchZone, editJobZone);
     }
 
     @OnEvent(component = "printBatchList")
@@ -300,7 +290,9 @@ public class ScanJobs {
 
     @OnEvent(component = "show_batch_queue")
     void onShowBatchQueue() {
+        visibleBlock = BlockDefinition.Batch;
 
+        addAjaxRender(batchZone, editJobZone);
     }
 
     private void loadEditJobData(int scanJobID) throws SolrServerException {
@@ -421,8 +413,7 @@ public class ScanJobs {
         }
         if (request.isXHR()) {
             ajaxRenderer.addCallback((JavaScriptCallback) js -> js.addScript(toastrCallback));
-            ajaxRenderer.addRender(jobsZone)
-                    .addRender(editJobZone);
+            addAjaxRender(jobsZone, editJobZone);
         }
     }
 
@@ -580,5 +571,10 @@ public class ScanJobs {
                 .filter(d -> d.name().equals(name))
                 .findFirst();
         return block.isPresent() && block.get().equals(visibleBlock);
+    }
+
+    private void addAjaxRender(ClientBodyElement...elements) {
+        if (request.isXHR())
+            Arrays.stream(elements).forEach(e -> ajaxRenderer.addRender(e));
     }
 }

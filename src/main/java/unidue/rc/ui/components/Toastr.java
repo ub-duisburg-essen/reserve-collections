@@ -19,13 +19,29 @@ import org.apache.tapestry5.ClientElement;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.annotations.*;
+import org.apache.tapestry5.dom.Element;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
-import org.apache.tapestry5.services.Context;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 /**
- * Created by nils on 20.05.16.
+ * <p>
+ *     A <code>Toastr</code> component can be used to show non blocking notifications for a user. The component is based
+ *     on and uses the toastr javascript library.
+ * </p>
+ * <p>
+ *     Example:
+ *     {@code
+ *     <t:toastr position="top_right" type="info" t:id="myToastr" target="clientElement">Content</t:toastr>
+ *     }
+ * </p>
+ * <div>
+ *     Position, type and target are required elements. See {@link Toastr.Type} and {@link Toastr.Position} for more
+ *     information. The target contains the element that will be bound to the toastr, to finally show the notification
+ *     on an event.
+ * </div>
+ *
+ * @see <a href="https://github.com/CodeSeven/toastr">Toastr on Github</a>
  */
 @Import(library = {
         "context:vendor/toastr/toastr.min.js",
@@ -33,24 +49,49 @@ import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 }, stylesheet = {
         "context:vendor/toastr/toastr.min.css"
 })
-public class Toastr {
+public class Toastr implements ClientElement {
 
+    /**
+     * <p>Type of the toastr notification, may be one of the following:</p>
+     * <ul>
+     *     <li>success</li>
+     *     <li>info</li>
+     *     <li>warning</li>
+     *     <li>error</li>
+     * </ul>
+     */
     public enum Type {
         SUCCESS, INFO, WARNING, ERROR
     }
 
+    /**
+     * <p>Position and sizing of the notification, may be one of the following:</p>
+     * <ul>
+     *     <li>top_right</li>
+     *     <li>bottom_right</li>
+     *     <li>bottom_left</li>
+     *     <li>top_left</li>
+     *     <li>top_full_width</li>
+     *     <li>bottom_full_width</li>
+     *     <li>top_center</li>
+     *     <li>bottom_center</li>
+     * </ul>
+     */
     public enum Position {
         TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, TOP_LEFT, TOP_FULL_WIDTH, BOTTOM_FULL_WIDTH, TOP_CENTER, BOTTOM_CENTER
     }
 
     @Parameter(allowNull = false, required = true)
-    private ClientElement observe;
+    private ClientElement target;
 
     @Parameter(defaultPrefix = "literal", allowNull = false, required = true, value = "info")
     private Type type;
 
-    @Parameter(defaultPrefix = "literal", allowNull = false, required = true, value = "top_right")
+    @Parameter(defaultPrefix = "literal", allowNull = false, required = true, value = "toast-top-right")
     private Position position;
+
+    @Parameter(defaultPrefix = "literal", allowNull = false, value = "click")
+    private String event;
 
     @Parameter
     private String title;
@@ -100,11 +141,21 @@ public class Toastr {
     @Environmental
     private JavaScriptSupport javaScriptSupport;
 
+    private Element element;
+
+    private String clientId;
+
+    @SetupRender
+    void onSetupRender() {
+
+        element = null;
+        clientId = null;
+    }
 
     @BeginRender
     void onBeginRender(MarkupWriter writer) {
 
-        writer.element("div", "style", "display: none !important;");
+        element = writer.element("div", "style", "display: none !important;");
     }
 
     @AfterRender
@@ -113,7 +164,8 @@ public class Toastr {
         writer.end();
 
         JSONObject options = new JSONObject();
-        options.put("positionClass", position.name().toLowerCase());
+        String toastrPosition = String.format("toast-%s", position.name().toLowerCase().replace('_', '-'));
+        options.put("positionClass", toastrPosition);
         options.put("showEasing", showEasing);
         options.put("hideEasing", hideEasing);
         options.put("showMethod", showMethod);
@@ -129,12 +181,29 @@ public class Toastr {
         options.put("newestOnTop", newestOnTop);
 
         JSONObject spec = new JSONObject();
-        spec.put("observe", observe.getClientId());
-        spec.put("elementID", componentResources.getId());
+        spec.put("target", target.getClientId());
+        spec.put("elementId", this.getClientId());
         spec.put("type", type.name().toLowerCase());
         spec.put("title", title);
+        spec.put("event", event);
         spec.put("options", options);
 
         javaScriptSupport.addInitializerCall("toastr", spec);
     }
+
+    @Override
+    public String getClientId() {
+        if (clientId == null) {
+            if (element == null)
+                throw new IllegalStateException(String.format(
+                        "Client id for %s is not available as it did not render yet (or was disabled).",
+                        componentResources.getCompleteId()));
+
+            clientId = javaScriptSupport.allocateClientId(componentResources);
+            element.forceAttributes("id", clientId);
+        }
+
+        return clientId;
+    }
+
 }

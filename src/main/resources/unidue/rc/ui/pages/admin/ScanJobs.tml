@@ -82,6 +82,12 @@
                             <t:eventlink zone="jobsZone" event="editJob" context="scanJobView.jobID" t:id="editJobLink">
                                 <span class="glyphicon glyphicon-edit"></span>
                             </t:eventlink>
+                            <t:toastr position="top_right" type="info" t:id="batchQueueToastr"
+                                      timeOut="0" extendedTimeOut="0" preventDuplicates="true"
+                                      hideDuration="200"
+                                      target="editJobLink">
+                                <t:actionlink t:id="show_batch_queue">${message:info.msg.show.batch.queue}</t:actionlink>
+                            </t:toastr>
                         </td>
                         <td>
                             <t:eventlink zone="jobsZone" event="enqueueJob" context="scanJobView.jobID">
@@ -100,9 +106,6 @@
     </div>
 </div>
 <a href="#" class="fab hidden-lg"><span class="glyphicon glyphicon-arrow-up"/></a>
-<t:toastr position="top_right" type="info" t:id="batchQueueToastr" timeOut="0" extendedTimeOut="0" observe="editJobLink">
-    <t:actionlink t:id="show_batch_queue">${message:info.msg.show.batch.queue}</t:actionlink>
-</t:toastr>
 
 <t:block t:id="editJobBlock" id="editJobBlock">
 

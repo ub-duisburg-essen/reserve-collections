@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 Toastr = Class.create({
-    initialize: function(observe, elementId, type, title, options) {
-        this.elementId = elementId;
+    initialize: function(target, elementId, type, title, event, options) {
+        this.target = $(target);
+        this.toastrElement = $(elementId);
         this.type = type;
         this.title = title;
         this.options = options;
-        Event.observe($(observe), 'click', this.show.bindAsEventListener())
+
+        Event.observe(this.target, event, this.show.bind(this));
     },
 
     show: function () {
-        var message = $(this.elementId).innerHTML;
+        var message = this.toastrElement.innerHTML;
         toastr[this.type](message, this.title, this.options);
     }
 });
 
 Tapestry.Initializer.toastr = function(spec) {
-    new Toastr(spec.observe, spec.elementId, spec.type, spec.title, spec.options);
+    new Toastr(spec.target, spec.elementId, spec.type, spec.title, spec.event, spec.options);
 }
