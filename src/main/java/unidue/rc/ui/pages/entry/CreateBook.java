@@ -41,7 +41,6 @@ import unidue.rc.model.Headline;
 import unidue.rc.model.web.BookRequest;
 import unidue.rc.model.web.Conversations;
 import unidue.rc.security.CollectionSecurityService;
-import unidue.rc.system.BookUtils;
 import unidue.rc.system.OpacFacadeService;
 import unidue.rc.ui.ProtectedPage;
 import unidue.rc.ui.SecurityContextPage;
@@ -266,7 +265,7 @@ public class CreateBook implements SecurityContextPage {
         if (libraryData != null) {
 
             bookRequest.setLibraryItems(libraryData.getItems());
-            bookRequest.reduceItemsByLocation();
+            bookRequest.reduceItemsToSelection();
         }
 
         step = Step.SELECT_LIBRARY_ITEM;

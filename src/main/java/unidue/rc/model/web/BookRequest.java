@@ -16,12 +16,14 @@
 package unidue.rc.model.web;
 
 
+import org.apache.commons.lang3.StringUtils;
 import unidue.rc.model.OpacFacadeBook;
 import unidue.rc.model.OpacFacadeLibraryDataItem;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by nils on 12.10.15.
@@ -100,10 +102,17 @@ public class BookRequest {
         this.chosenItem = chosenItem;
     }
 
-    public void reduceItemsByLocation() {
+    /**
+     * Reduces this list of {@link #libraryItems} to a list where each value may be selected.
+     */
+    public void reduceItemsToSelection() {
 
         if (libraryItems == null)
             return;
+
+        libraryItems = libraryItems.stream()
+                .filter(i -> StringUtils.isNotBlank(i.getSignature()))
+                .collect(Collectors.toList());
 
         List<OpacFacadeLibraryDataItem> filtered = new ArrayList<>();
         for (OpacFacadeLibraryDataItem libraryItem : libraryItems) {
