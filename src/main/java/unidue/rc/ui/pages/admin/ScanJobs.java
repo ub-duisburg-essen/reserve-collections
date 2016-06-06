@@ -100,6 +100,9 @@ public class ScanJobs {
     private Messages messages;
 
     @InjectComponent
+    private Zone filterZone;
+
+    @InjectComponent
     private Zone jobsZone;
 
     @InjectComponent
@@ -464,6 +467,13 @@ public class ScanJobs {
         return request.isXHR()
                ? jobsZone.getBody()
                : this;
+    }
+
+    @OnEvent(value = "sort")
+    void onSort(String column) {
+
+        log.debug("sorting by " + column);
+        addAjaxRender(jobsZone, filterZone);
     }
 
     public void loadScanJobs() {

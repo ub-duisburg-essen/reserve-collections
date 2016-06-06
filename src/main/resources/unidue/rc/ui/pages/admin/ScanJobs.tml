@@ -6,58 +6,79 @@
     <div class="col-lg-8">
         <fieldset>
         <table class="table table-hover">
-            <t:zone t:id="filterZone" id="filterZone" update="none">
-                <t:form t:id="filterForm" t:clientValidation="none" zone="^">
-                <thead>
+            <thead>
                 <tr>
                     <th>${message:entry}</th>
-                    <th>${message:number-label}</th>
-                    <th>${message:libraryLocation-label}</th>
-                    <th>${message:reviser}</th>
+                    <th>
+                        ${message:number-label}
+                        <t:ajaxsortlink context="literal:collectionNumber"/>
+                    </th>
+                    <th>
+                        ${message:libraryLocation-label}
+                        <t:ajaxsortlink context="literal:location"/>
+                    </th>
+                    <th>
+                        ${message:reviser}
+                        <t:ajaxsortlink context="literal:reviser"/>
+                    </th>
                     <th>${message:signature}</th>
                     <th>${message:author-label}</th>
                     <th>${message:page.start}</th>
                     <th>${message:page.end}</th>
                     <th>${message:job}</th>
-                    <th>${message:scannable.type}</th>
+                    <th>
+                        ${message:scannable.type}
+                        <t:ajaxsortlink context="literal:type"/>
+                    </th>
                     <th></th>
                     <th></th>
                 </tr>
                 <tr>
                     <th></th>
                     <th>
-                        <t:textfield value="fNumber" id="fNumber" class="form-control input-sm" t:mixins="zoneUpdater"
-                                     t:clientEvent="keyup" t:event="filterNumberChanged" t:zone="jobsZone"/>
+                    <t:zone t:id="filterZone" id="filterZone" update="none">
+                        <t:form t:id="filterForm" t:clientValidation="none" zone="^">
+                            <t:textfield value="fNumber" id="fNumber" class="form-control input-sm" t:mixins="zoneUpdater"
+                                         t:clientEvent="keyup" t:event="filterNumberChanged" t:zone="jobsZone"/>
+                        </t:form>
+                    </t:zone>
                     </th>
                     <th>
+                        <t:zone t:id="locationZone" id="locationZone" update="none">
+                        <t:form t:id="locationForm" t:clientValidation="none" zone="^">
                         <t:select value="fLocation" model="libraryLocationSelectModel"
                                   t:id="locationFilter"
                                   id="libraryLocation" zone="jobsZone"
                                   class="form-control input-sm" encoder="libraryLocationEncoder"
                                   blankLabel="message:blank-label"/>
+                        </t:form>
+                        </t:zone>
                     </th>
                     <th>
-                        <t:textfield value="fReviser" id="fReviser" class="form-control input-sm" t:mixins="zoneUpdater"
-                                     t:clientEvent="keyup" t:event="filterReviserChanged" t:zone="jobsZone"/></th>
+                        <!--<t:textfield value="fReviser" id="fReviser" class="form-control input-sm" t:mixins="zoneUpdater"-->
+                                     <!--t:clientEvent="keyup" t:event="filterReviserChanged" t:zone="jobsZone"/>-->
+                    </th>
                     <th></th>
                     <th>
-                        <t:textfield value="fAuthor" id="fAuthor" class="form-control input-sm" t:mixins="zoneUpdater"
-                                     t:clientEvent="keyup" t:event="filterAuthorChanged" t:zone="jobsZone"/>
+                        <!--<t:textfield value="fAuthor" id="fAuthor" class="form-control input-sm" t:mixins="zoneUpdater"-->
+                                     <!--t:clientEvent="keyup" t:event="filterAuthorChanged" t:zone="jobsZone"/>-->
                     </th>
                     <th></th>
                     <th></th>
                     <th>
+                        <t:zone t:id="statusZone" id="statusZone" update="none">
+                        <t:form t:id="statusForm" t:clientValidation="none" zone="^">
                         <select t:type="select" t:id="fStatus" id="fStatus" zone="jobsZone"
                                 class="form-control input-sm"
                                 blankLabel="message:blank-label"/>
+                        </t:form>
+                        </t:zone>
                     </th>
                     <th></th>
                     <th></th>
                     <th></th>
                 </tr>
-                </thead>
-                </t:form>
-            </t:zone>
+            </thead>
 
             <tbody t:type="zone" t:id="jobsZone" id="jobsZone" t:update="none">
                 <t:loop source="scanJobs.items" value="scanJobView">

@@ -48,7 +48,8 @@ public class CollectionRequestFilter implements ComponentRequestFilter {
 
     private static final Logger LOG = LoggerFactory.getLogger(CollectionRequestFilter.class);
 
-    private static final String REQUEST_LOG_FORMAT = "user: %10s |- requests: %30s |- params: %s";
+    private static final String PAGE_REQUEST_LOG_FORMAT = "user: %10s |-  page: %30s |- params: %s";
+    private static final String COMPONENT_REQUEST_LOG_FORMAT = "user: %10s |- event: %30s |- event params: %s |- page params: %s";
     private static final String GUEST_USERNAME = "guest";
     private static final String PARAM_LOG_DIVIDER = ", ";
 
@@ -87,6 +88,8 @@ public class CollectionRequestFilter implements ComponentRequestFilter {
     @Override
     public void handleComponentEvent(ComponentEventRequestParameters parameters, ComponentRequestHandler handler) throws IOException {
         handler.handleComponentEvent(parameters);
+
+        logRequest(parameters);
     }
 
     @Override
@@ -125,16 +128,34 @@ public class CollectionRequestFilter implements ComponentRequestFilter {
     }
 
     private void logRequest(PageRenderRequestParameters parameters) {
-        User currentUser = securityService.getCurrentUser();
-        String username = currentUser != null
-                ? currentUser.getUsername()
-                : GUEST_USERNAME;
+        String username = getAuthenticatedUsername();
 
         String logicalPageName = parameters.getLogicalPageName();
         EventContext activationContext = parameters.getActivationContext();
         String[] values = activationContext.toStrings();
 
-        LOG.info(String.format(REQUEST_LOG_FORMAT, username, logicalPageName, StringUtils.join(values, PARAM_LOG_DIVIDER)));
+        LOG.info(String.format(PAGE_REQUEST_LOG_FORMAT, username, logicalPageName, StringUtils.join(values, PARAM_LOG_DIVIDER)));
+    }
+
+    private void logRequest(ComponentEventRequestParameters parameters) {
+        String username = getAuthenticatedUsername();
+
+        String eventType = parameters.getEventType();
+        EventContext eventContext = parameters.getEventContext();
+        EventContext pageActivationContext = parameters.getPageActivationContext();
+        String[] pageValues = pageActivationContext.toStrings();
+        String[] eventContextValues = eventContext.toStrings();
+
+        LOG.info(String.format(COMPONENT_REQUEST_LOG_FORMAT, username, eventType,
+                StringUtils.join(eventContextValues, PARAM_LOG_DIVIDER),
+                StringUtils.join(pageValues, PARAM_LOG_DIVIDER)));
+    }
+
+    private String getAuthenticatedUsername() {
+        User currentUser = securityService.getCurrentUser();
+        return currentUser != null
+               ? currentUser.getUsername()
+               : GUEST_USERNAME;
     }
 
     private void setReferrer(String logicalPageName, EventContext activationContext) {
