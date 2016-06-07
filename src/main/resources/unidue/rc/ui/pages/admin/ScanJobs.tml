@@ -11,15 +11,15 @@
                     <th>${message:entry}</th>
                     <th>
                         ${message:number-label}
-                        <t:ajaxsortlink context="literal:collectionNumber"/>
+                        <t:ajaxsortlink for="collectionNumber"/>
                     </th>
                     <th>
                         ${message:libraryLocation-label}
-                        <t:ajaxsortlink context="literal:location"/>
+                        <t:ajaxsortlink for="location" />
                     </th>
                     <th>
                         ${message:reviser}
-                        <t:ajaxsortlink context="literal:reviser"/>
+                        <t:ajaxsortlink for="reviser" />
                     </th>
                     <th>${message:signature}</th>
                     <th>${message:author-label}</th>
@@ -28,7 +28,7 @@
                     <th>${message:job}</th>
                     <th>
                         ${message:scannable.type}
-                        <t:ajaxsortlink context="literal:type"/>
+                        <t:ajaxsortlink for="type"/>
                     </th>
                     <th></th>
                     <th></th>

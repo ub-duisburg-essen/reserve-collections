@@ -45,6 +45,7 @@ import unidue.rc.search.SolrService;
 import unidue.rc.security.CollectionSecurityService;
 import unidue.rc.security.RequiresActionPermission;
 import unidue.rc.ui.ProtectedPage;
+import unidue.rc.ui.components.AjaxSortLink;
 import unidue.rc.ui.components.Toastr;
 import unidue.rc.ui.selectmodel.LibraryLocationSelectModel;
 import unidue.rc.ui.valueencoder.LibraryLocationValueEncoder;
@@ -470,9 +471,9 @@ public class ScanJobs {
     }
 
     @OnEvent(value = "sort")
-    void onSort(String column) {
+    void onSort(String column, AjaxSortLink.SortState sortState) {
 
-        log.debug("sorting by " + column);
+        log.debug("sorting by " + column + " sort by " + sortState.name());
         addAjaxRender(jobsZone, filterZone);
     }
 

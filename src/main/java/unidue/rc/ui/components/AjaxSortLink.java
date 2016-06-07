@@ -21,11 +21,12 @@ public class AjaxSortLink {
 
     private static final String EVENT_NAME = "sort";
 
-    @Parameter
-    @Property(write = false)
-    private String context;
+    @Parameter(defaultPrefix = "literal", name = "for")
+    @Property
+    private String id;
 
     @Persist(PersistenceConstants.FLASH)
+    @Property
     private SortState sortState;
 
     @Inject
@@ -37,20 +38,34 @@ public class AjaxSortLink {
     @InjectComponent
     private Zone sortZone;
 
-    @OnEvent(value = EVENT_NAME)
-    boolean onSort(String value) {
+    @SetupRender
+    void onSetupRender() {
 
         if (sortState == null)
             sortState = SortState.NoSort;
+    }
 
-        Optional<SortState> nextSortState = sortState.next();
-        sortState = nextSortState.isPresent()
-                    ? nextSortState.get()
-                    : sortState;
+    @OnEvent(value = EVENT_NAME)
+    boolean onSort(String id, SortState nextSortState) {
+
+        if (nextSortState == null)
+            nextSortState = SortState.NoSort;
+
+        sortState = nextSortState;
 
         if (request.isXHR())
             ajaxResponseRenderer.addRender(sortZone);
         return false;
+    }
+
+    public SortState getNextSortState() {
+        if (sortState == null)
+            return SortState.NoSort;
+
+        Optional<SortState> nextSortState = sortState.next();
+        return nextSortState.isPresent()
+               ? nextSortState.get()
+               : null;
     }
 
     public String getSortIconName() {
@@ -60,12 +75,12 @@ public class AjaxSortLink {
     }
 
     public String getSortZoneId() {
-        return StringUtils.isBlank(context)
+        return StringUtils.isBlank(id)
                ? "sortZone"
-               : "sortZone_" + context;
+               : "sortZone_" + id;
     }
 
-    private enum SortState {
+    public enum SortState {
 
         NoSort(0, 1, ""),
         Ascending(1, 2, "sort-icon-asc"),
