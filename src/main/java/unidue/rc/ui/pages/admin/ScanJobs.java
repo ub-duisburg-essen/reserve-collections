@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2014 - 2016 Universitaet Duisburg-Essen (semapp|uni-due.de)
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,11 +42,11 @@ import unidue.rc.model.*;
 import unidue.rc.model.solr.SolrScanJobView;
 import unidue.rc.search.SolrResponse;
 import unidue.rc.search.SolrService;
+import unidue.rc.search.SolrSortField;
 import unidue.rc.security.CollectionSecurityService;
 import unidue.rc.security.RequiresActionPermission;
 import unidue.rc.ui.ProtectedPage;
 import unidue.rc.ui.components.AjaxSortLink;
-import unidue.rc.ui.components.Toastr;
 import unidue.rc.ui.selectmodel.LibraryLocationSelectModel;
 import unidue.rc.ui.valueencoder.LibraryLocationValueEncoder;
 import unidue.rc.workflow.ResourceService;
@@ -56,6 +56,8 @@ import unidue.rc.workflow.ScannableService;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static unidue.rc.ui.components.AjaxSortLink.SortState;
 
 /**
  * Created by nils on 07.04.16.
@@ -101,16 +103,7 @@ public class ScanJobs {
     private Messages messages;
 
     @InjectComponent
-    private Zone filterZone;
-
-    @InjectComponent
-    private Zone jobsZone;
-
-    @InjectComponent
-    private Zone editJobZone;
-
-    @InjectComponent
-    private Zone batchZone;
+    private Zone filterZone, jobsZone, editJobZone, batchZone;
 
     @Inject
     private PageRenderLinkSource linkSource;
@@ -126,19 +119,12 @@ public class ScanJobs {
     @Inject
     private Request request;
 
-    @InjectComponent("batchQueueToastr")
-    private Toastr toastr;
-
     @Inject
     private AjaxResponseRenderer ajaxRenderer;
 
     @Property(write = false)
     @Persist(PersistenceConstants.FLASH)
     private BlockDefinition visibleBlock;
-
-    @Property
-    @Persist(PersistenceConstants.FLASH)
-    private SolrResponse<SolrScanJobView> scanJobs;
 
     @Property
     private SolrScanJobView scanJobView;
@@ -163,14 +149,18 @@ public class ScanJobs {
     @Property
     private String fScannableType;
 
+    // sort
+    @Persist(PersistenceConstants.SESSION)
+    private List<SolrSortField> sortStack;
+
     // queue
 
     @Property(write = false)
     @Persist(PersistenceConstants.SESSION)
-    private List<Integer> batchScanJobIDs;
+    private List<SolrScanJobView> batchScanJobs;
 
     @Property
-    private Integer batchScanJobID;
+    private SolrScanJobView batchScanJob;
 
     // edit scan job form values
 
@@ -234,21 +224,22 @@ public class ScanJobs {
 
     @SetupRender
     void onSetupRender() {
-        if (batchScanJobIDs == null)
-            batchScanJobIDs = new ArrayList<>();
+        if (batchScanJobs == null)
+            batchScanJobs = new ArrayList<>();
+
+        if (sortStack == null)
+            sortStack = new LinkedList<>();
     }
 
     @RequiresActionPermission(value = ActionDefinition.VIEW_ADMIN_PANEL)
     @OnEvent(EventConstants.ACTIVATE)
     public void onActivate() {
-        loadScanJobs();
     }
 
     @OnEvent(value = "editJob")
     void onEditJob(int scanJobID) {
         try {
 
-            loadScanJobs();
             loadEditJobData(scanJobID);
             visibleBlock = BlockDefinition.EditJob;
 
@@ -262,37 +253,41 @@ public class ScanJobs {
     @OnEvent(value = "enqueueJob")
     void onEnqueueJob(Integer scanJobID) {
 
-        loadScanJobs();
-        batchScanJobIDs.add(scanJobID);
+        SolrScanJobView scanJobView = getViewByID(scanJobID);
+        if (scanJobView != null)
+            batchScanJobs.add(scanJobView);
+
         visibleBlock = BlockDefinition.Batch;
 
         addAjaxRender(batchZone, editJobZone);
     }
 
     @OnEvent(value = "dequeueBatch")
-    void onDequeueJob(Integer scanJobID) {
+    void onDequeueJob(int scanJobID) {
 
-        loadScanJobs();
-        batchScanJobIDs.remove(scanJobID);
+        batchScanJobs = batchScanJobs.stream()
+                .filter(job -> job.getJobID() != scanJobID)
+                .collect(Collectors.toList());
+
         visibleBlock = BlockDefinition.Batch;
 
         addAjaxRender(batchZone, editJobZone);
     }
 
-    @OnEvent(component = "clearBatchList")
+    @OnEvent(value = "clearBatchList")
     void onClearBatchJobs() {
-        batchScanJobIDs.clear();
+        batchScanJobs.clear();
         visibleBlock = BlockDefinition.Batch;
 
         addAjaxRender(batchZone, editJobZone);
     }
 
-    @OnEvent(component = "printBatchList")
+    @OnEvent(value = "printBatchList")
     void onPrintBatchJobs() {
 
     }
 
-    @OnEvent(component = "show_batch_queue")
+    @OnEvent(value = "show_batch_queue")
     void onShowBatchQueue() {
         visibleBlock = BlockDefinition.Batch;
 
@@ -471,18 +466,48 @@ public class ScanJobs {
     }
 
     @OnEvent(value = "sort")
-    void onSort(String column, AjaxSortLink.SortState sortState) {
+    void onSort(String column, AjaxSortLink.SortState newSortState) {
 
-        log.debug("sorting by " + column + " sort by " + sortState.name());
+        SolrQuery.ORDER solrOrder = getSolrOrder(newSortState);
+        Optional<SolrSortField> sortItem = sortStack.stream()
+                .filter(item -> item.getFieldName().equals(column))
+                .findAny();
+
+
+        // if the user has already sorted after column
+        if (sortItem.isPresent()) {
+            SolrSortField sortField = sortItem.get();
+            // apply next order if given
+            if (solrOrder != null)
+                sortField.setOrder(solrOrder);
+
+            // otherwise remove ordering (do not just set to null!)
+            else
+                sortStack.remove(sortField);
+        }
+
+        // else if sort is asc or desc add the field
+        else if (solrOrder != null) {
+            SolrSortField sortField = new SolrSortField(column);
+            sortField.setOrder(solrOrder);
+            sortStack.add(sortField);
+        }
+
         addAjaxRender(jobsZone, filterZone);
     }
 
-    public void loadScanJobs() {
+    public SolrResponse getScanJobs() {
 
         try {
-            scanJobs = solrService.query(SolrScanJobView.class, new SolrQuery("*:*"));
+            SolrQuery query = new SolrQuery("*:*");
+
+            sortStack.forEach(sortField -> query.addSort(sortField.getFieldName(), sortField.getOrder()));
+
+            return solrService.query(SolrScanJobView.class, query);
+
         } catch (SolrServerException e) {
             log.error("could not query solr server", e);
+            return null;
         }
     }
 
@@ -527,24 +552,19 @@ public class ScanJobs {
 
     public String getScanJobShortDetails() {
 
-        Optional<SolrScanJobView> jobViewOptional = scanJobs.getItems().stream()
-                .filter(jv -> jv.getJobID() == batchScanJobID)
-                .findFirst();
         String result = StringUtils.EMPTY;
 
-        if (jobViewOptional.isPresent()) {
+        if (batchScanJob != null) {
 
-            SolrScanJobView jobView = jobViewOptional.get();
-
-            List<String> docents = jobView.getDocents();
+            List<String> docents = batchScanJob.getDocents();
             docents = docents == null
                       ? Collections.EMPTY_LIST
                       : docents;
 
-            String location = jobView.getLocation();
-            Integer collectionNumber = jobView.getCollectionNumber();
-            Integer entryID = jobView.getEntryID();
-            String type = messages.get(jobView.getScannableType());
+            String location = batchScanJob.getLocation();
+            Integer collectionNumber = batchScanJob.getCollectionNumber();
+            Integer entryID = batchScanJob.getEntryID();
+            String type = messages.get(batchScanJob.getScannableType());
             String docentsValue = String.join(", ", docents);
 
             result = String.format("%s - %d - %d: %s [%s]", location, collectionNumber, entryID, type, docentsValue);
@@ -554,11 +574,8 @@ public class ScanJobs {
 
     public String getBatchScanJobColor() {
 
-        Optional<SolrScanJobView> jobViewOptional = scanJobs.getItems().stream()
-                .filter(jv -> jv.getJobID() == batchScanJobID)
-                .findFirst();
-        return jobViewOptional.isPresent()
-               ? getStatusColor(jobViewOptional.get())
+        return batchScanJob != null
+               ? getStatusColor(batchScanJob)
                : "#transparent";
     }
 
@@ -584,8 +601,51 @@ public class ScanJobs {
         return block.isPresent() && block.get().equals(visibleBlock);
     }
 
-    private void addAjaxRender(ClientBodyElement...elements) {
+    public AjaxSortLink.SortState getSortForColumn(String column) {
+        Optional<SolrSortField> sortField = sortStack.stream()
+                .filter(item -> item.getFieldName().equals(column))
+                .findAny();
+
+        return sortField.isPresent()
+               ? getSortState(sortField.get().getOrder())
+               : SortState.NoSort;
+    }
+
+    private SolrScanJobView getViewByID(Integer scanJobViewID) {
+
+        try {
+            return solrService.getById(SolrScanJobView.class, Integer.toString(scanJobViewID));
+        } catch (SolrServerException e) {
+            log.error("could not get scan job view with id " + scanJobViewID, e);
+            return null;
+        }
+    }
+
+    private void addAjaxRender(ClientBodyElement... elements) {
         if (request.isXHR())
             Arrays.stream(elements).forEach(e -> ajaxRenderer.addRender(e));
+    }
+
+    private static SolrQuery.ORDER getSolrOrder(SortState sortState) {
+        switch (sortState) {
+            case Ascending:
+                return SolrQuery.ORDER.asc;
+            case Descending:
+                return SolrQuery.ORDER.desc;
+            case NoSort:
+            default:
+                return null;
+        }
+    }
+
+    private static AjaxSortLink.SortState getSortState(SolrQuery.ORDER ordering) {
+        switch (ordering) {
+            case asc:
+                return SortState.Ascending;
+            case desc:
+                return SortState.Descending;
+            default:
+                return SortState.NoSort;
+        }
     }
 }

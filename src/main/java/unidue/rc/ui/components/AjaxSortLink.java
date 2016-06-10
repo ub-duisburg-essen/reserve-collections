@@ -25,8 +25,7 @@ public class AjaxSortLink {
     @Property
     private String id;
 
-    @Persist(PersistenceConstants.FLASH)
-    @Property
+    @Parameter
     private SortState sortState;
 
     @Inject

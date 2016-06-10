@@ -1,7 +1,10 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
 <t:content>
     <span t:type="zone" t:id="sortZone" id="${sortZoneId}">
-        <t:eventlink event="sort" class="sort-icon ${prop:sortIconName}" context="[id, nextSortState]" zone="${sortZoneId}"/>
+        <t:eventlink event="sort"
+                     class="sort-icon ${prop:sortIconName}"
+                     context="[id, nextSortState]"
+                     zone="${sortZoneId}"/>
     </span>
 </t:content>
 </html>

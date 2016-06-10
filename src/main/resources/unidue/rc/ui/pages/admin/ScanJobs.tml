@@ -8,14 +8,18 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>${message:entry}</th>
+                    <th>
+                        ${message:entry}
+                        <t:ajaxsortlink for="entryID" />
+                    </th>
+
                     <th>
                         ${message:number-label}
-                        <t:ajaxsortlink for="collectionNumber"/>
+                        <t:ajaxsortlink for="collectionNumber" />
                     </th>
                     <th>
                         ${message:libraryLocation-label}
-                        <t:ajaxsortlink for="location" />
+                        <t:ajaxsortlink for="locationName" />
                     </th>
                     <th>
                         ${message:reviser}
@@ -28,7 +32,7 @@
                     <th>${message:job}</th>
                     <th>
                         ${message:scannable.type}
-                        <t:ajaxsortlink for="type"/>
+                        <t:ajaxsortlink for="scannableType" />
                     </th>
                     <th></th>
                     <th></th>
@@ -103,12 +107,6 @@
                             <t:eventlink zone="jobsZone" event="editJob" context="scanJobView.jobID" t:id="editJobLink">
                                 <span class="glyphicon glyphicon-edit"></span>
                             </t:eventlink>
-                            <t:toastr position="top_right" type="info" t:id="batchQueueToastr"
-                                      timeOut="0" extendedTimeOut="0" preventDuplicates="true"
-                                      hideDuration="200"
-                                      target="editJobLink">
-                                <t:actionlink t:id="show_batch_queue">${message:info.msg.show.batch.queue}</t:actionlink>
-                            </t:toastr>
                         </td>
                         <td>
                             <t:eventlink zone="jobsZone" event="enqueueJob" context="scanJobView.jobID">
@@ -121,10 +119,10 @@
         </table>
         </fieldset>
     </div>
-    <div class="col-lg-4">
+    <aside class="col-lg-4 shadow-left">
         <t:delegate to="editJobBlock"/>
         <t:delegate to="queuedJobsBlock"/>
-    </div>
+    </aside>
 </div>
 <a href="#" class="fab hidden-lg"><span class="glyphicon glyphicon-arrow-up"/></a>
 
@@ -132,7 +130,17 @@
 
     <t:zone t:id="editJobZone" id="editJobZone" update="none" class="row bg-main">
         <t:if test="isBlockVisible('EditJob')">
-            <form t:type="form" class="form-horizontal shadow-left" t:clientValidation="none" t:id="edit_scan_job_form"
+            <t:if test="batchScanJobs">
+                <div class="col-md-11">
+
+                    <div class="btn-group pull-right">
+                        <t:eventlink class="button"
+                                     event="show_batch_queue"
+                                     zone="^">${message:info.msg.show.batch.queue}</t:eventlink>
+                    </div>
+                </div>
+            </t:if>
+            <form t:type="form" class="form-horizontal" t:clientValidation="none" t:id="edit_scan_job_form"
                   t:zone="^">
                 <h3>${message:job}</h3>
                 <fieldset>
@@ -282,26 +290,24 @@
 <t:block t:id="queuedJobsBlock" id="queuedJobsBlock">
     <t:zone t:id="batchZone" id="batchZone" update="none" class="row bg-main">
         <t:if test="isBlockVisible('Batch')">
-            <aside class="shadow-left right-content">
-                <section id="queue">
-                    <h3>${message:stack}</h3>
-                    <ul class="list-group">
-                        <t:loop source="batchScanJobIDs" value="batchScanJobID">
-                            <li class="list-group-item" style="color: ${prop:batchScanJobColor};">
-                                ${scanJobShortDetails}
-                                <t:eventlink event="dequeueBatch" context="batchScanJobID" zone="batchZone"
-                                             class="glyphicon glyphicon-minus-sign"/>
-                            </li>
-                        </t:loop>
-                    </ul>
-                </section>
-                <section>
-                    <div class="btn-group">
-                        <t:actionlink t:id="clearBatchList" class="btn btn-default" zone="batchZone">${message:clear}</t:actionlink>
-                        <t:actionlink t:id="printBatchList" class="btn btn-default" zone="batchZone">${message:print}</t:actionlink>
-                    </div>
-                </section>
-            </aside>
+            <section id="queue" class="col-md-11">
+                <h3>${message:stack}</h3>
+                <ul class="list-group">
+                    <t:loop source="batchScanJobs" value="batchScanJob">
+                        <li class="list-group-item" style="color: ${prop:batchScanJobColor};">
+                            ${scanJobShortDetails}
+                            <t:eventlink event="dequeueBatch" context="batchScanJob.jobID" zone="batchZone"
+                                         class="glyphicon glyphicon-minus-sign"/>
+                        </li>
+                    </t:loop>
+                </ul>
+            </section>
+            <section class="col-md-11">
+                <div class="btn-group">
+                    <t:eventlink event="clearBatchList" class="btn btn-default" zone="batchZone">${message:clear}</t:eventlink>
+                    <t:eventlink event="printBatchList" class="btn btn-default" zone="batchZone">${message:print}</t:eventlink>
+                </div>
+            </section>
         </t:if>
     </t:zone>
 </t:block>
