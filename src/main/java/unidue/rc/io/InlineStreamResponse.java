@@ -16,8 +16,6 @@
 package unidue.rc.io;
 
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.tapestry5.StreamResponse;
 import org.apache.tapestry5.services.Response;
 import unidue.rc.model.Resource;
@@ -32,6 +30,7 @@ import java.io.*;
  * @since 30.07.14 11:12
  */
 public class InlineStreamResponse implements StreamResponse {
+
     private File file = null;
     private InputStream is = null;
 
@@ -55,7 +54,6 @@ public class InlineStreamResponse implements StreamResponse {
 
     public void prepareResponse(Response response) {
 
-        String filename = FilenameUtils.getName(resource.getFilePath());
-        response.setHeader("Content-Disposition", "inline; filename='" + filename + "'");
+        response.setHeader("Content-Length", Long.toString(file.length()));
     }
 }

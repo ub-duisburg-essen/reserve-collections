@@ -22,14 +22,12 @@
                         <div class="entry-label">${message:filename}</div>
                     </div>
                     <div class="col-md-10">
-                        <t:eventlink event="download" title="message:download"
-                                     context="file.resource.id" class="piwik_download">
+                        <t:downloadlink resource="file.resource" type="inline">
                             ${file.resource.fileName}
-                        </t:eventlink>
+                        </t:downloadlink>
                         <t:if test="downloadAllowed">
-
-                            <t:pagelink page="entry/download" context="[file.resource.id, 'attachment']"
-                                        class="glyphicon glyphicon-download piwik_download"/>
+                            <t:downloadlink resource="file.resource" type="attachment"
+                                            class="glyphicon glyphicon-download"/>
                         </t:if>
                     </div>
                 </div>

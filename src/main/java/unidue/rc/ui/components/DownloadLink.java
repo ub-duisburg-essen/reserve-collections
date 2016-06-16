@@ -1,0 +1,123 @@
+package unidue.rc.ui.components;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.Link;
+import org.apache.tapestry5.MarkupWriter;
+import org.apache.tapestry5.annotations.*;
+import org.apache.tapestry5.corelib.base.AbstractLink;
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.PageRenderLinkSource;
+import org.slf4j.Logger;
+import unidue.rc.model.Resource;
+import unidue.rc.ui.pages.entry.Download;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.Optional;
+
+/**
+ * Created by nils on 10.06.16.
+ */
+public class DownloadLink extends AbstractLink {
+
+    public enum Method {
+        Inline,
+        Attachment
+    }
+
+    /**
+     * <p>One of:</p>
+     * <ul>
+     * <li><code>inline</code></li>
+     * <li><code>attachment</code></li>
+     * </ul>
+     * <p>Inline downloads will be handled by the browser, with attachment the browser is forced to save the file.</p>
+     */
+    @Parameter(required = true, allowNull = false, defaultPrefix = "literal")
+    private String type;
+
+    @Parameter(required = true, allowNull = false)
+    private Resource resource;
+
+    @Inject
+    private Logger log;
+
+    @Inject
+    private PageRenderLinkSource linkSource;
+
+    @Inject
+    private ComponentResources resources;
+
+    @BeginRender
+    void onBeginRender(MarkupWriter writer) {
+        if (isDisabled()) return;
+
+        writeDownloadLink(writer, resource.getFileName());
+    }
+
+    /**
+     * Writes an &lt;a&gt; element with the provided link as the href attribute. A call to
+     * {@link org.apache.tapestry5.MarkupWriter#end()} is <em>not</em> provided. Automatically appends an anchor if
+     * the component's anchor parameter is non-null. Informal parameters are rendered as well.
+     *
+     * @param writer         to write markup to
+     * @param namesAndValues additional attributes to write
+     */
+    private void writeDownloadLink(MarkupWriter writer, String filename, Object... namesAndValues) {
+
+        // Download page requires resource id and method therefore the link has to created at
+        // least with this information
+        Link link = linkSource.createPageRenderLinkWithContext(Download.class, resource.getId(), type);
+
+        addParameters(link);
+
+        URI href = buildHref(link, filename);
+        String hrefString = href == null
+                            ? "#"
+                            : href.toString();
+        writer.element("a", "href", hrefString);
+
+        writer.attributes(namesAndValues);
+
+        resources.renderInformalParameters(writer);
+    }
+
+    private URI buildHref(Link downloadLink, String filename) {
+        try {
+            URIBuilder uriBuilder = new URIBuilder(downloadLink.toURI());
+            String path = uriBuilder.getPath();
+            StringBuilder pathBuilder = new StringBuilder(path);
+            if (!path.endsWith("/")) {
+                pathBuilder.append('/');
+            }
+            pathBuilder.append(filename);
+            uriBuilder.setPath(pathBuilder.toString());
+            return uriBuilder.build();
+        } catch (URISyntaxException e) {
+            log.error("could not create URI of " + downloadLink.toURI(), e);
+            return null;
+        }
+    }
+
+    private String calcMethod() {
+        Optional<Method> method = Arrays.stream(Method.values())
+                .filter(m -> m.name().equalsIgnoreCase(type))
+                .findAny();
+        return method.isPresent()
+               ? method.get().name().toLowerCase()
+               : Method.Attachment.name().toLowerCase();
+    }
+
+    @AfterRender
+    void onAfterRender(MarkupWriter writer) {
+        if (isDisabled()) return;
+
+        writer.end(); // <a>
+    }
+}

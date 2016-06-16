@@ -39,13 +39,12 @@
                 </p>
                 <t:if test="bookChapter.fileAvailable">
                     <p>
-                        <t:eventlink event="download" title="message:download"
-                                     context="bookChapter.resource.id">
+
+                        <t:downloadlink resource="bookChapter.resource" type="inline">
                             ${bookChapter.resource.fileName}
-                        </t:eventlink>
-                        <t:pagelink page="entry/download"
-                                    context="[bookChapter.resource.id, 'attachment']"
-                                    class="glyphicon glyphicon-download "/>
+                        </t:downloadlink>
+                        <t:downloadlink resource="bookChapter.resource" type="attachment"
+                                        class="glyphicon glyphicon-download"/>
                     </p>
                 </t:if>
                 <t:if test="bookChapter.resource?.fullTextURL">

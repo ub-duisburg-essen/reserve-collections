@@ -321,6 +321,7 @@ public class AppModule {
             MappedConfiguration<Class, Object> configuration,
             @Local BaseURLSource baseURLSource) {
         configuration.add(BaseURLSource.class, baseURLSource);
+        configuration.add(URLEncoder.class, new CustomURLEncoderImpl());
     }
 
     public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration) {
