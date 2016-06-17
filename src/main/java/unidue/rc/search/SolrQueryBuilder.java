@@ -18,6 +18,7 @@ package unidue.rc.search;
 
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -149,6 +150,19 @@ public class SolrQueryBuilder {
         if (queryStringBuilder.length() > 0)
             queryStringBuilder.append(" and ");
         addLike(field, value);
+        return this;
+    }
+
+    /**
+     * Adds an and field match against a part of the value by target value.
+     *
+     * @param field field to query
+     * @return this instance
+     */
+    public <T> SolrQueryBuilder and(SolrQueryField field) {
+        if (queryStringBuilder.length() > 0)
+            queryStringBuilder.append(" and ");
+        field.add(this);
         return this;
     }
 

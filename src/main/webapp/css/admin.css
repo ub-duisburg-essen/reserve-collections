@@ -22,6 +22,10 @@ html,body {
 body {
 }
 
+section {
+    margin: 0.5em 0;
+}
+
 #home {
     padding: 24px 8px;
     font-size: 1.2em;

@@ -16,10 +16,15 @@
 package unidue.rc.ui.pages.admin;
 
 import miless.model.User;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.common.params.CommonParams;
 import org.apache.tapestry5.*;
 import org.apache.tapestry5.annotations.*;
 import org.apache.tapestry5.corelib.components.EventLink;
@@ -40,9 +45,7 @@ import unidue.rc.dao.ScanJobDAO;
 import unidue.rc.dao.UserDAO;
 import unidue.rc.model.*;
 import unidue.rc.model.solr.SolrScanJobView;
-import unidue.rc.search.SolrResponse;
-import unidue.rc.search.SolrService;
-import unidue.rc.search.SolrSortField;
+import unidue.rc.search.*;
 import unidue.rc.security.CollectionSecurityService;
 import unidue.rc.security.RequiresActionPermission;
 import unidue.rc.ui.ProtectedPage;
@@ -132,22 +135,20 @@ public class ScanJobs {
     // filter
 
     @Property
-    private String fNumber;
+    @Persist(PersistenceConstants.SESSION)
+    private String fReviser, fAuthor, fScannableType;
 
     @Property
+    @Persist(PersistenceConstants.SESSION)
+    private Integer fNumber;
+
+    @Property
+    @Persist(PersistenceConstants.SESSION)
     private LibraryLocation fLocation;
 
     @Property
-    private String fReviser;
-
-    @Property
-    private String fAuthor;
-
-    @Property
+    @Persist(PersistenceConstants.SESSION)
     private ScanJobStatus fStatus;
-
-    @Property
-    private String fScannableType;
 
     // sort
     @Persist(PersistenceConstants.SESSION)
@@ -418,8 +419,10 @@ public class ScanJobs {
 
     @OnEvent(value = "filterNumberChanged")
     Object onFilterNumberChanged() {
-        fNumber = request.getParameter("param");
-        log.debug("filter by number: " + fNumber);
+        String param = request.getParameter("param");
+        fNumber = NumberUtils.isNumber(param)
+                  ? NumberUtils.toInt(param)
+                  : null;
 
         return request.isXHR()
                ? jobsZone.getBody()
@@ -429,7 +432,7 @@ public class ScanJobs {
     @OnEvent(value = EventConstants.VALUE_CHANGED, component = "locationFilter")
     Object onValueChangedFromLocationFilter(LibraryLocation location) {
         fLocation = location;
-        log.debug("filter by location: " + location);
+
         return request.isXHR()
                ? jobsZone.getBody()
                : this;
@@ -438,7 +441,6 @@ public class ScanJobs {
     @OnEvent(value = "filterReviserChanged")
     Object onValueChangedFromReviser() {
         fReviser = request.getParameter("param");
-        log.debug("filter by reviser: " + fReviser);
 
         return request.isXHR()
                ? jobsZone.getBody()
@@ -448,7 +450,6 @@ public class ScanJobs {
     @OnEvent(value = "filterAuthorChanged")
     Object onValueChangedFromAuthor() {
         fAuthor = request.getParameter("param");
-        log.debug("filter by author: " + fAuthor);
 
         return request.isXHR()
                ? jobsZone.getBody()
@@ -458,7 +459,6 @@ public class ScanJobs {
     @OnEvent(value = EventConstants.VALUE_CHANGED, component = "fStatus")
     Object onValueChangedFromStatus(ScanJobStatus status) {
         fStatus = status;
-        log.debug("filter by status: " + status);
 
         return request.isXHR()
                ? jobsZone.getBody()
@@ -481,7 +481,7 @@ public class ScanJobs {
             if (solrOrder != null)
                 sortField.setOrder(solrOrder);
 
-            // otherwise remove ordering (do not just set to null!)
+                // otherwise remove ordering (do not just set to null!)
             else
                 sortStack.remove(sortField);
         }
@@ -499,11 +499,14 @@ public class ScanJobs {
     public SolrResponse getScanJobs() {
 
         try {
-            SolrQuery query = new SolrQuery("*:*");
+            SolrQueryBuilder queryBuilder = solrService.createQueryBuilder();
 
-            sortStack.forEach(sortField -> query.addSort(sortField.getFieldName(), sortField.getOrder()));
+            sortStack.forEach(sortField -> queryBuilder.addSortField(sortField.getFieldName(), sortField.getOrder()));
 
-            return solrService.query(SolrScanJobView.class, query);
+            List<SolrQueryField> filter = buildFilterParams();
+            filter.forEach(param -> queryBuilder.and(param));
+
+            return solrService.query(SolrScanJobView.class, queryBuilder.build());
 
         } catch (SolrServerException e) {
             log.error("could not query solr server", e);
@@ -587,6 +590,26 @@ public class ScanJobs {
         return new LibraryLocationValueEncoder(libraryLocationDAO);
     }
 
+    private List<SolrQueryField> buildFilterParams() {
+        List<SolrQueryField> result = new ArrayList<>();
+        if (fStatus != null) {
+            result.add(new SolrNumberQueryField(SolrScanJobView.JOB_STATUS_PROPERTY, fStatus.getValue()));
+        }
+        if (StringUtils.isNotBlank(fAuthor)) {
+            result.add(new SolrTextQueryField(SolrScanJobView.DOCENTS_PROPERTY, fAuthor));
+        }
+        if (StringUtils.isNotBlank(fReviser)) {
+            result.add(new SolrTextQueryField(SolrScanJobView.REVISER_PROPERTY, fReviser));
+        }
+        if (fNumber != null) {
+            result.add(new SolrNumberQueryField(SolrScanJobView.COLLECTION_NUMBER_PROPERTY, fNumber));
+        }
+        if (fLocation != null) {
+            result.add(new SolrNumberQueryField(SolrScanJobView.LOCATION_ID_PROPERTY, fLocation.getId()));
+        }
+        return result;
+    }
+
     private String getStatusColor(SolrScanJobView scanJobView) {
         ScanJobStatus scanJobStatus = ScanJobStatus.get(scanJobView.getStatus());
         return scanJobStatus != null
@@ -599,16 +622,6 @@ public class ScanJobs {
                 .filter(d -> d.name().equals(name))
                 .findFirst();
         return block.isPresent() && block.get().equals(visibleBlock);
-    }
-
-    public AjaxSortLink.SortState getSortForColumn(String column) {
-        Optional<SolrSortField> sortField = sortStack.stream()
-                .filter(item -> item.getFieldName().equals(column))
-                .findAny();
-
-        return sortField.isPresent()
-               ? getSortState(sortField.get().getOrder())
-               : SortState.NoSort;
     }
 
     private SolrScanJobView getViewByID(Integer scanJobViewID) {
@@ -635,17 +648,6 @@ public class ScanJobs {
             case NoSort:
             default:
                 return null;
-        }
-    }
-
-    private static AjaxSortLink.SortState getSortState(SolrQuery.ORDER ordering) {
-        switch (ordering) {
-            case asc:
-                return SortState.Ascending;
-            case desc:
-                return SortState.Descending;
-            default:
-                return SortState.NoSort;
         }
     }
 }

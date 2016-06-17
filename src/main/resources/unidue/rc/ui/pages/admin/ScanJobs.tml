@@ -49,23 +49,31 @@
                     </th>
                     <th>
                         <t:zone t:id="locationZone" id="locationZone" update="none">
-                        <t:form t:id="locationForm" t:clientValidation="none" zone="^">
-                        <t:select value="fLocation" model="libraryLocationSelectModel"
-                                  t:id="locationFilter"
-                                  id="libraryLocation" zone="jobsZone"
-                                  class="form-control input-sm" encoder="libraryLocationEncoder"
-                                  blankLabel="message:blank-label"/>
-                        </t:form>
+                            <t:form t:id="locationForm" t:clientValidation="none" zone="^">
+                                <t:select value="fLocation" model="libraryLocationSelectModel"
+                                          t:id="locationFilter"
+                                          id="libraryLocation" zone="jobsZone"
+                                          class="form-control input-sm" encoder="libraryLocationEncoder"
+                                          blankLabel="message:blank-label"/>
+                            </t:form>
                         </t:zone>
                     </th>
                     <th>
-                        <!--<t:textfield value="fReviser" id="fReviser" class="form-control input-sm" t:mixins="zoneUpdater"-->
-                                     <!--t:clientEvent="keyup" t:event="filterReviserChanged" t:zone="jobsZone"/>-->
+                        <t:zone t:id="reviserZone" id="reviserZone" update="none">
+                            <t:form t:id="reviserForm" t:clientValidation="none" zone="^">
+                                <t:textfield value="fReviser" id="fReviser" class="form-control input-sm" t:mixins="zoneUpdater"
+                                             t:clientEvent="keyup" t:event="filterReviserChanged" t:zone="jobsZone"/>
+                            </t:form>
+                        </t:zone>
                     </th>
                     <th></th>
                     <th>
-                        <!--<t:textfield value="fAuthor" id="fAuthor" class="form-control input-sm" t:mixins="zoneUpdater"-->
-                                     <!--t:clientEvent="keyup" t:event="filterAuthorChanged" t:zone="jobsZone"/>-->
+                        <t:zone t:id="authorZone" id="authorZone" update="none">
+                            <t:form t:id="authorForm" t:clientValidation="none" zone="^">
+                                <t:textfield value="fAuthor" id="fAuthor" class="form-control input-sm" t:mixins="zoneUpdater"
+                                             t:clientEvent="keyup" t:event="filterAuthorChanged" t:zone="jobsZone"/>
+                            </t:form>
+                        </t:zone>
                     </th>
                     <th></th>
                     <th></th>
@@ -120,6 +128,23 @@
         </fieldset>
     </div>
     <aside class="col-lg-4 shadow-left">
+        <section>
+            <t:if test="batchScanJobs">
+                <div class="col-md-11">
+
+                    <div class="btn-group pull-right">
+                        <t:eventlink class="button"
+                                     event="show_batch_queue"
+                                     zone="editJobZone">${message:info.msg.show.batch.queue}</t:eventlink>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <hr/>
+                    </div>
+                </div>
+            </t:if>
+        </section>
         <t:delegate to="editJobBlock"/>
         <t:delegate to="queuedJobsBlock"/>
     </aside>
@@ -130,16 +155,6 @@
 
     <t:zone t:id="editJobZone" id="editJobZone" update="none" class="row bg-main">
         <t:if test="isBlockVisible('EditJob')">
-            <t:if test="batchScanJobs">
-                <div class="col-md-11">
-
-                    <div class="btn-group pull-right">
-                        <t:eventlink class="button"
-                                     event="show_batch_queue"
-                                     zone="^">${message:info.msg.show.batch.queue}</t:eventlink>
-                    </div>
-                </div>
-            </t:if>
             <form t:type="form" class="form-horizontal" t:clientValidation="none" t:id="edit_scan_job_form"
                   t:zone="^">
                 <h3>${message:job}</h3>
