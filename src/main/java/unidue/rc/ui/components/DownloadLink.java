@@ -1,23 +1,22 @@
 package unidue.rc.ui.components;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.MarkupWriter;
-import org.apache.tapestry5.annotations.*;
+import org.apache.tapestry5.annotations.AfterRender;
+import org.apache.tapestry5.annotations.BeginRender;
+import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.corelib.base.AbstractLink;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.slf4j.Logger;
 import unidue.rc.model.Resource;
 import unidue.rc.ui.pages.entry.Download;
+import unidue.rc.ui.services.MimeService;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -54,6 +53,9 @@ public class DownloadLink extends AbstractLink {
     @Inject
     private ComponentResources resources;
 
+    @Inject
+    private MimeService mimeService;
+
     @BeginRender
     void onBeginRender(MarkupWriter writer) {
         if (isDisabled()) return;
@@ -73,14 +75,22 @@ public class DownloadLink extends AbstractLink {
 
         // Download page requires resource id and method therefore the link has to created at
         // least with this information
-        Link link = linkSource.createPageRenderLinkWithContext(Download.class, resource.getId(), type);
+        Class<?> mimeServicePage = mimeService.getPage(resource);
+        Link downloadLink;
+        String hrefString;
+        if (mimeServicePage != null && type.equalsIgnoreCase(Method.Inline.name())) {
+            downloadLink = linkSource.createPageRenderLinkWithContext(mimeServicePage, resource.getId());
+            hrefString = downloadLink.toURI();
+        } else {
+            downloadLink = linkSource.createPageRenderLinkWithContext(Download.class, resource.getId(), type);
+            addParameters(downloadLink);
+            URI href = buildHref(downloadLink, filename);
+            hrefString = href == null
+                                ? "#"
+                                : href.toString();
+        }
 
-        addParameters(link);
 
-        URI href = buildHref(link, filename);
-        String hrefString = href == null
-                            ? "#"
-                            : href.toString();
         writer.element("a", "href", hrefString);
 
         writer.attributes(namesAndValues);
