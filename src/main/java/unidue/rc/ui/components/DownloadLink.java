@@ -1,5 +1,7 @@
 package unidue.rc.ui.components;
 
+import org.apache.commons.codec.EncoderException;
+import org.apache.commons.codec.net.URLCodec;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.MarkupWriter;
@@ -54,7 +56,7 @@ public class DownloadLink extends AbstractLink {
     void onBeginRender(MarkupWriter writer) {
         if (isDisabled()) return;
 
-        writeDownloadLink(writer, resource.getFileName());
+        writeDownloadLink(writer);
     }
 
     /**
@@ -65,7 +67,7 @@ public class DownloadLink extends AbstractLink {
      * @param writer         to write markup to
      * @param namesAndValues additional attributes to write
      */
-    private void writeDownloadLink(MarkupWriter writer, String filename, Object... namesAndValues) {
+    private void writeDownloadLink(MarkupWriter writer, Object... namesAndValues) {
 
         // Download page requires resource id and method therefore the link has to created at
         // least with this information
@@ -81,7 +83,7 @@ public class DownloadLink extends AbstractLink {
             StringBuilder uri = new StringBuilder(baseURI);
             if (!baseURI.endsWith("/"))
                 uri.append("/");
-            uri.append(filename);
+            uri.append(encode(resource.getFileName()));
 
             hrefString = uri.toString();
         }
@@ -92,6 +94,16 @@ public class DownloadLink extends AbstractLink {
         writer.attributes(namesAndValues);
 
         resources.renderInformalParameters(writer);
+    }
+
+    private String encode(String value) {
+        URLCodec codec = new URLCodec();
+        try {
+            return codec.encode(value);
+        } catch (EncoderException e) {
+            log.error("could not encode " + value, e);
+            return value;
+        }
     }
 
     @AfterRender
