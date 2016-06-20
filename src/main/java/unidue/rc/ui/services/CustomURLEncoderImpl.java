@@ -23,7 +23,6 @@ public class CustomURLEncoderImpl implements URLEncoder {
      * kind
      * of unicode escape.
      */
-    private final BitSet safeForInput = new BitSet(128);
     private final BitSet safeForOutput = new BitSet(128);
 
     /**
@@ -46,20 +45,9 @@ public class CustomURLEncoderImpl implements URLEncoder {
     };
 
     {
-
-        markSafeForInput("aàâäbcçĉdeéèêëfgĝhĥiïîjĵklmnoôöpqrsŝtuùûüvwxyzæœ");
-        markSafeForInput("AÀÂÄBCÇĈDEÉÈÊËFGĜHĤIÏÎĤJĴKLMNOÔÖPQRSŜTUÙÛÜVWXYZÆŒ");
-        markSafeForInput("01234567890-_.:,'");
-
         markSafeForOuput("abcdefghijklmnopqrstuvwxyz");
         markSafeForOuput("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
         markSafeForOuput("01234567890-_.:,'");
-    }
-
-    private void markSafeForInput(String s) {
-        for (char ch : s.toCharArray()) {
-            safeForInput.set(ch);
-        }
     }
 
     private void markSafeForOuput(String s) {
@@ -154,11 +142,6 @@ public class CustomURLEncoderImpl implements URLEncoder {
                 }
             } else if (mapping.isPresent()) {
                 output.append(mapping.get());
-            } else if (!safeForInput.get(ch)) {
-                throw new IllegalArgumentException(
-                        String.format(
-                                "Input string '%s' is not valid; the character '%s' at position %d is not valid.",
-                                input, ch, i + 1));
             } else {
 
                 output.append(ch);

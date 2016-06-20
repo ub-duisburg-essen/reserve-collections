@@ -19,6 +19,8 @@ package unidue.rc.io;
 import miless.model.User;
 import org.apache.cayenne.di.Inject;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import unidue.rc.dao.ParticipationDAO;
 import unidue.rc.dao.RoleDAO;
 import unidue.rc.dao.UserDAO;
@@ -29,6 +31,7 @@ import unidue.rc.system.BaseURLService;
 import unidue.rc.system.SystemConfigurationService;
 import unidue.rc.system.SystemMessageService;
 
+import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -41,6 +44,8 @@ public class CollectionRSSWriterImpl implements CollectionRSSWriter, CollectionV
 
     private static final DateFormat TIME_FORMATTER = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.GERMANY);
     private static final String DESCRIPTION_LINE_END = "<br/>" + System.getProperty("line.separator");
+
+    private static final Logger LOG = LoggerFactory.getLogger(CollectionRSSWriterImpl.class);
 
     @Inject
     private RoleDAO roleDAO;
@@ -268,7 +273,12 @@ public class CollectionRSSWriterImpl implements CollectionRSSWriter, CollectionV
 
     @Override
     public void visit(Resource resource) {
-        currentItem.setLink(urlService.getDownloadLink(resource));
+        try {
+
+            currentItem.setLink(urlService.getDownloadLink(resource));
+        } catch (URISyntaxException e) {
+            LOG.error("could not set download link on rss item " + currentItem, e);
+        }
     }
 
     @Override

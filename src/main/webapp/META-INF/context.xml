@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<Context>
+
+    <Resource name="jdbc/miless" auth="Container" type="javax.sql.DataSource"
+              maxTotal="100" maxIdle="30" maxWaitMillis="10000"
+              username="miless" password="miless" driverClassName="org.postgresql.Driver"
+              url="jdbc:postgresql://localhost:5432/miless"/>
+
+    <Resource name="jdbc/reserve_collections" auth="Container" type="javax.sql.DataSource"
+              maxTotal="100" maxIdle="30" maxWaitMillis="10000"
+              username="rc" password="rc" driverClassName="org.postgresql.Driver"
+              url="jdbc:postgresql://localhost:5432/reserve_collections"/>
+
+    <Resource name="jdbc/rc_access_log" auth="Container" type="javax.sql.DataSource"
+              maxTotal="100" maxIdle="30" maxWaitMillis="10000"
+              username="rc" password="rc" driverClassName="org.postgresql.Driver"
+              url="jdbc:postgresql://localhost:5432/rc_access_log"/>
+</Context>

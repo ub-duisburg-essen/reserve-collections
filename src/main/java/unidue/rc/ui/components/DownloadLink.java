@@ -1,7 +1,5 @@
 package unidue.rc.ui.components;
 
-import org.apache.commons.codec.EncoderException;
-import org.apache.commons.codec.net.URLCodec;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.MarkupWriter;
@@ -13,18 +11,16 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.slf4j.Logger;
 import unidue.rc.model.Resource;
+import unidue.rc.system.BaseURLService;
 import unidue.rc.ui.pages.entry.Download;
 import unidue.rc.ui.services.MimeService;
+
+import java.net.URISyntaxException;
 
 /**
  * Created by nils on 10.06.16.
  */
 public class DownloadLink extends AbstractLink {
-
-    public enum Method {
-        Inline,
-        Attachment
-    }
 
     /**
      * <p>One of:</p>
@@ -45,6 +41,9 @@ public class DownloadLink extends AbstractLink {
 
     @Inject
     private PageRenderLinkSource linkSource;
+
+    @Inject
+    private BaseURLService urlService;
 
     @Inject
     private ComponentResources resources;
@@ -72,22 +71,18 @@ public class DownloadLink extends AbstractLink {
         // Download page requires resource id and method therefore the link has to created at
         // least with this information
         Class<?> mimeServicePage = mimeService.getPage(resource);
-        Link downloadLink;
         String hrefString;
-        if (mimeServicePage != null && type.equalsIgnoreCase(Method.Inline.name())) {
-            downloadLink = linkSource.createPageRenderLinkWithContext(mimeServicePage, resource.getId());
-            hrefString = downloadLink.toURI();
+        if (mimeServicePage != null && type.equalsIgnoreCase(BaseURLService.DownloadMethod.Inline.name())) {
+            hrefString = buildMimePageHref(mimeServicePage);
         } else {
-            downloadLink = linkSource.createPageRenderLinkWithContext(Download.class, resource.getId(), type);
-            String baseURI = downloadLink.toURI();
-            StringBuilder uri = new StringBuilder(baseURI);
-            if (!baseURI.endsWith("/"))
-                uri.append("/");
-            uri.append(encode(resource.getFileName()));
-
-            hrefString = uri.toString();
+            try {
+                hrefString = buildHrefFromURLService();
+            } catch (URISyntaxException e) {
+                Link downloadLink = linkSource.createPageRenderLinkWithContext(Download.class, resource.getId(),
+                        BaseURLService.DownloadMethod.Attachment);
+                hrefString = downloadLink.toURI();
+            }
         }
-
 
         writer.element("a", "href", hrefString);
 
@@ -96,14 +91,24 @@ public class DownloadLink extends AbstractLink {
         resources.renderInformalParameters(writer);
     }
 
-    private String encode(String value) {
-        URLCodec codec = new URLCodec();
-        try {
-            return codec.encode(value);
-        } catch (EncoderException e) {
-            log.error("could not encode " + value, e);
-            return value;
+    private String buildHrefFromURLService() throws URISyntaxException {
+        BaseURLService.DownloadMethod downloadMethod;
+        switch (type) {
+            case "inline":
+                downloadMethod = BaseURLService.DownloadMethod.Inline;
+                break;
+            case "attachment":
+            default:
+                downloadMethod = BaseURLService.DownloadMethod.Attachment;
+                break;
         }
+        return urlService.getDownloadLink(resource, downloadMethod);
+    }
+
+    private String buildMimePageHref(Class<?> mimeServicePage) {
+        Link downloadLink = linkSource.createPageRenderLinkWithContext(mimeServicePage, resource.getId());
+        String href = downloadLink.toURI();
+        return href;
     }
 
     @AfterRender

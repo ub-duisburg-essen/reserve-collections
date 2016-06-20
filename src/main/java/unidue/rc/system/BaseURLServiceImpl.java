@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2014 - 2016 Universitaet Duisburg-Essen (semapp|uni-due.de)
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,13 +19,21 @@ package unidue.rc.system;
 import miless.model.User;
 import org.apache.cayenne.di.Inject;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.utils.URIBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import unidue.rc.model.ReserveCollection;
 import unidue.rc.model.Resource;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Created by nils on 13.07.15.
  */
 public class BaseURLServiceImpl implements BaseURLService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(BaseURLServiceImpl.class);
 
     private static final String URL_PATH_DIVIDER = "/";
 
@@ -35,7 +43,7 @@ public class BaseURLServiceImpl implements BaseURLService {
     @Override
     public String getBaseURL() {
 
-        return String.format("%s://%s%s%s",
+        return String.format("%s://%s%s",
                 getProtocol(),
                 getHostname(),
                 getPort());
@@ -65,10 +73,35 @@ public class BaseURLServiceImpl implements BaseURLService {
     }
 
     @Override
-    public String getDownloadLink(Resource resource) {
-        return String.format("%s/entry/download/%d/attachment",
-                getApplicationURL(),
-                resource.getId());
+    public String getDownloadLink(Resource resource) throws URISyntaxException {
+        return getDownloadLink(resource, DownloadMethod.Attachment);
+    }
+
+    @Override
+    public String getDownloadLink(Resource resource, DownloadMethod method) throws URISyntaxException {
+        try {
+            URIBuilder builder = new URIBuilder(getApplicationURL());
+
+            switch (method) {
+                case Inline:
+                        builder.setPath(String.format("%s/entry/download/%d/inline/%s",
+                                builder.getPath(),
+                                resource.getId(),
+                                resource.getFileName()));
+                    break;
+                case Attachment:
+                default:
+                    builder.setPath(String.format("%s/entry/download/%d/attachment",
+                            builder.getPath(),
+                            resource.getId()));
+                    break;
+            }
+            URI uri = builder.build();
+            return uri.toString();
+        } catch (URISyntaxException e) {
+            LOG.error("could not build download link for resource " + resource, e);
+            throw e;
+        }
     }
 
     @Override
@@ -107,8 +140,8 @@ public class BaseURLServiceImpl implements BaseURLService {
     protected String getPort() {
         int port = config.getInt("server.port");
         return port == 80 || port == 443
-                ? ""
-                : ":" + port;
+               ? ""
+               : ":" + port;
     }
 
     /**

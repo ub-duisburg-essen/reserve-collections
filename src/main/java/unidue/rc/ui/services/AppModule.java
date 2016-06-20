@@ -88,6 +88,7 @@ public class AppModule {
         binder.bind(MCRCategoryDAO.class, MCRCategoryDAOImpl.class);
         binder.bind(LegalEntityDAO.class, LegalEntityXMLFileDAO.class);
         binder.bind(ReserveCollectionNumberDAO.class, ReserveCollectionNumberDAOImpl.class);
+
         binder.bind(QuartzService.class, QuartzServiceImpl.class);
         binder.bind(SecurityRequestFilter.class, SecurityRequestFilter.class);
         binder.bind(ClientFilter.class, ClientFilter.class);
@@ -307,13 +308,18 @@ public class AppModule {
         return cayenneService.getInjector().getInstance(CollectionRSSWriter.class);
     }
 
-    public static BaseURLSource buildCollectionBaseURLService(@InjectService("Request") Request request,
-                                                              @InjectService("SystemConfigurationService") SystemConfigurationService config,
-                                                              @Inject @Symbol(SymbolConstants.HOSTNAME) String hostname,
-                                                              @Symbol(SymbolConstants.HOSTPORT) int hostPort,
-                                                              @Symbol(SymbolConstants.HOSTPORT_SECURE) int hostPortSecure) {
+    public static BaseURLSource buildCollectionBaseURLSource(@InjectService("Request") Request request,
+                                                             @InjectService("SystemConfigurationService") SystemConfigurationService config,
+                                                             @Inject @Symbol(SymbolConstants.HOSTNAME) String hostname,
+                                                             @Symbol(SymbolConstants.HOSTPORT) int hostPort,
+                                                             @Symbol(SymbolConstants.HOSTPORT_SECURE) int hostPortSecure) {
 
         return new CollectionBaseURLSource(request, hostname, hostPort, hostPortSecure, config);
+    }
+
+    public static BaseURLService buildBaseURLService(@InjectService("CayenneService") CayenneService
+                                                               cayenneService) {
+        return cayenneService.getInjector().getInstance(BaseURLService.class);
     }
 
     @Contribute(ServiceOverride.class)

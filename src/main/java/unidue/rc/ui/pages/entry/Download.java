@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2014 - 2016 Universitaet Duisburg-Essen (semapp|uni-due.de)
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,6 +30,7 @@ import unidue.rc.io.AttachmentStreamResponse;
 import unidue.rc.io.InlineStreamResponse;
 import unidue.rc.model.Resource;
 import unidue.rc.security.CollectionSecurityService;
+import unidue.rc.system.BaseURLService;
 import unidue.rc.ui.ResourcePageUtil;
 import unidue.rc.ui.SecurityContextPage;
 import unidue.rc.ui.ProtectedPage;
@@ -68,22 +69,28 @@ public class Download implements SecurityContextPage {
     @Inject
     private ResourceService resourceService;
 
-    @Inject
-    private CollectionSecurityService securityService;
-
     @Property
     private Resource resource;
 
     @OnEvent(EventConstants.ACTIVATE)
-    Object onActivate(Integer resourceID, String method) {
+    Object onActivate(Integer resourceID, BaseURLService.DownloadMethod downloadMethod) {
+        return getStreamResponse(resourceID, downloadMethod);
+    }
+
+    @OnEvent(EventConstants.ACTIVATE)
+    Object onActivate(Integer resourceID, BaseURLService.DownloadMethod downloadMethod, String filename) {
+        return getStreamResponse(resourceID, downloadMethod);
+    }
+
+    private Object getStreamResponse(Integer resourceID, BaseURLService.DownloadMethod downloadMethod) {
         resource = resourceDAO.get(Resource.class, resourceID);
         java.io.File file = resourceService.download(resource);
 
         return resource.getFileDeleted() != null
-                ? new HttpError(HttpServletResponse.SC_NOT_FOUND, messages.get("not.found"))
-                : "attachment".equals(method)
-                    ? new AttachmentStreamResponse(file, resource)
-                    : new InlineStreamResponse(file, resource);
+               ? new HttpError(HttpServletResponse.SC_NOT_FOUND, messages.get("not.found"))
+               : BaseURLService.DownloadMethod.Attachment.equals(downloadMethod)
+                 ? new AttachmentStreamResponse(file, resource)
+                 : new InlineStreamResponse(file, resource);
     }
 
     @OnEvent(EventConstants.PASSIVATE)
