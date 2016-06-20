@@ -426,7 +426,7 @@ public class ScanJobs {
 
         return request.isXHR()
                ? jobsZone.getBody()
-               : null;
+               : this;
     }
 
     @OnEvent(value = EventConstants.VALUE_CHANGED, component = "locationFilter")
@@ -444,7 +444,7 @@ public class ScanJobs {
 
         return request.isXHR()
                ? jobsZone.getBody()
-               : null;
+               : this;
     }
 
     @OnEvent(value = "filterAuthorChanged")
@@ -453,7 +453,7 @@ public class ScanJobs {
 
         return request.isXHR()
                ? jobsZone.getBody()
-               : null;
+               : this;
     }
 
     @OnEvent(value = EventConstants.VALUE_CHANGED, component = "fStatus")
@@ -498,10 +498,14 @@ public class ScanJobs {
 
     public SolrResponse getScanJobs() {
 
+        sortStack = sortStack == null
+                    ? Collections.EMPTY_LIST
+                    : sortStack;
         try {
             SolrQueryBuilder queryBuilder = solrService.createQueryBuilder();
 
-            sortStack.forEach(sortField -> queryBuilder.addSortField(sortField.getFieldName(), sortField.getOrder()));
+            if (sortStack != null)
+                sortStack.forEach(sortField -> queryBuilder.addSortField(sortField.getFieldName(), sortField.getOrder()));
 
             List<SolrQueryField> filter = buildFilterParams();
             filter.forEach(param -> queryBuilder.and(param));
