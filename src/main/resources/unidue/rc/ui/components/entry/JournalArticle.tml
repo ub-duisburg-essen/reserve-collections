@@ -49,9 +49,6 @@
                             <t:downloadlink resource="journalArticle.resource" type="inline">
                                 ${journalArticle.resource.fileName}
                             </t:downloadlink>
-                            <t:pagelink page="entry/download"
-                                        context="[journalArticle.resource.id, 'attachment']"
-                                        class="glyphicon glyphicon-download piwik_download"/>
                             <t:downloadlink resource="journalArticle.resource" type="attachment"
                                             class="glyphicon glyphicon-download"/>
                         </p>
