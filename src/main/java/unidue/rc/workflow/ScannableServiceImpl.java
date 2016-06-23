@@ -18,6 +18,7 @@ package unidue.rc.workflow;
 
 import org.apache.cayenne.Persistent;
 import org.apache.cayenne.di.Inject;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import unidue.rc.dao.CommitException;
@@ -97,9 +98,12 @@ public class ScannableServiceImpl implements ScannableService {
         }
 
         update(scannable);
-        resource.setFullTextURL(fullTextURL);
-        resourceService.update(resource);
-        scanJobService.onScannableUpdated(scannable);
+        if (!StringUtils.equals(resource.getFullTextURL(), fullTextURL)) {
+
+            resource.setFullTextURL(fullTextURL);
+            resourceService.update(resource);
+            scanJobService.onScannableUpdated(scannable);
+        }
         return resource;
     }
 

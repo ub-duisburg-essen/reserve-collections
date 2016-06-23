@@ -75,8 +75,8 @@ public interface ScannableService {
     Resource create(Scannable scannable, ReserveCollection collection, String filename, InputStream input) throws CommitException, IOException;
 
     /**
-     * Updates the {@link Resource} of given scannable and sets target full text url. If the scannable contains no
-     * resource one is created.
+     * Updates the {@link Resource} of given scannable and sets target full text url if it has changed. If the
+     * scannable contains no resource one is created.
      *
      * @param scannable   scannable to update
      * @param fullTextURL fulltext for the resource
