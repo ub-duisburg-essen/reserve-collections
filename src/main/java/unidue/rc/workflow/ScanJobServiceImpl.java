@@ -46,6 +46,7 @@ import unidue.rc.system.SystemMessageService;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Nils Verheyen
@@ -349,6 +350,7 @@ public class ScanJobServiceImpl implements ScanJobService {
             view.setStatus(job.getStatus().getValue());
             view.setLocation(rc.getLibraryLocation().getName());
             view.setLocationID(rc.getLibraryLocation().getId());
+            view.setDocents(getDocents(rc));
 
             Integer reviserID = job.getReviserID();
             if (reviserID != null) {
@@ -363,6 +365,15 @@ public class ScanJobServiceImpl implements ScanJobService {
         } else {
             LOG.warn("scan job " + job + " does not belong to a scannable");
         }
+    }
+
+    private List<String> getDocents(ReserveCollection collection) {
+        return collection.getDocentParticipations().stream()
+                .filter(p -> p.getEndDate() == null)
+                .map(p -> userDAO.getUserById(p.getUserId()))
+                .filter(u -> u != null)
+                .map(u -> u.getRealname())
+                .collect(Collectors.toList());
     }
 
     private void deleteScanJobFromSolr(ScanJob job) {
