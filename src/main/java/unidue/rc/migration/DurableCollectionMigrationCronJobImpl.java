@@ -122,6 +122,8 @@ public class DurableCollectionMigrationCronJobImpl extends BaseCronJob implement
                     .create();
 
             mailService.sendMail(mail);
+        } catch (CommitException e) {
+            LOG.error("could not save mail", e);
         } catch (EmailException e) {
             LOG.error("could not send mail", e);
         } catch (IOException e) {

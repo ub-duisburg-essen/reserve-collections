@@ -19,9 +19,9 @@ package unidue.rc.system;
 import org.apache.cayenne.di.Inject;
 import org.apache.commons.mail.EmailException;
 import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import unidue.rc.dao.CommitException;
 import unidue.rc.dao.MailDAO;
 import unidue.rc.model.Mail;
 
@@ -58,6 +58,8 @@ public class MailCronJobImpl extends BaseCronJob implements MailCronJob {
     private void send(Mail unsendMail) {
         try {
             mailService.sendMail(unsendMail);
+        } catch (CommitException e) {
+            LOG.error("could not save mail", e);
         } catch (EmailException e) {
             LOG.error("could not send mail", e);
         }

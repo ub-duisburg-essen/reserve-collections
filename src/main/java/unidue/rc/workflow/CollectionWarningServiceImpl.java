@@ -114,8 +114,10 @@ public class CollectionWarningServiceImpl implements CollectionWarningService {
                     LOG.info(String.format("    %1$s", collection));
                     saveWarning(mail, collection, cd.docent);
                 }
-            } catch (EmailException e) {
-                LOG.error("could not send mail", e);
+            } catch (IOException e) {
+                LOG.error("could not build mail", e);
+            } catch (CommitException e) {
+                LOG.error("could not save mail", e);
             }
         }
     }
@@ -130,7 +132,7 @@ public class CollectionWarningServiceImpl implements CollectionWarningService {
         }
     }
 
-    private Mail sendWarning(User docent, List<ReserveCollection> collections) throws EmailException {
+    private Mail sendWarning(User docent, List<ReserveCollection> collections) throws IOException, CommitException {
         VelocityContext context = new VelocityContext();
 
         String subject = messages.get("mail.subject.expiring.collections");
@@ -151,22 +153,22 @@ public class CollectionWarningServiceImpl implements CollectionWarningService {
         String recipient = docent.getEmail();
         String from = config.getString("mail.from");
 
-        try {
-            MailServiceImpl.MailBuilder mailBuilder = mailService.builder("/vt/expiration.warning.msg.html.vm")
-                    .from(from)
-                    .subject(subject.toString())
-                    .addBcc(config.getString("system.mail"))
-                    .textTemplateName("/vt/expiration.warning.msg.text.vm")
-                    .context(context)
-                    .addRecipients(recipient);
+        MailServiceImpl.MailBuilder mailBuilder = mailService.builder("/vt/expiration.warning.msg.html.vm")
+                .from(from)
+                .subject(subject.toString())
+                .addBcc(config.getString("system.mail"))
+                .textTemplateName("/vt/expiration.warning.msg.text.vm")
+                .context(context)
+                .addRecipients(recipient);
 
-            Mail mail = mailBuilder.create();
+        Mail mail = mailBuilder.create();
+
+        try {
             mailService.sendMail(mail);
-            return mail;
-        } catch (IOException e) {
-            LOG.error("could not create mail", e);
+        } catch (EmailException e) {
+            LOG.error("could not send mail " + mail, e);
         }
-        return null;
+        return mail;
     }
 
     private List<CollectionsByUser> filter(List<CollectionsByUser> data) {

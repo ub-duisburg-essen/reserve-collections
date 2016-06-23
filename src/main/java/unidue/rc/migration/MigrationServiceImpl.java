@@ -466,6 +466,8 @@ public class MigrationServiceImpl implements MigrationService, MigrationVisitor 
                     .addRecipients(MIGRATION_ADMINS)
                     .create();
             mailService.sendMail(mail);
+        } catch (CommitException e) {
+            LOG.error("could not save mail", e);
         } catch (EmailException e) {
             LOG.error("could not send mail", e);
         } catch (IOException e) {
@@ -506,6 +508,8 @@ public class MigrationServiceImpl implements MigrationService, MigrationVisitor 
                     .addCc(MIGRATION_ADMINS)
                     .create();
             mailService.sendMail(mail);
+        } catch (CommitException e) {
+            LOG.error("could not save mail", e);
         } catch (EmailException e) {
             LOG.error("could not send mail", e);
         } catch (IOException e) {

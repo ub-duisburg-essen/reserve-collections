@@ -28,6 +28,7 @@ import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.apache.velocity.VelocityContext;
 import org.slf4j.Logger;
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
+import unidue.rc.dao.CommitException;
 import unidue.rc.dao.RoleDAO;
 import unidue.rc.model.Mail;
 import unidue.rc.model.Role;
@@ -114,6 +115,9 @@ public class RequestMembership {
                     .create();
             mailService.sendMail(mail);
             requestSuccessMsg = messages.get("info.msg.request.membership.mail.send");
+        } catch (CommitException e) {
+            log.error("could not save mail", e);
+            requestFailedMsg = messages.get("info.msg.request.membership.failed");
         } catch (EmailException e) {
             log.error("could not send mail", e);
             requestFailedMsg = messages.get("info.msg.request.membership.failed");

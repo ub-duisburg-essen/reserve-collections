@@ -129,6 +129,8 @@ public class AlephSynchronizerImpl extends BaseCronJob implements AlephSynchroni
                     .addRecipient(recipient)
                     .create();
             mailService.sendMail(mail);
+        } catch (CommitException e) {
+            LOG.error("could not save mail", e);
         } catch (EmailException e) {
             LOG.error("could not send mail", e);
         } catch (IOException e) {

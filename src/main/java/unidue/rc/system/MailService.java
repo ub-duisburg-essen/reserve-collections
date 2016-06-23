@@ -18,6 +18,7 @@ package unidue.rc.system;
 
 import miless.model.User;
 import org.apache.commons.mail.EmailException;
+import unidue.rc.dao.CommitException;
 import unidue.rc.model.Entry;
 import unidue.rc.model.Mail;
 import unidue.rc.model.ReserveCollection;
@@ -28,13 +29,14 @@ import unidue.rc.model.ReserveCollection;
 public interface MailService {
 
     /**
-     * Tries to send target {@link Mail}. If the mail is valid, but could not be send
+     * Tries to save and send target {@link Mail} in that order. If the mail is valid, but could not be send
      * it is saved in backend for later use.
      *
      * @param mail mail that should be send
+     * @throws CommitException thrown if the mail could not be saved in backend
      * @throws EmailException thrown if mail send was unsuccessful
      */
-    void sendMail(Mail mail) throws EmailException;
+    void sendMail(Mail mail) throws CommitException, EmailException;
 
     /**
      * Builds a string of the form {@code <location name> - <collection number> - <entry id>: <context> <[authors]>}

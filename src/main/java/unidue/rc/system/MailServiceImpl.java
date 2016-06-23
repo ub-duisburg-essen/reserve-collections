@@ -81,7 +81,7 @@ public class MailServiceImpl implements MailService {
     private UserDAO userDAO;
 
     @Override
-    public void sendMail(Mail mail) throws EmailException {
+    public void sendMail(Mail mail) throws CommitException, EmailException {
 
         if (!config.getBoolean("mail.send"))
             return;
@@ -167,18 +167,12 @@ public class MailServiceImpl implements MailService {
             // update mail after successful send
             mail.setSend(true);
             mail.setSendDate(new Date());
-        } catch (CommitException e) {
-            LOG.error("could not commit mail", e);
         } catch (EmailException e) {
             mail.setSend(false);
             mail.setSendDate(null);
             throw e;
         } finally {
-            try {
-                mailDAO.update(mail);
-            } catch (CommitException e) {
-                LOG.error("could not update mail", e);
-            }
+            mailDAO.update(mail);
         }
 
         LOG.info("mail send from " + from + " to " + recipients);
