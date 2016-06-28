@@ -177,9 +177,6 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="spacer">
-                                <a href="${sys:duepublico.url}">${message:nav.item.duepublico}</a>
-                            </li>
                         </ul>
                         <ul id="service-nav" class="secondary-nav">
                             <li>
