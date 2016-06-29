@@ -17,6 +17,7 @@ package unidue.rc.ui.services;
 
 
 import org.apache.cayenne.di.Inject;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.mime.MediaType;
 import unidue.rc.model.Resource;
 import unidue.rc.system.SystemConfigurationService;
@@ -39,7 +40,11 @@ public class MimeServiceImpl implements MimeService {
 
     @Override
     public Class<?> getPage(Resource resource) {
-        String type = MediaType.parse(resource.getMimeType()).getType();
+        String mimeType = resource.getMimeType();
+        if (StringUtils.isBlank(mimeType))
+            return null;
+
+        String type = MediaType.parse(mimeType).getType();
 
         // lookup by mime type
         switch (type) {
