@@ -1,0 +1,9 @@
+<section>
+    #parse("collection.vm")
+</section>
+<section>
+    #parse("entry.vm")
+</section>
+<section>
+    #parse("journal.article.vm")
+</section>

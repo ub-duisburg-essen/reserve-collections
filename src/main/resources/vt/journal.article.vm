@@ -1,0 +1,87 @@
+<table>
+    <caption>Zeitschriftenartikel</caption>
+    <tr>
+        <td>Titel:</td>
+        <td>$article.ArticleTitle</td>
+    </tr>
+    #if($article.Authors)
+        <tr>
+            <td>Autor(Innen):</td>
+            <td>$article.Authors</td>
+        </tr>
+    #end
+    #if($article.Comment)
+        <tr>
+            <td>Kommentar:</td>
+            <td>$article.Volume</td>
+        </tr>
+    #end
+    #if($article.JournalTitle)
+        <tr>
+            <td>Zeitschrift:</td>
+            <td>$article.JournalTitle</td>
+        </tr>
+    #end
+    #if($article.placeOfPublication)
+        <tr>
+            <td>Erscheinungsort:</td>
+            <td>$article.placeOfPublication</td>
+        </tr>
+    #end
+    #if($article.Publisher)
+        <tr>
+            <td>Verlag:</td>
+            <td>$article.Publisher</td>
+        </tr>
+    #end
+    #if($article.Issn)
+        <tr>
+            <td>ISSN:</td>
+            <td>$article.Issn</td>
+        </tr>
+    #end
+    #if($article.Signature)
+        <tr>
+            <td>Signatur:</td>
+            <td>$article.Signature</td>
+        </tr>
+    #end
+    #if($article.Volume)
+        <tr>
+            <td>Jahr/Jahrgang:</td>
+            <td>$article.Volume</td>
+        </tr>
+    #end
+    #if($article.Issue)
+        <tr>
+            <td>Ausgabe/Heft:</td>
+            <td>$article.Issue</td>
+        </tr>
+    #end
+    <tr>
+        <td>Seiten:</td>
+        <td>von $article.PageStart bis $article.PageEnd</td>
+    </tr>
+    #if($oldPageStart || $oldPageEnd)
+        <tr>
+            <td>Seiten (alt):</td>
+            <td>von $oldPageStart bis $oldPageEnd</td>
+        </tr>
+    #end
+    #if($article.ReferenceNumber)
+        <tr>
+            <td>Referenznummer:</td>
+            <td>$article.ReferenceNumber</td>
+        </tr>
+    #end
+    #if($article.Signature)
+        <tr>
+            <td>Signatur:</td>
+            <td>$article.Signature</td>
+        </tr>
+        <tr>
+            <td>Link zum Katalog:</td>
+            <td><a href="http://primo.ub.uni-due.de/primo_library/libweb/action/dlSearch.do?vid=UDE&institution=UDE&search_scope=default_scope&bulkSize=10&lang=ger&indx=1&onCampus=false&query=lsr11,contains,$article.Signature">Primo</a></td>
+        </tr>
+    #end
+</table>

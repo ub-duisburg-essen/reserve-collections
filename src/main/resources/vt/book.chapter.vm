@@ -1,0 +1,94 @@
+<table>
+    <caption>Buchauszug</caption>
+    <tr>
+        <td>Kapiteltitel:</td>
+        <td>$chapter.ChapterTitle</td>
+    </tr>
+    #if($chapter.BookAuthors)
+        <tr>
+            <td>Autor(Innen) (Buch):</td>
+            <td>$chapter.BookAuthors</td>
+        </tr>
+    #end
+    #if($chapter.ChapterAuthors)
+        <tr>
+            <td>Autor(Innen) (Kapitel):</td>
+            <td>$chapter.ChapterAuthors</td>
+        </tr>
+    #end
+    #if($chapter.Comment)
+        <tr>
+            <td>Kommentar:</td>
+            <td>$chapter.Comment</td>
+        </tr>
+    #end
+    <tr>
+        <td>Seiten:</td>
+        <td>von $chapter.PageStart bis $chapter.PageEnd</td>
+    </tr>
+    #if($oldPageStart || $oldPageEnd)
+        <tr>
+            <td>Seiten (alt):</td>
+            <td>von $oldPageStart bis $oldPageEnd</td>
+        </tr>
+    #end
+    #if($chapter.BookTitle)
+        <tr>
+            <td>Titel des Buches:</td>
+            <td>$chapter.BookTitle</td>
+        </tr>
+    #end
+    #if($chapter.Editor)
+        <tr>
+            <td>Herausgeber:</td>
+            <td>$chapter.Editor</td>
+        </tr>
+    #end
+    #if($chapter.Edition)
+        <tr>
+            <td>Ausgabe/Auflage:</td>
+            <td>$chapter.Edition</td>
+        </tr>
+    #end
+    #if($chapter.PlaceOfPublication)
+        <tr>
+            <td>Erscheinungsort:</td>
+            <td>$chapter.PlaceOfPublication</td>
+        </tr>
+    #end
+    #if($chapter.Publisher)
+        <tr>
+            <td>Verlag:</td>
+            <td>$chapter.Publisher</td>
+        </tr>
+    #end
+    #if($chapter.YearOfPublication)
+        <tr>
+            <td>Erscheinungsjahr:</td>
+            <td>$chapter.YearOfPublication</td>
+        </tr>
+    #end
+    #if($chapter.Isbn)
+        <tr>
+            <td>ISBN:</td>
+            <td>$chapter.Isbn</td>
+        </tr>
+    #end
+    #if($chapter.ReferenceNumber)
+        <tr>
+            <td>Referenznummer:</td>
+            <td>$chapter.ReferenceNumber</td>
+        </tr>
+    #end
+    #if($chapter.Signature)
+        <tr>
+            <td>Signatur:</td>
+            <td>$chapter.Signature</td>
+        </tr>
+        <tr>
+            <td>Link zum Katalog:</td>
+            <td>
+                <a href="http://primo.ub.uni-due.de/primo_library/libweb/action/dlSearch.do?vid=UDE&institution=UDE&search_scope=default_scope&bulkSize=10&lang=ger&indx=1&onCampus=false&query=lsr11,contains,$chapter.Signature">Primo</a></td>
+        </tr>
+    #end
+</table>

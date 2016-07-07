@@ -1,0 +1,9 @@
+<html t:type="printlayout" title="${message:scan.jobs.page.title}"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+<t:loop source="scanjobs" value="scanjob">
+    <section>
+        <t:outputraw value="scanjobPrintTemplate"/>
+    </section>
+    <footer></footer>
+</t:loop>
+</html>

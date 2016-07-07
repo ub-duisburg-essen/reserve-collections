@@ -41,11 +41,14 @@ public class AttachmentStreamResponse implements StreamResponse {
 
     protected String filename = "default";
 
+    public AttachmentStreamResponse(File file, String filename, String contentType) {
+        this.file = file;
+        this.filename = filename;
+        this.contentType = contentType;
+    }
 
     public AttachmentStreamResponse(File file, Resource resource) {
-        this.file = file;
-        this.filename = resource.getFileName();
-        this.contentType = resource.getMimeType();
+        this(file, resource.getFileName(), resource.getMimeType());
     }
 
     public String getContentType() {

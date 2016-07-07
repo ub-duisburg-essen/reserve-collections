@@ -22,6 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import unidue.rc.model.Entry;
 import unidue.rc.model.ReserveCollection;
 import unidue.rc.model.Resource;
 
@@ -63,6 +64,11 @@ public class BaseURLServiceImpl implements BaseURLService {
         return String.format("%s/collection/view/%d",
                 getApplicationURL(),
                 collection.getId());
+    }
+
+    @Override
+    public String getEntryLink(Entry entry) {
+        return String.format("%s#%d", getViewCollectionURL(entry.getReserveCollection()), entry.getId());
     }
 
     @Override

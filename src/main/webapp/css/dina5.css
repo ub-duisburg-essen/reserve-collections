@@ -1,0 +1,9 @@
+@page {
+    margin: 1cm;
+}
+
+@media print {
+    footer {
+        page-break-after: always;
+    }
+}

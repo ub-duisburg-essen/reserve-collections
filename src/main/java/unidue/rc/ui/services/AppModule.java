@@ -304,6 +304,11 @@ public class AppModule {
         return cayenneService.getInjector().getInstance(MailService.class);
     }
 
+    public static TemplateService buildTemplateService(@InjectService("CayenneService") CayenneService
+                                                               cayenneService) {
+        return cayenneService.getInjector().getInstance(TemplateService.class);
+    }
+
     public static CollectionRSSWriter buildCollectionRSSWriter(@InjectService("CayenneService") CayenneService
                                                                 cayenneService) {
         return cayenneService.getInjector().getInstance(CollectionRSSWriter.class);

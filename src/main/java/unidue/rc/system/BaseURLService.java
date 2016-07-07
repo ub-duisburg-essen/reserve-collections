@@ -17,6 +17,7 @@ package unidue.rc.system;
 
 
 import miless.model.User;
+import unidue.rc.model.Entry;
 import unidue.rc.model.ReserveCollection;
 import unidue.rc.model.Resource;
 
@@ -55,6 +56,14 @@ public interface BaseURLService {
      * @return see description
      */
     String getViewCollectionURL(ReserveCollection collection);
+
+    /**
+     * Creates a url that points to given entry inside a collection.
+     *
+     * @param entry see description
+     * @return url that points to target entry
+     */
+    String getEntryLink(Entry entry);
 
     /**
      * Returns the url with which a {@link User} can be edited.

@@ -16,15 +16,11 @@
 package unidue.rc.ui.pages.admin;
 
 import miless.model.User;
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.lang3.tuple.Triple;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.common.params.CommonParams;
 import org.apache.tapestry5.*;
 import org.apache.tapestry5.annotations.*;
 import org.apache.tapestry5.corelib.components.EventLink;
@@ -37,6 +33,7 @@ import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.apache.tapestry5.services.ajax.JavaScriptCallback;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.upload.services.UploadedFile;
 import org.slf4j.Logger;
 import unidue.rc.dao.CommitException;
@@ -66,7 +63,8 @@ import static unidue.rc.ui.components.AjaxSortLink.SortState;
  * Created by nils on 07.04.16.
  */
 @Import(library = {
-        "context:js/admin.scanjobs.js"
+        "context:js/admin.scanjobs.js",
+        "context:js/print.page.js"
 })
 @ProtectedPage
 public class ScanJobs {
@@ -124,6 +122,9 @@ public class ScanJobs {
 
     @Inject
     private AjaxResponseRenderer ajaxRenderer;
+
+    @InjectPage
+    private unidue.rc.ui.pages.print.ScanJobs printPage;
 
     @Property(write = false)
     @Persist(PersistenceConstants.FLASH)
@@ -285,7 +286,17 @@ public class ScanJobs {
 
     @OnEvent(value = "printBatchList")
     void onPrintBatchJobs() {
-
+        List<Integer> scanJobIDs = batchScanJobs.stream()
+                .map(job -> job.getJobID())
+                .collect(Collectors.toList());
+        Link printPageLink = linkSource.createPageRenderLink(unidue.rc.ui.pages.print.ScanJobs.class);
+        printPageLink.addParameter(unidue.rc.ui.pages.print.ScanJobs.PARAM_SCANJOB_IDS, StringUtils.join(scanJobIDs, ','));
+        ajaxRenderer.addCallback(new JavaScriptCallback() {
+            @Override
+            public void run(JavaScriptSupport javascriptSupport) {
+                javascriptSupport.addScript("openPrintWindow('%s')", printPageLink.toAbsoluteURI());
+            }
+        });
     }
 
     @OnEvent(value = "show_batch_queue")
@@ -317,14 +328,6 @@ public class ScanJobs {
 
     @OnEvent(value = EventConstants.VALIDATE, component = "edit_scan_job_form")
     void onValidateEditingJob() {
-        log.debug("         id: " + editingJobID);
-        log.debug("  signature: " + signature);
-        log.debug(" page start: " + pageStart);
-        log.debug("   page end: " + pageEnd);
-        log.debug("       grab: " + grab);
-        log.debug("     status: " + editingJobStatus);
-        log.debug("        url: " + url);
-        log.debug("new comment: " + newComment);
         ScanJob scanJob = scanJobDAO.get(ScanJob.class, editingJobID);
 
         try {

@@ -494,6 +494,7 @@ public class CayenneServiceImpl implements CayenneService, Module {
         binder.bind(MoodleRequestHandler.class).to(MoodleRequestHandlerImpl.class);
         binder.bind(MailService.class).to(MailServiceImpl.class);
         binder.bind(BaseURLService.class).to(BaseURLServiceImpl.class);
+        binder.bind(TemplateService.class).to(VelocityService.class);
 
         // quartz jobs
         binder.bind(AlephSynchronizer.class).to(AlephSynchronizerImpl.class);
