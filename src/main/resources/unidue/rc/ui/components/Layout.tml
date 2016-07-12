@@ -114,7 +114,7 @@
                                     </t:secureblock>
                                     <t:secureblock action="EDIT_SCAN_JOBS">
                                         <li>
-                                            <a t:type="pagelink" t:page="jobs/scanjobs"
+                                            <a t:type="pagelink" t:page="admin/scanjobs"
                                                class="${prop:getClassForLink('jobs/scanjobs')}">${message:nav.item.scan.jobs}</a>
                                         </li>
                                     </t:secureblock>
