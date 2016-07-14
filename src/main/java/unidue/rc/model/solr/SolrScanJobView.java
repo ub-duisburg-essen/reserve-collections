@@ -32,6 +32,7 @@ public class SolrScanJobView {
     public static final String COLLECTION_NUMBER_PROPERTY = "collectionNumber";
     public static final String ENTRY_ID_PROPERTY = "entryID";
     public static final String JOB_MODIFIED_PROPERTY = "jobModified";
+    public static final String SCANNABLE_CREATED_PROPERTY = "scannableCreated";
     public static final String SCANNABLE_MODIFIED_PROPERTY = "scannableModified";
     public static final String SCANNABLE_TYPE_PROPERTY = "scannableType";
     public static final String SIGNATURE_PROPERTY = "signature";
@@ -78,6 +79,12 @@ public class SolrScanJobView {
      */
     @Field(JOB_MODIFIED_PROPERTY)
     private Date jobModified;
+
+    /**
+     * Contains the creation date of the {@link unidue.rc.model.Scannable}.
+     */
+    @Field(SCANNABLE_CREATED_PROPERTY)
+    private Date scannableCreated;
 
     /**
      * Contains the last date of modification of the {@link unidue.rc.model.Scannable}.
@@ -280,6 +287,14 @@ public class SolrScanJobView {
         this.reviserID = reviserID;
     }
 
+    public Date getScannableCreated() {
+        return scannableCreated;
+    }
+
+    public void setScannableCreated(Date scannableCreated) {
+        this.scannableCreated = scannableCreated;
+    }
+
     public Date getScannableModified() {
         return scannableModified;
     }
@@ -340,6 +355,9 @@ public class SolrScanJobView {
         if (scannableModified != null
             ? !scannableModified.equals(that.scannableModified)
             : that.scannableModified != null) return false;
+        if (scannableCreated != null
+            ? !scannableCreated.equals(that.scannableCreated)
+            : that.scannableCreated != null) return false;
         if (!scannableType.equals(that.scannableType)) return false;
         if (signature != null
             ? !signature.equals(that.signature)
@@ -376,6 +394,9 @@ public class SolrScanJobView {
                                 : 0);
         result = 31 * result + (scannableModified != null
                                 ? scannableModified.hashCode()
+                                : 0);
+        result = 31 * result + (scannableCreated != null
+                                ? scannableCreated.hashCode()
                                 : 0);
         result = 31 * result + scannableType.hashCode();
         result = 31 * result + (signature != null

@@ -539,6 +539,10 @@ public class ScanJobs {
                : null;
     }
 
+    public String getScannableCreated() {
+        return DateFormatUtils.format(scanJobView.getScannableCreated(), "dd.MM.yy");
+    }
+
     public List<JobComment> getComments() {
         List<JobComment> result = Collections.EMPTY_LIST;
         if (editingJob != null) {

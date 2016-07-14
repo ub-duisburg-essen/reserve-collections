@@ -88,6 +88,13 @@ public interface Scannable extends EntryValue, ResourceContainer, Cloneable {
     String getSignature();
 
     /**
+     * Returns the modification date of the scannable.
+     *
+     * @return see description
+     */
+    Date getModified();
+
+    /**
      * Returns the {@link unidue.rc.model.ScanJob} associated or <code>null</code> if there is none.
      *
      * @return see description
