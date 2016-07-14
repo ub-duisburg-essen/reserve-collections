@@ -47,6 +47,7 @@ import unidue.rc.security.CollectionSecurityService;
 import unidue.rc.security.RequiresActionPermission;
 import unidue.rc.ui.ProtectedPage;
 import unidue.rc.ui.components.AjaxSortLink;
+import unidue.rc.ui.components.Pagination;
 import unidue.rc.ui.selectmodel.LibraryLocationSelectModel;
 import unidue.rc.ui.valueencoder.LibraryLocationValueEncoder;
 import unidue.rc.workflow.ResourceService;
@@ -104,7 +105,7 @@ public class ScanJobs {
     private Messages messages;
 
     @InjectComponent
-    private Zone filterZone, jobsZone, editJobZone, batchZone;
+    private Zone filterZone, jobsZone, editJobZone, batchZone, paginationZone;
 
     @Inject
     private PageRenderLinkSource linkSource;
@@ -132,6 +133,10 @@ public class ScanJobs {
 
     @Property
     private SolrScanJobView scanJobView;
+
+    // pagination
+    @InjectComponent
+    private Pagination pagination;
 
     // filter
 
@@ -427,42 +432,40 @@ public class ScanJobs {
                   ? NumberUtils.toInt(param)
                   : null;
 
-        return request.isXHR()
-               ? jobsZone.getBody()
-               : this;
+        return onFilterChange();
     }
 
     @OnEvent(value = EventConstants.VALUE_CHANGED, component = "locationFilter")
     Object onValueChangedFromLocationFilter(LibraryLocation location) {
         fLocation = location;
 
-        return request.isXHR()
-               ? jobsZone.getBody()
-               : this;
+        return onFilterChange();
     }
 
     @OnEvent(value = "filterReviserChanged")
     Object onValueChangedFromReviser() {
         fReviser = request.getParameter("param");
 
-        return request.isXHR()
-               ? jobsZone.getBody()
-               : this;
+        return onFilterChange();
     }
 
     @OnEvent(value = "filterAuthorChanged")
     Object onValueChangedFromAuthor() {
         fAuthor = request.getParameter("param");
 
-        return request.isXHR()
-               ? jobsZone.getBody()
-               : this;
+        return onFilterChange();
     }
 
     @OnEvent(value = EventConstants.VALUE_CHANGED, component = "fStatus")
     Object onValueChangedFromStatus(ScanJobStatus status) {
         fStatus = status;
 
+        return onFilterChange();
+    }
+
+    private Object onFilterChange() {
+
+        pagination.resetCurrentPage();
         return request.isXHR()
                ? jobsZone.getBody()
                : this;
@@ -499,6 +502,25 @@ public class ScanJobs {
         addAjaxRender(jobsZone, filterZone);
     }
 
+    /**
+     * Called when the number of results per page is changed in pagination-component
+     */
+    @OnEvent(component = "pagination", value = "change")
+    void onValueChanged() {
+        if(request.isXHR())
+            ajaxRenderer.addRender(jobsZone)
+                    .addRender(paginationZone);
+    }
+
+    /**
+     * is called when user selects another page in pagination
+     */
+    void onUpdateZones() {
+        if(request.isXHR())
+            ajaxRenderer.addRender(jobsZone)
+                    .addRender(paginationZone);
+    }
+
     public SolrResponse getScanJobs() {
 
         sortStack = sortStack == null
@@ -513,7 +535,11 @@ public class ScanJobs {
             List<SolrQueryField> filter = buildFilterParams();
             filter.forEach(param -> queryBuilder.and(param));
 
-            return solrService.query(SolrScanJobView.class, queryBuilder.build());
+            SolrQuery query = queryBuilder.setOffset((pagination.getCurrentPageNumber() - 1) * pagination.getMaxRowsPerPage())
+                    .setCount(pagination.getMaxRowsPerPage())
+                    .build();
+
+            return solrService.query(SolrScanJobView.class, query);
 
         } catch (SolrServerException e) {
             log.error("could not query solr server", e);
