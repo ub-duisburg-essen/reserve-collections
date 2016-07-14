@@ -466,6 +466,11 @@ public class ScanJobs {
     private Object onFilterChange() {
 
         pagination.resetCurrentPage();
+
+        if (request.isXHR()) {
+            ajaxRenderer.addRender(paginationZone);
+        }
+
         return request.isXHR()
                ? jobsZone.getBody()
                : this;
