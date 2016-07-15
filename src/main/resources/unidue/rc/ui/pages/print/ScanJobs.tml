@@ -1,8 +1,12 @@
 <html t:type="printlayout" title="${message:scan.jobs.page.title}"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
-<t:loop source="scanjobs" value="scanjob">
+<t:loop source="scanJobs" value="scanJobView">
     <section>
-        <t:outputraw value="scanjobPrintTemplate"/>
+        <t:outputraw value="scanJobPrintTemplate"/>
+    </section>
+    <section>
+        <h4>${message:barcode}</h4>
+        <t:barcodeimage content="barcode" width="400" height="128"/>
     </section>
     <footer></footer>
 </t:loop>

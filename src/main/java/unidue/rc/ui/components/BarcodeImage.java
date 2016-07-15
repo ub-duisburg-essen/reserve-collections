@@ -17,13 +17,11 @@ package unidue.rc.ui.components;
 
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.oned.Code128Writer;
 import com.google.zxing.oned.OneDimensionalCodeWriter;
 import org.apache.tapestry5.ComponentResources;
-import org.apache.tapestry5.Link;
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.annotations.BeginRender;
 import org.apache.tapestry5.annotations.Parameter;
@@ -33,8 +31,8 @@ import org.apache.tapestry5.services.Response;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.Base64;
 
 /**
  * @author Nils Verheyen
@@ -60,9 +58,9 @@ public class BarcodeImage {
 
     @BeginRender
     boolean beginRender(MarkupWriter writer) {
-        Link link = resources.createEventLink("image");
+        String imgSrc = String.format("data:image/jpeg;base64,%s", base64(content, "jpg"));
         writer.element("img",
-                "src", link.toAbsoluteURI(),
+                "src", imgSrc,
                 "width", width,
                 "height", height);
 
@@ -73,25 +71,19 @@ public class BarcodeImage {
         return false;
     }
 
-    void onImage() throws IOException, WriterException {
-
+    private String base64(String content, String format) {
         OneDimensionalCodeWriter codeWriter = new Code128Writer();
         final BitMatrix matrix;
-        matrix = codeWriter.encode(content, BarcodeFormat.CODE_128, width, height);
 
-        BufferedImage image = MatrixToImageWriter.toBufferedImage(matrix);
+        String encodedImage = null;
+        try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+            matrix = codeWriter.encode(content, BarcodeFormat.CODE_128, width, height);
 
-        response.setDateHeader("Expires", 0);
-        response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
-        response.setHeader("Cache-Control", "post-check=0, pre-check=0");
-        response.setHeader("Pragma", "no-cache");
-
-        OutputStream stream = response.getOutputStream("image/jpeg");
-
-        ImageIO.write(image, "jpg", stream);
-
-        stream.flush();
-
-        stream.close();
+            BufferedImage image = MatrixToImageWriter.toBufferedImage(matrix);
+            ImageIO.write(image, format, output);
+            encodedImage = Base64.getEncoder().encodeToString(output.toByteArray());
+        } finally {
+            return encodedImage;
+        }
     }
 }

@@ -107,4 +107,12 @@ public interface ScanJobService {
      * @param scannable scannable which should be checked
      */
     void checkScanJob(Scannable scannable);
+
+    /**
+     * Returns the barcode that must be used to upload a file for a scannable.
+     *
+     * @param scannable  scannable that should be used
+     * @return the barcode that must be used for upload
+     */
+    String getUploadBarcodeContent(Scannable scannable);
 }

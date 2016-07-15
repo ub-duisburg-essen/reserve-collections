@@ -190,6 +190,11 @@ public class ScanJobServiceImpl implements ScanJobService {
         }
     }
 
+    @Override
+    public String getUploadBarcodeContent(Scannable scannable) {
+        return Integer.toString(scannable.getId());
+    }
+
     private void createScanJob(Scannable scannable) throws CommitException {
         ScanJob job = new ScanJob();
         job.setStatus(ScanJobStatus.NEW);

@@ -291,11 +291,10 @@ public class ScanJobs {
 
     @OnEvent(value = "printBatchList")
     void onPrintBatchJobs() {
-        List<Integer> scanJobIDs = batchScanJobs.stream()
+        Integer[] scanJobIDs = batchScanJobs.stream()
                 .map(job -> job.getJobID())
-                .collect(Collectors.toList());
-        Link printPageLink = linkSource.createPageRenderLink(unidue.rc.ui.pages.print.ScanJobs.class);
-        printPageLink.addParameter(unidue.rc.ui.pages.print.ScanJobs.PARAM_SCANJOB_IDS, StringUtils.join(scanJobIDs, ','));
+                .toArray(Integer[]::new);
+        Link printPageLink = linkSource.createPageRenderLinkWithContext(unidue.rc.ui.pages.print.ScanJobs.class, scanJobIDs);
         ajaxRenderer.addCallback(new JavaScriptCallback() {
             @Override
             public void run(JavaScriptSupport javascriptSupport) {

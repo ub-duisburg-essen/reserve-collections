@@ -1,24 +1,20 @@
 package unidue.rc.ui.pages.print;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.EventConstants;
-import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.annotations.*;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.slf4j.Logger;
 import unidue.rc.dao.BaseDAO;
-import unidue.rc.model.BookChapter;
-import unidue.rc.model.Entry;
-import unidue.rc.model.JournalArticle;
-import unidue.rc.model.ReserveCollection;
+import unidue.rc.model.*;
 import unidue.rc.model.solr.SolrScanJobView;
 import unidue.rc.search.SolrService;
 import unidue.rc.system.BaseURLService;
 import unidue.rc.system.TemplateService;
+import unidue.rc.workflow.ScanJobService;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +33,13 @@ public class ScanJobs {
     private static final String AUTHOR_DIVIDER = ", ";
 
     @Inject
-    private Logger logger;
+    private Logger log;
+
+    @Inject
+    private ComponentResources resources;
+
+    @Inject
+    private ScanJobService scanJobService;
 
     @Inject
     private TemplateService templateService;
@@ -52,38 +54,43 @@ public class ScanJobs {
     @Service(BaseDAO.SERVICE_NAME)
     private BaseDAO baseDAO;
 
-    @Persist(PersistenceConstants.FLASH)
-    private List<SolrScanJobView> scanjobs;
+    @Property
+    private List<SolrScanJobView> scanJobs;
 
     @Property
-    private SolrScanJobView scanjob;
+    private SolrScanJobView scanJobView;
 
     @OnEvent(EventConstants.ACTIVATE)
-    void onActivate(@RequestParameter(PARAM_SCANJOB_IDS) String scanJobIDsParam) {
-        if (!scanJobIDsParam.matches(PARAM_SCANJOB_FORMAT))
+    void onActivate(List<String> scanJobIDs) {
+        if (scanJobIDs == null)
             return;
-
-        String[] scanJobIDs = scanJobIDsParam.split(PARAM_SCANJOB_DIVIDER);
-        scanjobs = Arrays.stream(scanJobIDs)
-                .map(this::getScanjob)
-                .filter(job -> job != null)
+        log.info("loading scanjobs");
+        this.scanJobs = scanJobIDs.stream()
+                .map(this::getScanJob)
                 .collect(Collectors.toList());
     }
 
-    private SolrScanJobView getScanjob(String id) {
+    @OnEvent(EventConstants.PASSIVATE)
+    Object onPassivate() {
+        return scanJobs.stream()
+                .map(j -> j.getJobID())
+                .toArray(Integer[]::new);
+    }
+
+    private SolrScanJobView getScanJob(String id) {
         try {
             return searchService.getById(SolrScanJobView.class, id);
         } catch (SolrServerException e) {
-            logger.error("could not get scan job from solr " + id, e);
+            log.error("could not get scan job from solr " + id, e);
         }
         return null;
     }
 
-    public String getScanjobPrintTemplate() {
+    public String getScanJobPrintTemplate() {
 
         TemplateService.Builder builder = templateService.builder();
-        ReserveCollection collection = baseDAO.get(ReserveCollection.class, scanjob.getReserveCollectionID());
-        Entry entry = baseDAO.get(Entry.class, scanjob.getEntryID());
+        ReserveCollection collection = baseDAO.get(ReserveCollection.class, scanJobView.getReserveCollectionID());
+        Entry entry = baseDAO.get(Entry.class, scanJobView.getEntryID());
 
         // collection.vm
         builder.put("collection", collection)
@@ -96,7 +103,7 @@ public class ScanJobs {
                 .put("entryLink", urlService.getEntryLink(entry));
 
         String template;
-        switch (scanjob.getScannableType()) {
+        switch (scanJobView.getScannableType()) {
             // journal.article.vm
             case "JournalArticle":
                 template = "/vt/print.journal.article.vm";
@@ -117,17 +124,14 @@ public class ScanJobs {
                 return builder.build(template);
             }
         } catch (IOException e) {
-            logger.error("could not build template " + template, e);
+            log.error("could not build template " + template, e);
         }
-
         return null;
     }
 
-    public List<SolrScanJobView> getScanjobs() {
-        return scanjobs;
-    }
-
-    public void setScanjobs(List<SolrScanJobView> scanjobs) {
-        this.scanjobs = scanjobs;
+    public String getBarcode() {
+        ScanJob scanJob = baseDAO.get(ScanJob.class, scanJobView.getJobID());
+        String barcode = scanJobService.getUploadBarcodeContent(scanJob.getScannable());
+        return barcode;
     }
 }
