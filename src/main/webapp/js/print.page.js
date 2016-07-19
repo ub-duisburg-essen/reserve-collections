@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-function openPrintWindow(url, name, specs) {
-    var printWindow = window.open(url, name, specs);
-    var printAndClose = function () {
-        if (printWindow.document.readyState == 'complete') {
-            clearInterval(sched);
-            printWindow.print();
-            printWindow.close();
+function print(url, id) {
+    var components = {
+        iframe: function (url) {
+            return '<iframe id="' + id + '" name="printPage' + id + '" src=' + url + ' style="position: absolute; top: -1000px; @media print { display: block; }"></iframe>';
+
         }
-    }
-    var sched = setInterval(printAndClose, 800);
+    };
+    jQuery("body").append(components.iframe(url));
+    jQuery('#' + id).on("load", function () {
+        var frm = window.frames[id].contentWindow;
+        frm.focus();
+        frm.print();
+    });
 };

@@ -124,9 +124,6 @@ public class ScanJobs {
     @Inject
     private AjaxResponseRenderer ajaxRenderer;
 
-    @InjectPage
-    private unidue.rc.ui.pages.print.ScanJobs printPage;
-
     @Property(write = false)
     @Persist(PersistenceConstants.FLASH)
     private BlockDefinition visibleBlock;
@@ -298,7 +295,10 @@ public class ScanJobs {
         ajaxRenderer.addCallback(new JavaScriptCallback() {
             @Override
             public void run(JavaScriptSupport javascriptSupport) {
-                javascriptSupport.addScript("openPrintWindow('%s')", printPageLink.toAbsoluteURI());
+
+                String printLink = printPageLink.toAbsoluteURI();
+                String printPageID = javascriptSupport.allocateClientId("printPage");
+                javascriptSupport.addScript("print('%s', '%s')", printLink, printPageID);
             }
         });
     }
