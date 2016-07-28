@@ -29,7 +29,8 @@ public enum CopyrightReviewMapping {
     NotReviewed("not.reviewed", CopyrightReviewStatus.NOT_REVIEWED),
     ReviewedPaymentNeeded("reviewed.payment.needed", CopyrightReviewStatus.REVIEWED_PAYMENT_NEEDED),
     ReviewedFeedbackNeeded("reviewed.feedback", CopyrightReviewStatus.REVIEWED_FEEDBACK_NEEDED),
-    ReviewedFree("reviewed.free", CopyrightReviewStatus.REVIEWED_FREE)
+    ReviewedFree("reviewed.free", CopyrightReviewStatus.REVIEWED_FREE),
+    ReviewedBooktex("reviewed.booktex", CopyrightReviewStatus.REVIEWED_BOOKTEX)
     ;
 
     private String legacyStatus;

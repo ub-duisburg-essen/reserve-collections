@@ -28,7 +28,9 @@ public enum  CopyrightReviewStatus implements JobStatus {
     REVIEWED_PAYMENT_NEEDED(2, 0xFFA500),
     REVIEWED_FREE(3, 0x7BB661),
     REVIEWED_FEEDBACK_NEEDED(4, 0xB1ADFF),
-    REVIEWED_REJECTED_BY_COPYRIGHT(5, 0xff9800);
+    REVIEWED_REJECTED_BY_COPYRIGHT(5, 0xff9800),
+    REVIEWED_BOOKTEX(6, 0xffc107)
+    ;
 
     private final Integer dbValue;
     private final Integer color;
