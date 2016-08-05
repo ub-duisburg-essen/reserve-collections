@@ -28,6 +28,8 @@ import java.util.List;
  */
 public interface ReserveCollectionNumberDAO extends BaseDAO {
 
+    String SERVICE_NAME = "ReserveCollectionNumberDAO";
+
     /**
      * Returns all free numbers in range for target location or an empty collection if there are no free numbers.
      * <p>

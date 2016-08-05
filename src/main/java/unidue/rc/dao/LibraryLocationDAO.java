@@ -16,7 +16,6 @@
 package unidue.rc.dao;
 
 
-import org.apache.cayenne.validation.ValidationException;
 import unidue.rc.model.LibraryLocation;
 
 import java.util.List;
@@ -28,7 +27,9 @@ import java.util.List;
  * @author Nils Verheyen
  * @see LibraryLocationDAOImpl
  */
-public interface LibraryLocationDAO {
+public interface LibraryLocationDAO extends BaseDAO {
+
+    String SERVICE_NAME = "LibraryLocationDAO";
 
     /**
      * Returns all {@link LibraryLocation} objects that have no parent.
@@ -44,32 +45,6 @@ public interface LibraryLocationDAO {
      * @return the location if one could be found, <code>null</code> otherwise
      */
     LibraryLocation getLocationById(Integer id);
-
-    /**
-     * Stores target {@link LibraryLocation} in backend.
-     *
-     * @param location location to create
-     * @throws CommitException thrown if any that inside the {@link LibraryLocation} is invalid. take a look at the
-     *                         modeler to see required values.
-     */
-    void create(LibraryLocation location) throws CommitException;
-
-    /**
-     * Deletes target {@link LibraryLocation} in backend.
-     *
-     * @param location {@link LibraryLocation} which should be deleted.
-     * @throws DeleteException thrown if a error occured during delete of target {@link LibraryLocation}
-     */
-    void delete(LibraryLocation location) throws DeleteException;
-
-    /**
-     * Updates target {@link LibraryLocation} in backend.
-     *
-     * @param location {@link LibraryLocation} which should be updated.
-     * @throws CommitException thrown if any that inside the {@link LibraryLocation} is invalid. take a look at the
-     *                         modeler to see required values.
-     */
-    void update(LibraryLocation location) throws CommitException;
 
     /**
      * Returns a list of all available {@link LibraryLocation} objects.

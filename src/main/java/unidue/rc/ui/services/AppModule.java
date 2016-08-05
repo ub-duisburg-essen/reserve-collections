@@ -83,12 +83,8 @@ public class AppModule {
          */
 
         // bind daos
-        binder.bind(RoleDAO.class, RoleDAOImpl.class);
-        binder.bind(LibraryLocationDAO.class, LibraryLocationDAOImpl.class);
-        binder.bind(UserDAO.class, UserDAOImpl.class);
         binder.bind(MCRCategoryDAO.class, MCRCategoryDAOImpl.class);
         binder.bind(LegalEntityDAO.class, LegalEntityXMLFileDAO.class);
-        binder.bind(ReserveCollectionNumberDAO.class, ReserveCollectionNumberDAOImpl.class);
 
         binder.bind(QuartzService.class, QuartzServiceImpl.class);
         binder.bind(SecurityRequestFilter.class, SecurityRequestFilter.class);
@@ -111,6 +107,18 @@ public class AppModule {
     public static BaseDAO buildBaseDAO(@InjectService("CayenneService") CayenneService
                                                cayenneService) {
         return cayenneService.getInjector().getInstance(BaseDAO.class);
+    }
+
+    @ServiceId(LibraryLocationDAO.SERVICE_NAME)
+    public static LibraryLocationDAO buildLibraryLocationDAO(@InjectService("CayenneService") CayenneService
+                                                                     cayenneService) {
+        return cayenneService.getInjector().getInstance(LibraryLocationDAO.class);
+    }
+
+    @ServiceId(ReserveCollectionNumberDAO.SERVICE_NAME)
+    public static ReserveCollectionNumberDAO buildReserveCollectionNumberDAO(@InjectService("CayenneService") CayenneService
+                                                                     cayenneService) {
+        return cayenneService.getInjector().getInstance(ReserveCollectionNumberDAO.class);
     }
 
     @ServiceId(ActionDAO.SERVICE_NAME)
@@ -159,6 +167,18 @@ public class AppModule {
     public static ParticipationDAO buildParticipationDAO(@InjectService("CayenneService") CayenneService
                                                                  cayenneService) {
         return cayenneService.getInjector().getInstance(ParticipationDAO.class);
+    }
+
+    @ServiceId(RoleDAO.SERVICE_NAME)
+    public static RoleDAO buildRoleDAO(@InjectService("CayenneService") CayenneService
+                                                                 cayenneService) {
+        return cayenneService.getInjector().getInstance(RoleDAO.class);
+    }
+
+    @ServiceId(UserDAO.SERVICE_NAME)
+    public static UserDAO buildUserDAO(@InjectService("CayenneService") CayenneService
+                                                                 cayenneService) {
+        return cayenneService.getInjector().getInstance(UserDAO.class);
     }
 
     @ServiceId(BookDAO.SERVICE_NAME)

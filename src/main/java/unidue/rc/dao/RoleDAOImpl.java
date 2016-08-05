@@ -123,24 +123,4 @@ public class RoleDAOImpl extends BaseDAOImpl implements RoleDAO {
 
         return (Role) Cayenne.objectForQuery(context, query);
     }
-
-    @Override
-    public void delete(Membership membership) throws DeleteException {
-
-        // get current ObjectContext
-        ObjectContext objectContext = BaseContext.getThreadObjectContext();
-
-        try {
-
-            // mark location as deleted
-            objectContext.deleteObjects(membership);
-
-            objectContext.commitChanges();
-            LOG.info("membership deleted: " + membership);
-        } catch (DeleteDenyException e) {
-            objectContext.rollbackChanges();
-            throw new DeleteException("could not delete membership " + membership, e);
-        }
-
-    }
 }

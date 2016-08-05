@@ -138,19 +138,15 @@ public class ReserveCollectionNumberDAOImpl extends BaseDAOImpl implements Reser
     @Override
     public ReserveCollectionNumber create(Integer value) throws CommitException {
 
-        ObjectContext context = BaseContext.getThreadObjectContext();
-
         // create new number
         ReserveCollectionNumber number = new ReserveCollectionNumber();
 
         // set value
         number.setNumber(value);
 
-        // commit to backend
-        context.registerNewObject(number);
         try {
             // commit to backend
-            context.commitChanges();
+            create(number);
         } catch (ValidationException e) {
             throw new CommitException("could not create number " + number + " - " + e.getMessage(), e);
         }
@@ -160,17 +156,12 @@ public class ReserveCollectionNumberDAOImpl extends BaseDAOImpl implements Reser
     @Override
     public void createOrUpdate(ReserveCollectionNumber number) throws CommitException {
 
-        ObjectContext context = BaseContext.getThreadObjectContext();
-
         // register new object if needed
-        if (number.getPersistenceState() == PersistenceState.NEW)
-            context.registerNewObject(number);
+        if (number.getPersistenceState() == PersistenceState.NEW) {
 
-        try {
-            // commit to backend
-            context.commitChanges();
-        } catch (ValidationException e) {
-            throw new CommitException("could not create number " + number + " - " + e.getMessage(), e);
+            create(number);
+        } else {
+            update(number);
         }
     }
 }

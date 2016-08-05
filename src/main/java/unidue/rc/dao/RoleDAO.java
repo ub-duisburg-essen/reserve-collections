@@ -81,13 +81,4 @@ public interface RoleDAO extends BaseDAO {
      * @return the role associated to target default role or <code>null</code> if it does not exist
      */
     Role getRole(DefaultRole defaultRole);
-
-    /**
-     * Deletes target {@link unidue.rc.model.Membership} inside backend.
-     *
-     * @param membership the membership to be deleted.
-     * @throws DeleteException thrown if any that inside the {@link LibraryLocation} is invalid. take a look at the
-     *                         modeler to see required values.
-     */
-    void delete(Membership membership) throws DeleteException;
 }

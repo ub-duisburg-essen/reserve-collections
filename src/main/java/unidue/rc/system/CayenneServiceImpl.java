@@ -37,7 +37,10 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import unidue.rc.auth.*;
+import unidue.rc.auth.LDAPRealm;
+import unidue.rc.auth.LDAPRealmImpl;
+import unidue.rc.auth.LocalRealm;
+import unidue.rc.auth.LocalRealmImpl;
 import unidue.rc.dao.*;
 import unidue.rc.io.CollectionRSSWriter;
 import unidue.rc.io.CollectionRSSWriterImpl;
@@ -53,7 +56,10 @@ import unidue.rc.plugins.moodle.services.MoodleService;
 import unidue.rc.plugins.moodle.services.MoodleServiceImpl;
 import unidue.rc.search.SolrService;
 import unidue.rc.search.SolrServiceImpl;
-import unidue.rc.security.*;
+import unidue.rc.security.CollectionSecurityService;
+import unidue.rc.security.CollectionSecurityServiceImpl;
+import unidue.rc.security.ShiroPermissionUtils;
+import unidue.rc.security.ShiroPermissionUtilsImpl;
 import unidue.rc.statistic.*;
 import unidue.rc.ui.services.MimeService;
 import unidue.rc.ui.services.MimeServiceImpl;
@@ -421,7 +427,6 @@ public class CayenneServiceImpl implements CayenneService, Module {
         // write changes to db
         objectContext.commitChanges();
     }
-
 
     @Override
     public void configure(Binder binder) {

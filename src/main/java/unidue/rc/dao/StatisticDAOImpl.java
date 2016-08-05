@@ -52,7 +52,7 @@ public class StatisticDAOImpl extends BaseDAOImpl implements StatisticDAO {
     private static final Logger LOG = LoggerFactory.getLogger(StatisticDAOImpl.class);
 
     @Inject
-    ReserveCollectionDAO reserveCollectionDAO;
+    ReserveCollectionDAO collectionDAO;
 
     @Override
     public List<Statistic> getGeneralStatisticForRange(String from, String to) {
@@ -86,7 +86,6 @@ public class StatisticDAOImpl extends BaseDAOImpl implements StatisticDAO {
 
     @Override
     public void addStatistics(SemAppStatistics statistics) {
-        ObjectContext objectContext = BaseContext.getThreadObjectContext();
 
         for (SemAppStatistic semAppStatistic : statistics.getSemAppStatistics()) {
 
@@ -94,7 +93,7 @@ public class StatisticDAOImpl extends BaseDAOImpl implements StatisticDAO {
             String[] dateParts = date.split(" ");
 
             if (!alreadyExistsInDB(dateParts[0])) {
-                Statistic statistic = objectContext.newObject(Statistic.class);
+                Statistic statistic = new Statistic();
                 statistic.setArticleCount(semAppStatistic.getArticle());
                 statistic.setBookCount(semAppStatistic.getBook());
                 statistic.setChapterCount(semAppStatistic.getChapter());
@@ -107,11 +106,13 @@ public class StatisticDAOImpl extends BaseDAOImpl implements StatisticDAO {
                 statistic.setReservecollectionCount(semAppStatistic.getNum());
                 statistic.setTotalFilesCount(semAppStatistic.getFiles());
                 statistic.setDate(dateParts[0]);
+                try {
+                    create(statistic);
+                } catch (CommitException e) {
+                    LOG.error("could not create statistic " + statistic, e);
+                }
             }
         }
-
-        // write changes to db
-        objectContext.commitChanges();
     }
 
     @Override
@@ -136,7 +137,7 @@ public class StatisticDAOImpl extends BaseDAOImpl implements StatisticDAO {
         Integer[] resourceIDs;
 
         if (actiontype.equals(StatisticDAO.DOWNLOAD)) {
-            ReserveCollection collection = reserveCollectionDAO.get(ReserveCollection.class, id);
+            ReserveCollection collection = collectionDAO.get(ReserveCollection.class, id);
             List<Resource> resources = collection.getResources();
             resourceIDs = resources.stream()
                     .map(resource -> resource.getId())
