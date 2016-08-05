@@ -503,7 +503,7 @@
             release, rather than a final release. -->
         <repository>
             <id>ub-repo</id>
-            <url>https://source.ub.uni-due.de/artifactory/repo</url>
+            <url>https://source.ub.uni-due.de/artifactory/libs-release</url>
         </repository>
         <repository>
             <id>apache-staging</id>
