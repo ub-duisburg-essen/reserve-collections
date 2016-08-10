@@ -18,6 +18,7 @@ package unidue.rc.ui.pages.collection;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ContextedException;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.PersistenceConstants;
@@ -76,6 +77,9 @@ public class ProlongCollection {
     @Component(id = "expiry")
     private Select expirationField;
 
+    @Component(id = "expected_participations")
+    private TextField expectedParticipationsField;
+
     @Component(id = "dissolve_form")
     private Form dissolveForm;
 
@@ -91,6 +95,9 @@ public class ProlongCollection {
 
     @Property
     private String prolongCode;
+
+    @Property
+    private Integer expectedParticipations;
 
     @Property
     private ReserveCollection collection;
@@ -125,15 +132,15 @@ public class ProlongCollection {
     @OnEvent(value = EventConstants.VALIDATE, component = "prolong_form")
     void onValidateProlong() {
 
+        if (expectedParticipations == null) {
+            prolongForm.recordError(expectedParticipationsField, messages.format("error.msg.expected.participations.required"));
+            return;
+        }
+
         try {
+            collection.setExpectedParticipations(expectedParticipations);
             collectionService.prolong(collection, prolongCode, expiry.getTime());
-        } catch (ConfigurationException e) {
-            log.error("invalid lecture ends configured", e);
-            prolongForm.recordError(expirationField, messages.format("error.msg.could.not.calc.next.lecture.end"));
-        } catch (IllegalStateException e) {
-            log.warn("collection " + collection + " already prolonged");
-            prolongForm.recordError(expirationField, messages.format("error.msg.collection.already.prolonged"));
-        } catch (IllegalArgumentException e) {
+        } catch (ContextedException e) {
             log.warn("could not prolong collection " + collection + " with code " + prolongCode, e);
             prolongForm.recordError(expirationField, messages.format("error.msg.could.not.prolong.collection"));
         } catch (CommitException e) {

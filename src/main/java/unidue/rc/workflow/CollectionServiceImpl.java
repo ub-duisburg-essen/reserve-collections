@@ -21,6 +21,7 @@ import org.apache.cayenne.di.Inject;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ContextedException;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.mail.EmailException;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -185,13 +186,18 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public void prolong(ReserveCollection collection, String code, Date to) throws CommitException {
+    public void prolong(ReserveCollection collection, String code, Date to) throws CommitException, ContextedException {
         if (StringUtils.equals(collection.getProlongCode(), code)
                 && collection.getProlongUsed() != null)
-            throw new IllegalStateException("prolong code already used.");
+            throw new ContextedException("prolong code already used.");
+
+        if (collection.getExpectedParticipations() == null)
+            throw new ContextedException("expected participations must not be null");
 
         if (!StringUtils.equals(collection.getProlongCode(), code))
-            throw new IllegalArgumentException("illegal prolong code used");
+            throw new ContextedException("illegal prolong code used")
+                    .addContextValue("is", collection.getProlongCode())
+                    .addContextValue("was", code);
 
         collection.setValidTo(to);
         collection.setProlongUsed(new Date());

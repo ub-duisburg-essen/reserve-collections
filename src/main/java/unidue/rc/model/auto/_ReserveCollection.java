@@ -26,6 +26,7 @@ public abstract class _ReserveCollection extends CayenneDataObject {
     public static final String COMMENT_PROPERTY = "comment";
     public static final String CREATED_PROPERTY = "created";
     public static final String DISSOLVE_AT_PROPERTY = "dissolveAt";
+    public static final String EXPECTED_PARTICIPATIONS_PROPERTY = "expectedParticipations";
     public static final String ID_PROPERTY = "id";
     public static final String MEDIA_DOWNLOAD_ALLOWED_PROPERTY = "mediaDownloadAllowed";
     public static final String MODIFIED_PROPERTY = "modified";
@@ -81,6 +82,13 @@ public abstract class _ReserveCollection extends CayenneDataObject {
     }
     public Date getDissolveAt() {
         return (Date)readProperty(DISSOLVE_AT_PROPERTY);
+    }
+
+    public void setExpectedParticipations(Integer expectedParticipations) {
+        writeProperty(EXPECTED_PARTICIPATIONS_PROPERTY, expectedParticipations);
+    }
+    public Integer getExpectedParticipations() {
+        return (Integer)readProperty(EXPECTED_PARTICIPATIONS_PROPERTY);
     }
 
     public void setId(Integer id) {

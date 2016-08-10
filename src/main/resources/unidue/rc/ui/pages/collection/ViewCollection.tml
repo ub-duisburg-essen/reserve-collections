@@ -77,6 +77,8 @@
                     <dd>${collection.number?.number}</dd>
                     <dt>${message:status}</dt>
                     <dd>${prop:localizedStatus}</dd>
+                    <dt>${message:meta.label.expected.participations}</dt>
+                    <dd>${prop:collection.expectedParticipations}</dd>
                     <dt>${message:meta.label.valid.to}</dt>
                     <dd>${validTo}</dd>
                     <t:if test="collection.dissolveAt">

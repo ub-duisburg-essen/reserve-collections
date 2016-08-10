@@ -18,6 +18,7 @@ package unidue.rc.workflow;
 
 import miless.model.User;
 import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.lang3.exception.ContextedException;
 import unidue.rc.dao.CommitException;
 import unidue.rc.dao.DeleteException;
 import unidue.rc.dao.NumberAssignedException;
@@ -67,12 +68,9 @@ public interface CollectionService {
      * @param code       code to use for prolong
      * @param to         new valid to date
      * @throws unidue.rc.dao.CommitException thrown if the collection could not be prolonged
-     * @throws IllegalStateException         thrown if the code has already been used
-     * @throws IllegalArgumentException      thrown if the code does not match the prolong code inside given collection
-     * @throws ConfigurationException        thrown if target collection could not be prolongend due to misconfiguration
+     * @throws ContextedException  thrown if any value inside the collection is not allowed
      */
-    void prolong(ReserveCollection collection, String code, Date to) throws CommitException, IllegalStateException,
-            IllegalArgumentException, ConfigurationException;
+    void prolong(ReserveCollection collection, String code, Date to) throws CommitException, ContextedException;
 
     /**
      * Activates target {@linkplain ReserveCollection} in backend.

@@ -261,6 +261,7 @@
 		<db-attribute name="comment" type="VARCHAR" length="512"/>
 		<db-attribute name="created" type="TIMESTAMP"/>
 		<db-attribute name="dissolveAt" type="TIMESTAMP"/>
+		<db-attribute name="expectedParticipations" type="INTEGER"/>
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
 		<db-attribute name="libraryLocationId" type="INTEGER" isMandatory="true"/>
 		<db-attribute name="mediaDownloadAllowed" type="BOOLEAN"/>
@@ -537,6 +538,7 @@
 		<obj-attribute name="comment" type="java.lang.String" db-attribute-path="comment"/>
 		<obj-attribute name="created" type="java.util.Date" db-attribute-path="created"/>
 		<obj-attribute name="dissolveAt" type="java.util.Date" db-attribute-path="dissolveAt"/>
+		<obj-attribute name="expectedParticipations" type="java.lang.Integer" db-attribute-path="expectedParticipations"/>
 		<obj-attribute name="id" type="java.lang.Integer" db-attribute-path="id"/>
 		<obj-attribute name="mediaDownloadAllowed" type="boolean" db-attribute-path="mediaDownloadAllowed"/>
 		<obj-attribute name="modified" type="java.util.Date" db-attribute-path="modified"/>
