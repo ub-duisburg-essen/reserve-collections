@@ -22,6 +22,7 @@ import org.apache.cayenne.Persistent;
 import org.apache.cayenne.di.Inject;
 import org.apache.cayenne.query.NamedQuery;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,6 +120,23 @@ public class ResourceDAOImpl extends BaseDAOImpl implements ResourceDAO {
         } catch (IOException e) {
             LOG.info("could not detect mime type of file " + file);
             return null;
+        }
+    }
+
+    @Override
+    public void rename(Resource resource, String filename) throws IOException, CommitException {
+        File srcFile = new File(filesDir, resource.getFilePath());
+
+        String srcPath = srcFile.getAbsolutePath();
+        File destFile = new File(FilenameUtils.concat(FilenameUtils.getFullPath(srcPath), filename));
+
+        if (srcFile.exists()) {
+            FileUtils.moveFile(srcFile, destFile);
+
+            String resourcePath = FilenameUtils.getPath(resource.getFilePath());
+            String newPath = FilenameUtils.concat(resourcePath, FilenameUtils.getName(destFile.getPath()));
+            resource.setFilePath(newPath);
+            update(resource);
         }
     }
 

@@ -20,6 +20,7 @@ import unidue.rc.model.ReserveCollection;
 import unidue.rc.model.Resource;
 import unidue.rc.model.ResourceContainer;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -91,6 +92,17 @@ public interface ResourceDAO extends BaseDAO {
      * @return a mimetype if one could be found, <code>null</code> otherwise
      */
     String detectMimeType(java.io.File file);
+
+    /**
+     * Renames the file that belongs to target resource and sets the new file path inside the resource to the new
+     * filename.
+     *
+     * @param resource Source to be renamed
+     * @param filename filename without any path that is returned by {@link Resource#getFileName()}
+     * @throws IOException     see {@link org.apache.commons.io.FileUtils#moveFile(File, File)}
+     * @throws CommitException thrown if the new filename could not be set inside the resource
+     */
+    void rename(Resource resource, String filename) throws IOException, CommitException;
 
     /**
      * Deletes the {@link java.io.File} that is bound to target {@link unidue.rc.model.Resource} if it present,

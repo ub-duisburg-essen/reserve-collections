@@ -16,21 +16,16 @@
 package unidue.rc.ui.pages.entry;
 
 
-
+import org.apache.commons.io.FileExistsException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.tapestry5.*;
-import org.apache.tapestry5.annotations.Component;
-import org.apache.tapestry5.annotations.OnEvent;
-import org.apache.tapestry5.annotations.Persist;
-import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.Service;
-import org.apache.tapestry5.annotations.SessionState;
-import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.annotations.*;
+import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.corelib.components.Form;
+import org.apache.tapestry5.corelib.components.TextField;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.PageRenderLinkSource;
-import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.upload.services.UploadedFile;
 import org.slf4j.Logger;
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
@@ -43,15 +38,12 @@ import unidue.rc.security.CollectionSecurityService;
 import unidue.rc.ui.ProtectedPage;
 import unidue.rc.ui.SecurityContextPage;
 import unidue.rc.ui.pages.collection.ViewCollection;
-import unidue.rc.workflow.EntryService;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Within this page an existing {@link unidue.rc.model.File} can be edited.
@@ -70,6 +62,10 @@ public class EditFile implements SecurityContextPage {
 
     @Property
     private unidue.rc.model.File file;
+
+    @Property
+    @Validate("required")
+    private String filename;
 
     @Property
     private ReserveCollection collection;
@@ -98,8 +94,11 @@ public class EditFile implements SecurityContextPage {
     @Inject
     private ComponentResources resources;
 
-    @Component(id = "file_form")
-    private Form form;
+    @InjectComponent("file_form")
+    private Form fileForm;
+
+    @InjectComponent("filename")
+    private TextField filenameField;
 
     @SessionState
     private BreadCrumbList breadCrumbList;
@@ -115,10 +114,26 @@ public class EditFile implements SecurityContextPage {
         log.info("loading entry " + entryId);
 
         file = resourceDAO.get(unidue.rc.model.File.class, entryId);
+        filename = file.getResource().getFileName();
         collection = file.getEntry().getReserveCollection();
         copyrightStatus = file.getResource().getCopyrightReviewStatus();
         headline = file.getEntry().getAssignedHeadline();
 
+    }
+
+    @OnEvent(value = EventConstants.VALIDATE, component = "file_form")
+    void onValidateFile() {
+        try {
+            Resource resource = file.getResource();
+            if (!resource.getFilePath().endsWith(filename))
+                resourceDAO.rename(resource, filename);
+        } catch (CommitException e) {
+            fileForm.recordError(filenameField, messages.format("error.msg.could.not.commit.file", file));
+        } catch (FileExistsException e) {
+            fileForm.recordError(filenameField, messages.get("error.msg.file.already.exists"));
+        } catch (IOException e) {
+            fileForm.recordError(filenameField, messages.get("error.msg.could.not.move.file"));
+        }
     }
 
     @OnEvent(EventConstants.SUCCESS)
@@ -144,8 +159,8 @@ public class EditFile implements SecurityContextPage {
 
             return viewCollectionLink;
         } catch (CommitException | IOException e) {
-            log.debug(e.getMessage());
-            form.recordError(messages.format("error.msg.could.not.commit.file", file));
+            log.error("could not save file " + file, e);
+            fileForm.recordError(messages.format("error.msg.could.not.commit.file", file));
             return null;
 
         } finally {
