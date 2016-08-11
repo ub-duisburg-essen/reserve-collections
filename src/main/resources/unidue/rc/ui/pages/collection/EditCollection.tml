@@ -69,13 +69,17 @@
 
             <!-- expected participations of reserve collection -->
             <div class="form-group">
-                <label class="col-md-3 control-label" for="expected_participations">${message:expected-participations-label}</label>
+                <label class="col-md-3 control-label required" for="expected_participations">${message:expected-participations-label}</label>
 
                 <div class="col-md-6">
                     <input class="form-control" t:type="TextField" t:id="expected_participations"
                            id="expected_participations"
                            value="collection.expectedParticipations"/>
                     <t:error for="expected_participations"/>
+                </div>
+                <div class="col-md-3">
+                    <t:pagelink page="faq" anchor="lump_sum" class="help" data-toggle="tooltip" target="_blank"
+                                title="${message:info.msg.expected.participations}"/>
                 </div>
             </div>
 

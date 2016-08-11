@@ -145,6 +145,10 @@ public class CreateCollection {
 
     @Property
     @Validate("required")
+    private Integer expectedParticipations;
+
+    @Property
+    @Validate("required")
     private Calendar expiry;
 
     @Property
@@ -254,6 +258,7 @@ public class CreateCollection {
         collection.setStatus(ReserveCollectionStatus.NEW);
         collection.setNumber(number);
         collection.setMediaDownloadAllowed(mediaDownloadAllowed);
+        collection.setExpectedParticipations(expectedParticipations);
 
         try {
             collectionService.create(collection);

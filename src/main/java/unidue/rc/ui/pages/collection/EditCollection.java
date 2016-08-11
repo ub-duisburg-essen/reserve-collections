@@ -167,6 +167,9 @@ public class EditCollection {
     @Component(id = "readKey")
     private TextField readKeyField;
 
+    @Component(id = "expected_participations")
+    private TextField expectedParticipationsField;
+
     @Inject
     private LibraryLocationDAO libraryLocationDAO;
 
@@ -260,8 +263,12 @@ public class EditCollection {
             form.recordError(expiryField, messages.get("invalid.date.format"));
         if (!StringUtils.isBlank(dissolveAt) && !dissolveAt.matches(DATE_PICKER_FORMAT))
             form.recordError(dissolveAtField, messages.get("invalid.date.format"));
-        if (collection.getReadKey().equals(collection.getWriteKey()))
+        if (StringUtils.isBlank(collection.getReadKey())) {
+            form.recordError(readKeyField, messages.get("readKey-required-message"));
+        } else if (collection.getReadKey().equals(collection.getWriteKey()))
             form.recordError(readKeyField, messages.get("error.msg.identical.keys"));
+        if (collection.getExpectedParticipations() == null)
+            form.recordError(expectedParticipationsField, messages.get("expected_participations-required-message"));
 
     }
 

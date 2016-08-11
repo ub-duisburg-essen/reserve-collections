@@ -80,7 +80,7 @@
 
                 <!-- expected participations -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="expiry">${message:expected-participations-label}</label>
+                    <label class="col-md-3 control-label required" for="expiry">${message:expected-participations-label}</label>
 
                     <div class="col-md-6">
                         <input t:type="textfield" t:id="expected_participations" id="expected_participations"
