@@ -11,6 +11,7 @@
 #parse("editor.vm")
 #parse("collection.vm")
 #parse("entry.vm")
+#parse("journal.article.vm")
 #parse("deleted.entry.vm")
 </body>
 </html>
