@@ -156,6 +156,7 @@ public class EditFile implements SecurityContextPage {
                 headlineDAO.move(file.getEntry(), headline);
             Link viewCollectionLink = linkSource.createPageRenderLinkWithContext(ViewCollection.class,
                     collection.getId());
+            viewCollectionLink.setAnchor(file.getId().toString());
 
             return viewCollectionLink;
         } catch (CommitException | IOException e) {

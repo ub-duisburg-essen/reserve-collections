@@ -217,6 +217,7 @@ public class EditJournal implements SecurityContextPage {
             log.info("journalarticle entry for " + collection + " saved");
             returnLink = linkSource.createPageRenderLinkWithContext(ViewCollection.class,
                     collection.getId());
+            returnLink.setAnchor(journal.getId().toString());
 
         }
         return returnLink;

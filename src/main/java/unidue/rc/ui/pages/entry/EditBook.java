@@ -115,6 +115,7 @@ public class EditBook implements SecurityContextPage {
                 headlineDAO.move(book.getEntry(), headline);
             Link viewCollectionLink = linkSource.createPageRenderLinkWithContext(ViewCollection.class,
                     collection.getId());
+            viewCollectionLink.setAnchor(book.getId().toString());
 
             return viewCollectionLink;
         } catch (CommitException e) {

@@ -114,6 +114,7 @@ public class EditHeadline implements SecurityContextPage {
 
             Link viewCollectionLink = linkSource.createPageRenderLinkWithContext(ViewCollection.class,
                     collection.getId());
+            viewCollectionLink.setAnchor(headline.getId().toString());
 
             return viewCollectionLink;
         } catch (CommitException e) {

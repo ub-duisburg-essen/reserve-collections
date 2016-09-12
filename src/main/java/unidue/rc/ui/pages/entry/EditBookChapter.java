@@ -222,6 +222,7 @@ public class EditBookChapter implements SecurityContextPage {
             log.info("bookchapter entry for " + collection + " saved");
             returnLink = linkSource.createPageRenderLinkWithContext(ViewCollection.class,
                     collection.getId());
+            returnLink.setAnchor(chapter.getId().toString());
 
         }
         return returnLink;

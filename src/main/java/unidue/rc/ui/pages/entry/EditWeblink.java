@@ -130,6 +130,7 @@ public class EditWeblink implements SecurityContextPage {
                 headlineDAO.move(weblink.getEntry(), headline);
             Link viewCollectionLink = linkSource.createPageRenderLinkWithContext(ViewCollection.class,
                     collection.getId());
+            viewCollectionLink.setAnchor(weblink.getId().toString());
 
             return viewCollectionLink;
         } catch (CommitException e) {
