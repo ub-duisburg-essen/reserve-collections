@@ -17,6 +17,7 @@ package unidue.rc.ui.pages.entry;
 
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.tapestry5.*;
 import org.apache.tapestry5.annotations.*;
@@ -30,6 +31,7 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import unidue.rc.dao.BaseDAO;
 import unidue.rc.dao.CommitException;
 import unidue.rc.dao.HeadlineDAO;
+import unidue.rc.dao.ResourceDAO;
 import unidue.rc.model.*;
 import unidue.rc.security.CollectionSecurityService;
 import unidue.rc.ui.SecurityContextPage;
@@ -57,12 +59,13 @@ public class EditBookChapter implements SecurityContextPage {
     @Inject
     private Logger log;
 
-    @InjectPage
-    private ViewCollection view;
-
     @Inject
     @Service(HeadlineDAO.SERVICE_NAME)
     private HeadlineDAO headlineDAO;
+
+    @Inject
+    @Service(ResourceDAO.SERVICE_NAME)
+    private ResourceDAO resourceDAO;
 
     @Property
     private Headline headline;
@@ -70,6 +73,9 @@ public class EditBookChapter implements SecurityContextPage {
     @Property
     @Persist
     private List<UploadedFile> uploads;
+
+    @Property
+    private String filename;
 
     @Property
     private boolean deleteFile;
@@ -134,7 +140,10 @@ public class EditBookChapter implements SecurityContextPage {
         headline = chapter.getEntry().getAssignedHeadline();
 
         Resource resource = chapter.getResource();
-        copyrightStatus = resource != null ? resource.getCopyrightReviewStatus() : null;
+        if (resource != null) {
+            copyrightStatus = resource.getCopyrightReviewStatus();
+            filename = resource.getFileName();
+        }
     }
 
     /**
@@ -157,7 +166,14 @@ public class EditBookChapter implements SecurityContextPage {
 
             throw new ValidationException(e.getLocalizedMessage());
         }
+    }
 
+    void onValidateFromFilename(String value) throws ValidationException {
+
+        Resource resource = chapter.getResource();
+        if (StringUtils.isNotBlank(resource.getFileName())
+                && StringUtils.isBlank(value))
+            throw new ValidationException(messages.get("filename-required-message"));
     }
 
     @OnEvent(value = EventConstants.SUCCESS, component = "edit_bookchapter_form")
@@ -179,11 +195,17 @@ public class EditBookChapter implements SecurityContextPage {
         }
         Resource resource = chapter.getResource();
         if (resource != null) {
+
             resource.setCopyrightReviewStatus(copyrightStatus);
             try {
+                if (!resource.getFilePath().endsWith(filename))
+                    resourceDAO.rename(resource, filename);
+
                 resourceService.update(resource);
             } catch (CommitException e) {
                 form.recordError(messages.format("error.msg.could.not.commit.resource", resource));
+            } catch (IOException e) {
+                form.recordError(messages.format("error.msg.could.not.move.file", resource));
             }
         }
 

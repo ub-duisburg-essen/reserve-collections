@@ -170,6 +170,9 @@
 
                 <div class="col-md-6">
                     <div t:type="udetapestry/ajaxupload" t:id="uploads" id="uploads" maxFiles="1"/>
+                    <input t:type="TextField" t:id="filename" id="filename" class="form-control"
+                           t:value="filename"/>
+                    <t:error for="filename"/>
 
                 </div>
             </div>
@@ -180,7 +183,6 @@
 
                         <div class="col-md-6">
                             <input t:type="checkbox" value="deleteFile" t:id="deleteFile" id="deleteFile"/>
-                            <label class="sub" for="deleteFile">${chapter.resource.fileName}</label>
                         </div>
                     </div>
                 </t:if>

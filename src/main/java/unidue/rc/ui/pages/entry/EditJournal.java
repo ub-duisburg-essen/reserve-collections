@@ -17,11 +17,9 @@ package unidue.rc.ui.pages.entry;
 
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.AuthorizationException;
-import org.apache.tapestry5.EventConstants;
-import org.apache.tapestry5.EventContext;
-import org.apache.tapestry5.Link;
-import org.apache.tapestry5.ValidationException;
+import org.apache.tapestry5.*;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
@@ -29,6 +27,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.Service;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.corelib.components.Form;
+import org.apache.tapestry5.corelib.components.TextField;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.PageRenderLinkSource;
@@ -38,6 +37,7 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import unidue.rc.dao.BaseDAO;
 import unidue.rc.dao.CommitException;
 import unidue.rc.dao.HeadlineDAO;
+import unidue.rc.dao.ResourceDAO;
 import unidue.rc.model.*;
 import unidue.rc.security.CollectionSecurityService;
 import unidue.rc.ui.ProtectedPage;
@@ -77,6 +77,13 @@ public class EditJournal implements SecurityContextPage {
 
     @Property
     private UploadedFile file;
+
+    @Property
+    private String filename;
+
+    @Inject
+    @Service(ResourceDAO.SERVICE_NAME)
+    private ResourceDAO resourceDAO;
 
     @Inject
     @Service(HeadlineDAO.SERVICE_NAME)
@@ -119,6 +126,9 @@ public class EditJournal implements SecurityContextPage {
     @Component(id = "journal_form")
     private Form form;
 
+    @Component(id = "filename")
+    private TextField filenameField;
+
     @SetupRender
     void onSetupRender() {
         uploads = new ArrayList<>();
@@ -132,7 +142,10 @@ public class EditJournal implements SecurityContextPage {
         collection = journal.getReserveCollection();
 
         Resource resource = journal.getResource();
-        copyrightStatus = resource != null ? resource.getCopyrightReviewStatus() : null;
+        if (resource != null) {
+            copyrightStatus = resource.getCopyrightReviewStatus();
+            filename = resource.getFileName();
+        }
 
         headline = journal.getEntry().getAssignedHeadline();
     }
@@ -148,6 +161,15 @@ public class EditJournal implements SecurityContextPage {
             throw new ValidationException(e.getLocalizedMessage());
         }
 
+    }
+
+    void onValidateFromFilename(String value) throws ValidationException {
+
+        Resource resource = journal.getResource();
+        if (StringUtils.isNotBlank(resource.getFileName())
+                && StringUtils.isBlank(value)) {
+            throw new ValidationException(messages.get("filename-required-message"));
+        }
     }
 
     @OnEvent(EventConstants.SUCCESS)
@@ -173,9 +195,13 @@ public class EditJournal implements SecurityContextPage {
         if (resource != null) {
             resource.setCopyrightReviewStatus(copyrightStatus);
             try {
+                if (!resource.getFilePath().endsWith(filename))
+                    resourceDAO.rename(resource, filename);
                 resourceService.update(resource);
             } catch (CommitException e) {
                 form.recordError(messages.format("error.msg.could.not.commit.resource", resource));
+            } catch (IOException e) {
+                form.recordError(messages.format("error.msg.could.not.move.file", resource));
             }
         }
         try {
