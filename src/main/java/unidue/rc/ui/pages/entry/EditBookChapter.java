@@ -178,35 +178,28 @@ public class EditBookChapter implements SecurityContextPage {
 
     @OnEvent(value = EventConstants.SUCCESS, component = "edit_bookchapter_form")
     Object onSuccess() {
-        try {
-            if (deleteFile)
-                scannableService.deleteFile(chapter);
+        Resource resource = chapter.getResource();
+        final int action = uploads != null && !uploads.isEmpty()
+                           ? 0x110 // delete file and upload new one
+                           : deleteFile
+                             ? 0x100 // delete file
+                             : resource != null && !resource.getFilePath().endsWith(filename)
+                               ? 0x001 // just rename
+                               : 0;
+        if ((action & 0x100) == 0x100) {
+            deleteFile();
+        }
+        if ((action & 0x010) == 0x010) {
+            uploadFile();
+        }
+        if ((action & 0x001) == 0x001) {
+            updateResource(resource);
+        }
 
+        try {
             scannableService.update(chapter, fullTextURL);
-            if (uploads != null && !uploads.isEmpty()) {
-                UploadedFile uploadedFile = uploads.get(0);
-                scannableService.update(chapter, uploadedFile.getFileName(), uploadedFile.getStream());
-                uploads = null;
-            }
-        } catch (IOException e) {
-            form.recordError(messages.format("error.msg.could.not.save.file", chapter));
         } catch (CommitException e) {
             form.recordError(messages.format("error.msg.could.not.commit.chapter", chapter));
-        }
-        Resource resource = chapter.getResource();
-        if (resource != null) {
-
-            resource.setCopyrightReviewStatus(copyrightStatus);
-            try {
-                if (!resource.getFilePath().endsWith(filename))
-                    resourceDAO.rename(resource, filename);
-
-                resourceService.update(resource);
-            } catch (CommitException e) {
-                form.recordError(messages.format("error.msg.could.not.commit.resource", resource));
-            } catch (IOException e) {
-                form.recordError(messages.format("error.msg.could.not.move.file", resource));
-            }
         }
 
         try {
@@ -218,8 +211,6 @@ public class EditBookChapter implements SecurityContextPage {
 
         Link returnLink = null;
         if (!form.getHasErrors()) {
-
-            log.info("bookchapter entry for " + collection + " saved");
             returnLink = linkSource.createPageRenderLinkWithContext(ViewCollection.class,
                     collection.getId());
             returnLink.setAnchor(chapter.getId().toString());
@@ -227,6 +218,42 @@ public class EditBookChapter implements SecurityContextPage {
         }
         return returnLink;
 
+    }
+
+    private void updateResource(Resource resource) {
+        resource.setCopyrightReviewStatus(copyrightStatus);
+        try {
+            if (!resource.getFilePath().endsWith(filename))
+                resourceDAO.rename(resource, filename);
+
+            resourceService.update(resource);
+        } catch (CommitException e) {
+            form.recordError(messages.format("error.msg.could.not.commit.resource", resource));
+        } catch (IOException e) {
+            form.recordError(messages.format("error.msg.could.not.move.file", resource));
+        }
+    }
+
+    private void uploadFile() {
+
+        try {
+            UploadedFile uploadedFile = uploads.get(0);
+            scannableService.update(chapter, uploadedFile.getFileName(), uploadedFile.getStream());
+            uploads = null;
+        } catch (IOException e) {
+            form.recordError(messages.format("error.msg.could.not.save.file", chapter));
+        } catch (CommitException e) {
+            form.recordError(messages.format("error.msg.could.not.commit.chapter", chapter));
+        }
+    }
+
+    private void deleteFile() {
+
+        try {
+            scannableService.deleteFile(chapter);
+        } catch (CommitException e) {
+            form.recordError(messages.format("error.msg.could.not.commit.chapter", chapter));
+        }
     }
 
     @Override

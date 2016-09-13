@@ -170,9 +170,11 @@
 
                 <div class="col-md-6">
                     <div t:type="udetapestry/ajaxupload" t:id="uploads" id="uploads" maxFiles="1"/>
-                    <input t:type="TextField" t:id="filename" id="filename" class="form-control"
-                           t:value="filename"/>
-                    <t:error for="filename"/>
+                    <t:if test="chapter.fileAvailable">
+                        <input t:type="TextField" t:id="filename" id="filename" class="form-control"
+                               t:value="filename"/>
+                        <t:error for="filename"/>
+                    </t:if>
 
                 </div>
             </div>
