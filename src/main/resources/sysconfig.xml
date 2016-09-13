@@ -697,4 +697,11 @@
         <format></format>
         <type>1</type>
     </defaultSetting>
+    <defaultSetting>
+        <label>Anzahl Tage nach dem ein Semesterapparat automatisch nach Ablauf der Gültigkeit deaktiviert werden soll</label>
+        <key>days.until.automatic.deactivation</key>
+        <value>7</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
 </defaultSettingsList>

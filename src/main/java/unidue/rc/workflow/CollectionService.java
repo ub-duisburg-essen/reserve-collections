@@ -99,6 +99,12 @@ public interface CollectionService {
     void deactivate(ReserveCollection collection) throws CommitException;
 
     /**
+     * Deactivates all active reserve collections that are have expired and contain an expiration date before now minus
+     * the count of days configured in system config with the key <code>days.until.automatic.deactivation</code>
+     */
+    void deactivateExpired();
+
+    /**
      * Archives target {@linkplain ReserveCollection} in backend.
      *
      * @param collection {@linkplain ReserveCollection} to archive.

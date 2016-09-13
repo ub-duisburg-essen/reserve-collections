@@ -34,15 +34,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import unidue.rc.dao.CommitException;
-import unidue.rc.dao.DeleteException;
-import unidue.rc.dao.EntryDAO;
-import unidue.rc.dao.NumberAssignedException;
-import unidue.rc.dao.ParticipationDAO;
-import unidue.rc.dao.ReserveCollectionDAO;
-import unidue.rc.dao.ReserveCollectionNumberDAO;
-import unidue.rc.dao.RoleDAO;
-import unidue.rc.dao.UserDAO;
+import unidue.rc.dao.*;
 import unidue.rc.model.ActionDefinition;
 import unidue.rc.model.CollectionAdmin;
 import unidue.rc.model.DefaultRole;
@@ -66,6 +58,7 @@ import unidue.rc.system.SystemMessageService;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -254,6 +247,39 @@ public class CollectionServiceImpl implements CollectionService {
         securityService.afterCollectionDeactivated(collection);
 
         sendCollectionMail(collection);
+    }
+
+    @Override
+    public void deactivateExpired() {
+        Integer dayCount = config.getInt("days.until.automatic.deactivation");
+
+        Predicate<ReserveCollection> expiredPredicate = collection ->
+                LocalDate.now().plusDays(dayCount).isAfter(LocalDate.fromDateFields(collection.getValidTo()))
+                && collection.getStatus().equals(ReserveCollectionStatus.ACTIVE);
+
+        Predicate<ReserveCollection> dissolvePredicate = collection ->
+                collection.getDissolveAt() != null
+                && LocalDate.now().isAfter(LocalDate.fromDateFields(collection.getDissolveAt()))
+                && collection.getStatus().equals(ReserveCollectionStatus.ACTIVE);
+
+        batchDeactivate(0, BaseDAO.MAX_RESULTS, expiredPredicate, dissolvePredicate);
+    }
+
+    private void batchDeactivate(int offset, int maxResults, Predicate<ReserveCollection>...predicates) {
+        List<ReserveCollection> collections = collectionDAO.get(ReserveCollection.class, offset, maxResults);
+        for (ReserveCollection collection : collections) {
+
+            boolean anyMatch = Stream.of(predicates).anyMatch(p -> p.test(collection));
+            if (anyMatch) {
+                try {
+                    deactivate(collection);
+                } catch (CommitException e) {
+                    LOG.error("could not deactivate collection " + collection, e);
+                }
+            }
+        }
+        if (collections.size() >= maxResults)
+            batchDeactivate(offset + maxResults, maxResults, predicates);
     }
 
     @Override

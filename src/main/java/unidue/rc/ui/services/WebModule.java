@@ -43,6 +43,7 @@ import unidue.rc.system.CayenneServiceImpl;
 import unidue.rc.system.MailCronJob;
 import unidue.rc.system.QuartzService;
 import unidue.rc.system.SystemConfigurationService;
+import unidue.rc.workflow.AutoDeactivationCronJob;
 import unidue.rc.workflow.CollectionWarningCronJob;
 import unidue.rc.workflow.ScanJobSyncCronJob;
 
@@ -174,6 +175,10 @@ public class WebModule {
         // send warning mails
         quartzService.add(createCronJob(CollectionWarningCronJob.class, jobMapData),
                 createCronJobTrigger(CronScheduleBuilder.dailyAtHourAndMinute(10, 0)));
+
+        // deactivate collections that expired
+        quartzService.add(createCronJob(AutoDeactivationCronJob.class, jobMapData),
+                createCronJobTrigger(CronScheduleBuilder.dailyAtHourAndMinute(3, 0)));
     }
 
     private static JobDetail createCronJob(Class clazz, Map<String, Object> mapData) {
