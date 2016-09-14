@@ -166,7 +166,8 @@ public class EditJournal implements SecurityContextPage {
     void onValidateFromFilename(String value) throws ValidationException {
 
         Resource resource = journal.getResource();
-        if (StringUtils.isNotBlank(resource.getFileName())
+        if (resource != null
+                && StringUtils.isNotBlank(resource.getFileName())
                 && StringUtils.isBlank(value)) {
             throw new ValidationException(messages.get("filename-required-message"));
         }
@@ -179,7 +180,7 @@ public class EditJournal implements SecurityContextPage {
                            ? 0x110 // delete file and upload new one
                            : deleteFile
                              ? 0x100 // delete file
-                             : resource != null && !resource.getFilePath().endsWith(filename)
+                             : resource != null && !StringUtils.endsWith(resource.getFilePath(), filename)
                                ? 0x001 // just rename
                                : 0;
         if ((action & 0x100) == 0x100) {
