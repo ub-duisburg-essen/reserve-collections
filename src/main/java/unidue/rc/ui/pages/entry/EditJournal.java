@@ -166,7 +166,8 @@ public class EditJournal implements SecurityContextPage {
     void onValidateFromFilename(String value) throws ValidationException {
 
         Resource resource = journal.getResource();
-        if (StringUtils.isNotBlank(resource.getFileName())
+        if (resource != null
+                && StringUtils.isNotBlank(resource.getFileName())
                 && StringUtils.isBlank(value)) {
             throw new ValidationException(messages.get("filename-required-message"));
         }
