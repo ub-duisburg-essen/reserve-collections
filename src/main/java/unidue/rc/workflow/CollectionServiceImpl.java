@@ -675,9 +675,12 @@ public class CollectionServiceImpl implements CollectionService {
         context.put("collectionLink", urlService.getViewCollectionURL(collection));
         context.put("authors", mailService.buildAuthors(collection));
         context.put("origin", mailService.buildOrigin(collection));
-        context.put("user", currentUser);
-        context.put("userOrigin", mailService.buildOrigin(currentUser));
-        context.put("roles", roleDAO.getRoles(currentUser));
+
+        if (currentUser != null) {
+            context.put("user", currentUser);
+            context.put("userOrigin", mailService.buildOrigin(currentUser));
+            context.put("roles", roleDAO.getRoles(currentUser));
+        }
         if (authorID.isPresent())
             context.put("editUserLink", urlService.getEditUserLink(userDAO.getUserById(authorID.get())));
 

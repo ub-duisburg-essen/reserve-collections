@@ -25,10 +25,6 @@ public class User extends _User implements IntPrimaryKey {
     
     public static final String USER_SESSION_ATTRIBUTE = "unidue.rc.currentuser";
 
-    String come;
-    String get;
-    String some;
-
     @Override
     public Integer getId() {
         return getUserid();

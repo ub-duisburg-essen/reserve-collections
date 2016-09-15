@@ -10,6 +10,8 @@
 </h3>
 #parse('editor.vm')
 #parse('collection.vm')
-#parse('user.vm')
+#if($user)
+    #parse('user.vm')
+#end
 </body>
 </html>

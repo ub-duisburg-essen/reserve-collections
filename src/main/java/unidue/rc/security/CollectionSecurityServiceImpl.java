@@ -27,6 +27,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -87,10 +88,16 @@ public class CollectionSecurityServiceImpl implements CollectionSecurityService 
 
     @Override
     public User getCurrentUser() {
-        Session shiroSession = SecurityUtils.getSubject().getSession(false);
-        return shiroSession != null
-                ? (User) shiroSession.getAttribute(User.USER_SESSION_ATTRIBUTE)
-                : null;
+        try {
+            Subject subject = SecurityUtils.getSubject();
+            Session shiroSession = subject.getSession(false);
+            return shiroSession != null
+                    ? (User) shiroSession.getAttribute(User.USER_SESSION_ATTRIBUTE)
+                    : null;
+        } catch (IllegalStateException | InvalidSessionException | UnavailableSecurityManagerException e) {
+            LOG.warn("no security manager available", e);
+            return null;
+        }
     }
 
     @Override
