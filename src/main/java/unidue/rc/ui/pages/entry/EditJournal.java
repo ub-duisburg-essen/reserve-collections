@@ -193,7 +193,8 @@ public class EditJournal implements SecurityContextPage {
             updateResource(resource);
         }
         try {
-
+            if (resource != null)
+                resource.setCopyrightReviewStatus(copyrightStatus);
             scannableService.update(journal, fullTextURL);
         } catch (CommitException e){
                 form.recordError(messages.format("error.msg.could.not.commit.journal", journal));

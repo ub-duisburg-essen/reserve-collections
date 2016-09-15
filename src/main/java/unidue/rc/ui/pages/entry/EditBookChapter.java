@@ -198,6 +198,8 @@ public class EditBookChapter implements SecurityContextPage {
         }
 
         try {
+            if (resource != null)
+                resource.setCopyrightReviewStatus(copyrightStatus);
             scannableService.update(chapter, fullTextURL);
         } catch (CommitException e) {
             form.recordError(messages.format("error.msg.could.not.commit.chapter", chapter));
@@ -222,7 +224,6 @@ public class EditBookChapter implements SecurityContextPage {
     }
 
     private void updateResource(Resource resource) {
-        resource.setCopyrightReviewStatus(copyrightStatus);
         try {
             if (!resource.getFilePath().endsWith(filename))
                 resourceDAO.rename(resource, filename);
