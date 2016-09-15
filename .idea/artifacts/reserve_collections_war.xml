@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="reserve-collections:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="reserve-collections.war">
+      <element id="artifact" artifact-name="reserve-collections:war exploded" />
+    </root>
+  </artifact>
+</component>
