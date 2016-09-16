@@ -238,7 +238,7 @@ public class BookJobServiceImpl implements BookJobService {
                     .subject(subject.toString())
                     .context(context)
                     .addRecipients(recipients.stream().toArray(String[]::new));
-            if (!StringUtils.isEmpty(currentUser.getEmail()))
+            if (currentUser != null && !StringUtils.isEmpty(currentUser.getEmail()))
                 mailBuilder.addReplyTo(currentUser.getEmail());
 
             Mail mail = mailBuilder.create();
