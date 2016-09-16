@@ -32,6 +32,8 @@ import unidue.rc.model.IntPrimaryKey;
 import unidue.rc.system.SystemConfigurationService;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.*;
 
 /**
@@ -43,6 +45,8 @@ public class SolrServiceImpl implements SolrService {
     private static final Logger LOG = LoggerFactory.getLogger(SolrServiceImpl.class);
 
     private static final int MAX_TIMEOUT_SECONDS = 5;
+
+    private final Map<Core, SolrClient> solrClients = new HashMap<>();
 
     @Inject
     private SystemConfigurationService config;
@@ -179,8 +183,13 @@ public class SolrServiceImpl implements SolrService {
     }
 
     private SolrClient getClient(Core core) {
-        String coreURL = config.getString("solr.core." + core.value);
-        return new HttpSolrClient(coreURL);
+        SolrClient solrClient = solrClients.get(core);
+        if (solrClient == null) {
+            String coreURL = config.getString("solr.core." + core.value);
+            solrClient = new HttpSolrClient(coreURL);
+            solrClients.put(core, solrClient);
+        }
+        return solrClient;
     }
 
 
