@@ -244,7 +244,7 @@ public class EditCollection {
 
             // number has changed
             Optional<Participation> p = participations.stream()
-                    .filter(participation -> numberDAO.isNumberFree(newNumberValue, collection.getLibraryLocation()))
+                    .filter(participation -> numberDAO.isNumberFree(newNumberValue, libraryLocation))
                     .findAny();
             if (!p.isPresent()) {
                 // record error if number has changed and new number is not free for target location
