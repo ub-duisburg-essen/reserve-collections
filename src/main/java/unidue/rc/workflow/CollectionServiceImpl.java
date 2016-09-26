@@ -253,13 +253,15 @@ public class CollectionServiceImpl implements CollectionService {
     public void deactivateExpired() {
         Integer dayCount = config.getInt("days.until.automatic.deactivation");
 
+        LocalDate now = LocalDate.now();
         Predicate<ReserveCollection> expiredPredicate = collection ->
-                LocalDate.now().plusDays(dayCount).isAfter(LocalDate.fromDateFields(collection.getValidTo()))
+                now.minusDays(dayCount).isAfter(LocalDate.fromDateFields(collection.getValidTo()))
+                && collection.getDissolveAt() == null
                 && collection.getStatus().equals(ReserveCollectionStatus.ACTIVE);
 
         Predicate<ReserveCollection> dissolvePredicate = collection ->
                 collection.getDissolveAt() != null
-                && LocalDate.now().isAfter(LocalDate.fromDateFields(collection.getDissolveAt()))
+                && now.isAfter(LocalDate.fromDateFields(collection.getDissolveAt()))
                 && collection.getStatus().equals(ReserveCollectionStatus.ACTIVE);
 
         batchDeactivate(0, BaseDAO.MAX_RESULTS, expiredPredicate, dissolvePredicate);
