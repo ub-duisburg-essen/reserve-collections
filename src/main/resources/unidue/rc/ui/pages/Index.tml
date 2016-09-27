@@ -1,6 +1,13 @@
 <html t:type="layout" title="${message:page.title}"
       actionBarBlock="indexBlock"
+      headBarBlock="headBlock"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+<t:block t:id="headBlock">
+    <noscript>
+        <meta http-equiv="refresh" content="0; URL=nojs"/>
+    </noscript>
+</t:block>
 
 <t:block t:id="indexBlock">
     <t:secureblock action="CREATE_RESERVE_COLLECTION">
@@ -9,7 +16,7 @@
     <ul class="nav navbar-nav">
 
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown">
                 <b class="glyphicon glyphicon-filter"></b><span class="dropdown-text"> ${message:filter} </span><b
                     class="caret"></b>
             </a>

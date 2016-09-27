@@ -18,6 +18,9 @@ package unidue.rc.search;
 
 import org.apache.solr.client.solrj.SolrQuery;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 /**
  * A <code>SolrSortField</code> can be used to apply consistend ordering of different fields in solr.
  *
@@ -65,5 +68,14 @@ public class SolrSortField {
 
     public void setOrder(SolrQuery.ORDER order) {
         this.order = order;
+    }
+
+    public void setOrder(String orderName) {
+
+        Optional<SolrQuery.ORDER> order = Arrays.stream(SolrQuery.ORDER.values())
+                .filter(o -> o.name().equals(orderName))
+                .findAny();
+        if (order.isPresent())
+            this.order = order.get();
     }
 }

@@ -1,0 +1,110 @@
+<html t:type="layout" title="${message:page.title}"
+      actionBarBlock="indexBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+<t:block t:id="indexBlock">
+    <t:secureblock action="CREATE_RESERVE_COLLECTION">
+        <t:reservecollectionactionslinklist/>
+    </t:secureblock>
+</t:block>
+
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div t:type="paper">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <form method="get" action="nojs/index" class="form-horizontal">
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="query">${message:search-label}</label>
+
+                            <div class="col-md-5">
+                                <input type="text" name="query" id="query" value="${query}" class="form-control input-sm"/>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="submit"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table collection-table">
+                        <thead>
+                        <tr>
+                            <th>
+                                <span>${message:location}</span>
+                                <a href="${getSortLink('location')}" class="sort-icon ${getClassForSort('location')}"/>
+                            </th>
+                            <th>
+                                <span>${message:number-label}</span>
+                                <a href="${getSortLink('number')}" class="sort-icon ${getClassForSort('number')}"/>
+                            </th>
+                            <t:secureblock action="VIEW_RESERVE_COLLECTION_EXPIRATION">
+                                <th>
+                                    <span>${message:expiration-label}<span
+                                            class="label label-info"> ${message:dissolution}</span></span>
+                                    <a href="${getSortLink('expiration')}" class="sort-icon ${getClassForSort('expiration')}"/>
+                                </th>
+                            </t:secureblock>
+                            <th>
+                                <span>${message:author-label}</span>
+                            </th>
+                            <th>
+                                <span>${message:title-label}</span>
+                                <a href="${getSortLink('title')}" class="sort-icon ${getClassForSort('title')}"/>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <t:loop source="collections.items" value="collectionView">
+                            <tr>
+                                <td>${collectionView.location}</td>
+                                <td>${collectionView.collectionNumber}</td>
+                                <t:secureblock action="VIEW_RESERVE_COLLECTION_EXPIRATION">
+                                    <td>
+                                        <t:output format="${prop:smallDateFormat}" value="collectionView.validTo"/>
+                                        <t:if test="collectionView.dissolveAt">
+                                            <span class="label label-info"> <t:output format="${prop:smallDateFormat}" value="collectionView.dissolveAt"/></span>
+                                        </t:if>
+                                    </td>
+                                </t:secureblock>
+                                <td>
+                                    <ul>
+                                        <t:if test="collectionView.authors">
+                                            <t:loop source="collectionView.authors" value="author">
+                                                <li>${author}</li>
+                                            </t:loop>
+                                        </t:if>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <t:pagelink page="collection/viewcollection"
+                                                context="collectionView.collectionId">${collectionView.title}</t:pagelink>
+                                    <t:secureblock action="EDIT_RESERVE_COLLECTION_ADMIN_DATA">
+                                        <t:if test="collectionView.collectionComment">
+                                            <a href="#" data-toggle="tooltip" class="help" id="show-collectioncomment-help"
+                                               title="${collectionView.collectionComment}"></a>
+                                        </t:if>
+                                    </t:secureblock>
+                                </td>
+                            </tr>
+                        </t:loop>
+                        </tbody>
+                        <!-- place collection count beneath loop cause the variable is set after retrieval -->
+                        <caption>${collectionCount} ${message:reserve-collections}</caption>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>
