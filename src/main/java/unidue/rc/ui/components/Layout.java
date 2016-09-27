@@ -79,6 +79,10 @@ public class Layout {
     private Block actionBarBlock;
 
     @Property
+    @Parameter(required = false, defaultPrefix = BindingConstants.BLOCK)
+    private Block headBarBlock;
+
+    @Property
     private BreadCrumbInfo breadCrumb;
 
     @Inject
