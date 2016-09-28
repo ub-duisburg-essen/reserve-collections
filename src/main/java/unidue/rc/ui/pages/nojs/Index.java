@@ -6,8 +6,10 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.annotations.ActivationRequestParameter;
+import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.PageRenderLinkSource;
@@ -71,6 +73,14 @@ public class Index {
 
     @Property
     private String sortParam;
+
+    @Property(write = false)
+    private SolrResponse<SolrCollectionView> collections;
+
+    @OnEvent(EventConstants.ACTIVATE)
+    void onActivate() {
+        loadCollections();
+    }
 
     public List<String> getCurrentSortParams() {
         Link link = linkSource.createPageRenderLink(Index.class);
@@ -167,11 +177,11 @@ public class Index {
         return DateTimeFormat.forPattern(dateFormat).print(date.getTime());
     }
 
-    public int getCollectionCount() {
-        return 0;
+    public long getCollectionCount() {
+        return collections.getCount();
     }
 
-    public SolrResponse<SolrCollectionView> getCollections() {
+    void loadCollections() {
         // link back to the current page including all parameters
         Link link = linkSource.createPageRenderLink(Index.class);
 
@@ -196,24 +206,33 @@ public class Index {
         }
         SolrQuery query = queryBuilder.setCount(100).build();
         try {
-            return solrService.query(SolrCollectionView.class, query);
+            this.collections = solrService.query(SolrCollectionView.class, query);
         } catch (SolrServerException e) {
             log.error("could not query solr", e);
         }
-        return new SolrResponse();
     }
 
-    private void addSortField(String fieldName, String order, SolrQueryBuilder queryBuilder) {
-        Optional<String> sortParam = SORT_MAPPING.stream()
-                .filter(m -> m.ui.equals(fieldName))
+    private void addSortField(String uiFieldName, String order, SolrQueryBuilder queryBuilder) {
+        // find mapping
+        Optional<String> optionalSortParam = SORT_MAPPING.stream()
+                .filter(m -> m.ui.equals(uiFieldName))
                 .map(p -> p.backend)
                 .findAny();
 
-        SolrSortField sortField = new SolrSortField(sortParam.get());
-        sortField.setOrder(order);
-        SolrQuery.ORDER realOrder = sortField.getOrder();
-        if (realOrder != null)
-            queryBuilder.addSortField(sortParam.get(), realOrder);
+        if (optionalSortParam.isPresent()) {
+            String sortParam = optionalSortParam.get();
+
+            // create sort field
+            SolrSortField sortField = new SolrSortField(sortParam);
+
+            // set order according to given string value
+            sortField.setOrder(order);
+
+            SolrQuery.ORDER realOrder = sortField.getOrder();
+            // add order to query if the string order contained a valid value
+            if (realOrder != null)
+                queryBuilder.addSortField(sortParam, realOrder);
+        }
     }
 
     private static class SortMapEntry {
