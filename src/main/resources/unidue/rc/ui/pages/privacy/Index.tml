@@ -60,7 +60,7 @@
                         </t:if>
                         <div class="form-group hide-on-js">
                             <div class="col-md-9">
-                                <input type="submit" value="${message:submit}"/>
+                                <input type="submit" value="${message:form-submit-label}"/>
                             </div>
                         </div>
                     </div>
