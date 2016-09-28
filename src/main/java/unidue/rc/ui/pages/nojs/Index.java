@@ -1,22 +1,32 @@
 package unidue.rc.ui.pages.nojs;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.annotations.ActivationRequestParameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.apache.tapestry5.services.Request;
+import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbReset;
 import unidue.rc.model.solr.SolrCollectionView;
+import unidue.rc.search.SolrQueryBuilder;
 import unidue.rc.search.SolrResponse;
+import unidue.rc.search.SolrService;
 import unidue.rc.search.SolrSortField;
 
-import java.text.Format;
-import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by nils on 26.09.16.
@@ -25,7 +35,13 @@ import java.text.SimpleDateFormat;
 @BreadCrumbReset
 public class Index {
 
-    private static final Format SMALL_DATE_FORMAT = new SimpleDateFormat("dd.MM.yy");
+    private static final List<Pair<String, String>> SORT_MAPPING = Stream.of(
+            Pair.of("location", SolrCollectionView.LOCATION_PROPERTY),
+            Pair.of("number", SolrCollectionView.COLLECTION_NUMBER_NUMERIC_PROPERTY),
+            Pair.of("expiration", SolrCollectionView.VALID_TO_PROPERTY),
+            Pair.of("title", SolrCollectionView.TITLE_PROPERTY)
+    ).collect(Collectors.toList());
+    private static final String SORT_PARAM_PATTERN = "(\\d+)_(asc|desc)";
 
     @Inject
     private Logger log;
@@ -35,6 +51,9 @@ public class Index {
 
     @Inject
     private Request request;
+
+    @Inject
+    private SolrService solrService;
 
     @ActivationRequestParameter
     @Property
@@ -51,27 +70,58 @@ public class Index {
 
     public Link getSortLink(String fieldName) {
 
+        /*
+        the sort param is of the form <field>=<sort_number>_<order>
+        to apply ordering in the correct selected order new fields must get a number higher than the current
+        used number. already present fields must retain their number.
+         */
+
+
         // link back to the current page including all parameters
         Link link = linkSource.createPageRenderLink(Index.class);
 
+        Optional<Integer> max = link.getParameterNames()
+                .stream()
+                .filter(p -> SORT_MAPPING.stream()
+                        .anyMatch(p2 -> p.endsWith(p2.getLeft()))) // filter for all sort params
+                .map(p -> link.getParameterValue(p).split("_")) // split for sort number
+                .filter(v -> v.length > 0 && NumberUtils.isNumber(v[0]))  // safety check for numeric values
+                .map(v -> Integer.valueOf(v[0]))  // map to integer
+                .max((v1, v2) -> v1.compareTo(v2));  // get max value if present
+        Integer newSortNum = max.isPresent()
+                             ? max.get() + 1
+                             : 0;
+
         // current ordering by fieldname
-        String currentOrder = link.getParameterValue(fieldName);
+        String[] currentOrder = StringUtils.split(link.getParameterValue(fieldName), "_");
 
         // wrap to new field to apply the next order
         SolrSortField field = new SolrSortField(fieldName);
 
-        if (StringUtils.isNotBlank(currentOrder)) {
-            field.setOrder(currentOrder);
+        if (currentOrder != null
+                && currentOrder.length > 1
+                && StringUtils.isNotBlank(currentOrder[1])) {
+
+            field.setOrder(currentOrder[1]);
         }
 
         // apply new ordering
         field.applyNextSortOrder();
 
+        Optional<String> optionalSortParam = link.getParameterNames()
+                .stream()
+                .filter(p -> StringUtils.endsWith(p, fieldName))
+                .findAny();
+
         // replace parameter
         link.removeParameter(fieldName);
         SolrQuery.ORDER newOrder = field.getOrder();
-        if (newOrder != null)
-            link.addParameter(fieldName, newOrder.name());
+        if (newOrder != null) {
+            String sortNum = optionalSortParam.isPresent()
+                             ? currentOrder[0]
+                             : Integer.toString(newSortNum);
+            link.addParameter(fieldName, sortNum + "_" + newOrder.name());
+        }
         return link;
     }
 
@@ -84,29 +134,64 @@ public class Index {
 
         if (StringUtils.isBlank(currentOrder)) {
             return StringUtils.EMPTY;
-        } else if (StringUtils.equals(currentOrder, SolrQuery.ORDER.asc.name())) {
+        } else if (StringUtils.endsWith(currentOrder, SolrQuery.ORDER.asc.name())) {
             return "sort-icon-asc";
         } else {
             return "sort-icon-desc";
         }
     }
 
-    public Format getSmallDateFormat() {
-        return SMALL_DATE_FORMAT;
+    public String format(String dateFormat, Date date) {
+        return DateTimeFormat.forPattern(dateFormat).print(date.getTime());
     }
 
     public int getCollectionCount() {
         return 0;
     }
 
-    public SolrResponse getCollections() {
+    public SolrResponse<SolrCollectionView> getCollections() {
         // link back to the current page including all parameters
         Link link = linkSource.createPageRenderLink(Index.class);
 
+        SolrQueryBuilder queryBuilder = solrService.createQueryBuilder();
         for (String param : link.getParameterNames()) {
-
+            if (StringUtils.equals(param, "query") && StringUtils.isNotBlank(query)) {
+                queryBuilder.singleCondition(SolrCollectionView.SEARCH_FIELD_PROPERTY, query);
+            }
+            link.getParameterNames().stream()
+                    // filter for any sort parameter
+                    .filter(p -> SORT_MAPPING.stream().anyMatch(pair -> StringUtils.equals(p, pair.getLeft())))
+                    // filter any sort parameter that contains a valid pattern
+                    .filter(p -> link.getParameterValue(p).matches(SORT_PARAM_PATTERN))
+                    // split up to tuple [(number, order(asc|desc)), ui field name]
+                    .map(p -> Pair.of(link.getParameterValue(p).split("_"), p))
+                    // split up to triple [number, order(asc|desc), ui field name]
+                    .map(p -> Triple.of(p.getLeft()[0], p.getLeft()[1], p.getRight()))
+                    // sort by number
+                    .sorted((obj1, obj2) -> Integer.valueOf(obj1.getLeft()).compareTo(Integer.valueOf(obj2.getLeft())))
+                    // add sort field for each
+                    .forEach(obj -> addSortField(obj.getRight(), obj.getMiddle(), queryBuilder));
+        }
+        SolrQuery query = queryBuilder.setCount(100).build();
+        try {
+            return solrService.query(SolrCollectionView.class, query);
+        } catch (SolrServerException e) {
+            log.error("could not query solr", e);
         }
         return new SolrResponse();
+    }
+
+    private void addSortField(String fieldName, String order, SolrQueryBuilder queryBuilder) {
+        Optional<String> sortParam = SORT_MAPPING.stream()
+                .filter(m -> m.getLeft().equals(fieldName))
+                .map(p -> p.getRight())
+                .findAny();
+
+        SolrSortField sortField = new SolrSortField(sortParam.get());
+        sortField.setOrder(order);
+        SolrQuery.ORDER realOrder = sortField.getOrder();
+        if (realOrder != null)
+            queryBuilder.addSortField(sortParam.get(), realOrder);
     }
 
 }
