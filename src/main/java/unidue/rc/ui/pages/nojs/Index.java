@@ -35,12 +35,13 @@ import java.util.stream.Stream;
 @BreadCrumbReset
 public class Index {
 
-    private static final List<Pair<String, String>> SORT_MAPPING = Stream.of(
-            Pair.of("location", SolrCollectionView.LOCATION_PROPERTY),
-            Pair.of("number", SolrCollectionView.COLLECTION_NUMBER_NUMERIC_PROPERTY),
-            Pair.of("expiration", SolrCollectionView.VALID_TO_PROPERTY),
-            Pair.of("title", SolrCollectionView.TITLE_PROPERTY)
+    private static final List<SortMapEntry> SORT_MAPPING = Stream.of(
+            new SortMapEntry("location", SolrCollectionView.LOCATION_PROPERTY),
+            new SortMapEntry("number", SolrCollectionView.COLLECTION_NUMBER_NUMERIC_PROPERTY),
+            new SortMapEntry("expiration", SolrCollectionView.VALID_TO_PROPERTY),
+            new SortMapEntry("title", SolrCollectionView.TITLE_PROPERTY)
     ).collect(Collectors.toList());
+
     private static final String SORT_PARAM_PATTERN = "(\\d+)_(asc|desc)";
 
     @Inject
@@ -68,6 +69,27 @@ public class Index {
     @Property
     private String author;
 
+    @Property
+    private String sortParam;
+
+    public List<String> getCurrentSortParams() {
+        Link link = linkSource.createPageRenderLink(Index.class);
+        List<String> result = link.getParameterNames().stream()
+                .filter(p -> SORT_MAPPING.stream().anyMatch(m -> StringUtils.equals(p, m.ui)))
+                .collect(Collectors.toList());
+        return result;
+    }
+
+    public String getSortValue() {
+
+        Link link = linkSource.createPageRenderLink(Index.class);
+        Optional<String> sortValue = link.getParameterNames().stream()
+                .filter(p -> StringUtils.equals(p, sortParam))
+                .map(p -> link.getParameterValue(p))
+                .findFirst();
+        return sortValue.orElse(null);
+    }
+
     public Link getSortLink(String fieldName) {
 
         /*
@@ -83,7 +105,7 @@ public class Index {
         Optional<Integer> max = link.getParameterNames()
                 .stream()
                 .filter(p -> SORT_MAPPING.stream()
-                        .anyMatch(p2 -> p.endsWith(p2.getLeft()))) // filter for all sort params
+                        .anyMatch(p2 -> p.endsWith(p2.ui))) // filter for all sort params
                 .map(p -> link.getParameterValue(p).split("_")) // split for sort number
                 .filter(v -> v.length > 0 && NumberUtils.isNumber(v[0]))  // safety check for numeric values
                 .map(v -> Integer.valueOf(v[0]))  // map to integer
@@ -160,7 +182,7 @@ public class Index {
             }
             link.getParameterNames().stream()
                     // filter for any sort parameter
-                    .filter(p -> SORT_MAPPING.stream().anyMatch(pair -> StringUtils.equals(p, pair.getLeft())))
+                    .filter(p -> SORT_MAPPING.stream().anyMatch(pair -> StringUtils.equals(p, pair.ui)))
                     // filter any sort parameter that contains a valid pattern
                     .filter(p -> link.getParameterValue(p).matches(SORT_PARAM_PATTERN))
                     // split up to tuple [(number, order(asc|desc)), ui field name]
@@ -183,8 +205,8 @@ public class Index {
 
     private void addSortField(String fieldName, String order, SolrQueryBuilder queryBuilder) {
         Optional<String> sortParam = SORT_MAPPING.stream()
-                .filter(m -> m.getLeft().equals(fieldName))
-                .map(p -> p.getRight())
+                .filter(m -> m.ui.equals(fieldName))
+                .map(p -> p.backend)
                 .findAny();
 
         SolrSortField sortField = new SolrSortField(sortParam.get());
@@ -194,4 +216,13 @@ public class Index {
             queryBuilder.addSortField(sortParam.get(), realOrder);
     }
 
+    private static class SortMapEntry {
+        private String ui;
+        private String backend;
+
+        public SortMapEntry(String ui, String backend) {
+            this.ui = ui;
+            this.backend = backend;
+        }
+    }
 }
