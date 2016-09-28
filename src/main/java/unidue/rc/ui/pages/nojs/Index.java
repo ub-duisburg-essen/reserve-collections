@@ -18,6 +18,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbReset;
+import unidue.rc.model.ReserveCollectionStatus;
 import unidue.rc.model.solr.SolrCollectionView;
 import unidue.rc.search.SolrQueryBuilder;
 import unidue.rc.search.SolrResponse;
@@ -45,6 +46,8 @@ public class Index {
     ).collect(Collectors.toList());
 
     private static final String SORT_PARAM_PATTERN = "(\\d+)_(asc|desc)";
+
+    private static final int DEFAULT_MAX_RESULTS = 100;
 
     @Inject
     private Logger log;
@@ -186,25 +189,29 @@ public class Index {
         Link link = linkSource.createPageRenderLink(Index.class);
 
         SolrQueryBuilder queryBuilder = solrService.createQueryBuilder();
-        for (String param : link.getParameterNames()) {
-            if (StringUtils.equals(param, "query") && StringUtils.isNotBlank(query)) {
-                queryBuilder.singleCondition(SolrCollectionView.SEARCH_FIELD_PROPERTY, query);
-            }
-            link.getParameterNames().stream()
-                    // filter for any sort parameter
-                    .filter(p -> SORT_MAPPING.stream().anyMatch(pair -> StringUtils.equals(p, pair.ui)))
-                    // filter any sort parameter that contains a valid pattern
-                    .filter(p -> link.getParameterValue(p).matches(SORT_PARAM_PATTERN))
-                    // split up to tuple [(number, order(asc|desc)), ui field name]
-                    .map(p -> Pair.of(link.getParameterValue(p).split("_"), p))
-                    // split up to triple [number, order(asc|desc), ui field name]
-                    .map(p -> Triple.of(p.getLeft()[0], p.getLeft()[1], p.getRight()))
-                    // sort by number
-                    .sorted((obj1, obj2) -> Integer.valueOf(obj1.getLeft()).compareTo(Integer.valueOf(obj2.getLeft())))
-                    // add sort field for each
-                    .forEach(obj -> addSortField(obj.getRight(), obj.getMiddle(), queryBuilder));
+        if (StringUtils.isNotBlank(query)) {
+            queryBuilder.singleCondition(SolrCollectionView.SEARCH_FIELD_PROPERTY, query);
         }
-        SolrQuery query = queryBuilder.setCount(100).build();
+
+        link.getParameterNames().stream()
+                // filter for any sort parameter
+                .filter(p -> SORT_MAPPING.stream().anyMatch(pair -> StringUtils.equals(p, pair.ui)))
+                // filter any sort parameter that contains a valid pattern
+                .filter(p -> link.getParameterValue(p).matches(SORT_PARAM_PATTERN))
+                // split up to tuple [(number, order(asc|desc)), ui field name]
+                .map(p -> Pair.of(link.getParameterValue(p).split("_"), p))
+                // split up to triple [number, order(asc|desc), ui field name]
+                .map(p -> Triple.of(p.getLeft()[0], p.getLeft()[1], p.getRight()))
+                // sort by number
+                .sorted((obj1, obj2) -> Integer.valueOf(obj1.getLeft()).compareTo(Integer.valueOf(obj2.getLeft())))
+                // add sort field for each
+                .forEach(obj -> addSortField(obj.getRight(), obj.getMiddle(), queryBuilder));
+
+        // default filter by active collections
+        queryBuilder.singleEqualCondition(SolrCollectionView.STATUS_PROPERTY, ReserveCollectionStatus.ACTIVE.getDatabaseValue().toString());
+
+        // default max value of results
+        SolrQuery query = queryBuilder.setCount(DEFAULT_MAX_RESULTS).build();
         try {
             this.collections = solrService.query(SolrCollectionView.class, query);
         } catch (SolrServerException e) {
