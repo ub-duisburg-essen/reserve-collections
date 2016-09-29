@@ -222,9 +222,9 @@
                 <t:secureblock action="EDIT_ENTRIES" objectID="collection.id">
                     <div class="entry-controls center-block">
                         <div class="dropdown">
-                            <a data-toggle="dropdown" class="btn btn-default dropdown-toggle">
+                            <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">
                                 <span class="glyphicon glyphicon-option-vertical"/>
-                            </a>
+                            </button>
                             <ul class="dropdown-menu">
                                 <li>
                                     <t:eventlink event="deleteEntry" title="message:delete"
@@ -264,9 +264,9 @@
                 <div class="col-md-1 col-xs-4">
                     <div class="entry-controls center-block">
                         <div class="dropdown">
-                            <a data-toggle="dropdown" class="btn btn-default">
+                            <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">
                                 <span class="glyphicon glyphicon-option-vertical"/>
-                            </a>
+                            </button>
                             <ul class="dropdown-menu">
                                 <li>
                                     <t:eventlink event="deleteEntry" title="message:delete"
