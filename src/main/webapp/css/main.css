@@ -750,7 +750,8 @@ img.t-error-icon {
     color: rgba(0, 0, 0, 0.5);
 }
 
-.dropdown-toggle:focus + .dropdown-menu {
+.dropdown-toggle:focus + .dropdown-menu,
+.dropdown-menu:hover {
     display: block;
 }
 
