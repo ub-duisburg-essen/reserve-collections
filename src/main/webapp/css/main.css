@@ -750,6 +750,10 @@ img.t-error-icon {
     color: rgba(0, 0, 0, 0.5);
 }
 
+.dropdown-toggle:focus + .dropdown-menu {
+    display: block;
+}
+
 .edit-entry-icon {
     background: url(../img/icons/pen_16x16.png);
 }
@@ -1401,10 +1405,6 @@ visible if javascript turned off
         width: 100%;
     }
 
-    .dropdown-menu>li>a {
-        color: #fff;
-    }
-
     .base-nav li {
         background: none;
         padding-left: 0;
@@ -1634,7 +1634,8 @@ visible if javascript turned off
     }
 
     .entry-controls {
-        width: 15%;
+        text-align: left;
+        width: auto;
     }
 
     .entry-controls .draggable {
@@ -1657,21 +1658,5 @@ visible if javascript turned off
     .navbar-nav .open .dropdown-menu > li > a {
         padding-left: 32px;
     }
-
-    .dropdown-menu {
-        position: inherit;
-        top: inherit;
-        left: inherit;
-        z-index: inherit;
-        display: block;
-        float: none;
-        padding: 5px 12px;
-        margin: 2px 0 0;
-        list-style: none;
-        background: none;
-        border: none;
-        box-shadow: none;
-    }
-
 
 }

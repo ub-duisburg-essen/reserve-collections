@@ -208,23 +208,23 @@
     <!-- block that generates the div for entry controls for one single entry -->
     <t:block id="entryControlsBlock">
         <div class="row block">
-            <div class="col-md-1">
+            <div class="col-md-1 hidden-xs">
                 <t:secureblock action="EDIT_ENTRIES" objectID="collection.id">
                     <div class="center-block">
                         <a class="glyphicon glyphicon-move draggable"/>
                     </div>
                 </t:secureblock>
             </div>
-            <div class="col-md-10">
+            <div class="col-md-10 col-xs-8">
                 <div class="entry-divider"></div>
             </div>
-            <div class="col-md-1">
+            <div class="col-md-1 col-xs-4">
                 <t:secureblock action="EDIT_ENTRIES" objectID="collection.id">
                     <div class="entry-controls center-block">
                         <div class="dropdown">
-                            <button data-toggle="dropdown" class="btn btn-default">
+                            <a data-toggle="dropdown" class="btn btn-default dropdown-toggle">
                                 <span class="glyphicon glyphicon-option-vertical"/>
-                            </button>
+                            </a>
                             <ul class="dropdown-menu">
                                 <li>
                                     <t:eventlink event="deleteEntry" title="message:delete"
@@ -251,22 +251,22 @@
 
         <div class="row block">
             <t:secureblock action="EDIT_ENTRIES" objectID="collection.id">
-                <div class="col-md-1">
+                <div class="col-md-1 hidden-xs">
                     <div class="center-block">
                         <a class="glyphicon glyphicon-move draggable"/>
                     </div>
                 </div>
             </t:secureblock>
-            <div class="col-md-10">
+            <div class="col-md-10  col-xs-8">
                 <div class="entry-divider"></div>
             </div>
             <t:secureblock action="EDIT_ENTRIES" objectID="collection.id">
-                <div class="col-md-1">
+                <div class="col-md-1 col-xs-4">
                     <div class="entry-controls center-block">
                         <div class="dropdown">
-                            <button data-toggle="dropdown" class="btn btn-default">
+                            <a data-toggle="dropdown" class="btn btn-default">
                                 <span class="glyphicon glyphicon-option-vertical"/>
-                            </button>
+                            </a>
                             <ul class="dropdown-menu">
                                 <li>
                                     <t:eventlink event="deleteEntry" title="message:delete"
