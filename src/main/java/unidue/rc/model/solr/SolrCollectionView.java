@@ -20,6 +20,7 @@ import org.apache.solr.client.solrj.beans.Field;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A <code>SolrCollectionView</code> represents en entity in solr, that contains the simple viewable data of a {@link
@@ -134,7 +135,11 @@ public class SolrCollectionView {
     }
 
     public List<String> getAuthors() {
-        return authors;
+        return authors != null
+               ? authors.stream()
+                       .distinct()
+                       .collect(Collectors.toList())
+               : null;
     }
 
     public void setAuthors(List<String> authors) {

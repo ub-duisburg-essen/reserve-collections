@@ -650,6 +650,7 @@ public class CollectionServiceImpl implements CollectionService {
                 .map(participation -> userDAO.getUserById(participation.getUserId()))
                 .filter(user -> user != null)
                 .map(user -> user.getRealname())
+                .distinct()
                 .collect(Collectors.toList());
         SolrCollectionView view = new SolrCollectionView();
         view.setCollectionID(reserveCollection.getId().toString());
