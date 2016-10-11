@@ -61,6 +61,7 @@
 		<db-attribute name="referenceNumber" type="VARCHAR" length="128"/>
 		<db-attribute name="resourceID" type="INTEGER"/>
 		<db-attribute name="signature" type="VARCHAR" length="64"/>
+		<db-attribute name="totalPages" type="INTEGER"/>
 		<db-attribute name="yearOfPublication" type="INTEGER"/>
 	</db-entity>
 	<db-entity name="BOOK_JOB">
@@ -140,6 +141,7 @@
 		<db-attribute name="referenceNumber" type="VARCHAR" length="128"/>
 		<db-attribute name="resourceID" type="INTEGER"/>
 		<db-attribute name="signature" type="VARCHAR" length="64"/>
+		<db-attribute name="totalPages" type="INTEGER"/>
 		<db-attribute name="volume" type="VARCHAR" length="256"/>
 	</db-entity>
 	<db-entity name="LIBRARY_LOCATION">
@@ -422,6 +424,7 @@
 		<obj-attribute name="publisher" type="java.lang.String" db-attribute-path="publisher"/>
 		<obj-attribute name="referenceNumber" type="java.lang.String" db-attribute-path="referenceNumber"/>
 		<obj-attribute name="signature" type="java.lang.String" db-attribute-path="signature"/>
+		<obj-attribute name="totalPages" type="java.lang.Integer" db-attribute-path="totalPages"/>
 		<obj-attribute name="yearOfPublication" type="java.lang.Integer" db-attribute-path="yearOfPublication"/>
 		<attribute-override name="index" db-attribute-path="rcIndex"/>
 	</obj-entity>
@@ -472,6 +475,7 @@
 		<obj-attribute name="publisher" type="java.lang.String" db-attribute-path="publisher"/>
 		<obj-attribute name="referenceNumber" type="java.lang.String" db-attribute-path="referenceNumber"/>
 		<obj-attribute name="signature" type="java.lang.String" db-attribute-path="signature"/>
+		<obj-attribute name="totalPages" type="java.lang.Integer" db-attribute-path="totalPages"/>
 		<obj-attribute name="volume" type="java.lang.String" db-attribute-path="volume"/>
 	</obj-entity>
 	<obj-entity name="LibraryLocation" className="unidue.rc.model.LibraryLocation" dbEntityName="LIBRARY_LOCATION">

@@ -29,6 +29,7 @@ public abstract class _JournalArticle extends CayenneDataObject {
     public static final String PUBLISHER_PROPERTY = "publisher";
     public static final String REFERENCE_NUMBER_PROPERTY = "referenceNumber";
     public static final String SIGNATURE_PROPERTY = "signature";
+    public static final String TOTAL_PAGES_PROPERTY = "totalPages";
     public static final String VOLUME_PROPERTY = "volume";
     public static final String ENTRY_PROPERTY = "entry";
     public static final String RESOURCE_PROPERTY = "resource";
@@ -125,6 +126,13 @@ public abstract class _JournalArticle extends CayenneDataObject {
     }
     public String getSignature() {
         return (String)readProperty(SIGNATURE_PROPERTY);
+    }
+
+    public void setTotalPages(Integer totalPages) {
+        writeProperty(TOTAL_PAGES_PROPERTY, totalPages);
+    }
+    public Integer getTotalPages() {
+        return (Integer)readProperty(TOTAL_PAGES_PROPERTY);
     }
 
     public void setVolume(String volume) {
