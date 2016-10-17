@@ -203,6 +203,17 @@
 		<db-attribute name="mailID" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
 		<db-attribute name="migrationID" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
 	</db-entity>
+	<db-entity name="ORDER_MAIL_RECIPIENT">
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="instanceClass" type="VARCHAR" isMandatory="true" length="256"/>
+		<db-attribute name="locationID" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="mail" type="VARCHAR" isMandatory="true" length="512"/>
+		<db-key-generator>
+			<db-generator-type>ORACLE</db-generator-type>
+			<db-generator-name>pk_order_mail_recipient</db-generator-name>
+			<db-key-cache-size>1</db-key-cache-size>
+		</db-key-generator>
+	</db-entity>
 	<db-entity name="PARTICIPATION">
 		<db-attribute name="accesskey" type="VARCHAR" length="8"/>
 		<db-attribute name="endDate" type="TIMESTAMP"/>
@@ -506,6 +517,10 @@
 		<obj-attribute name="finished" type="boolean" db-attribute-path="finished"/>
 		<obj-attribute name="migrationCode" type="java.lang.String" db-attribute-path="migrationCode"/>
 	</obj-entity>
+	<obj-entity name="OrderMailRecipient" className="unidue.rc.model.OrderMailRecipient" dbEntityName="ORDER_MAIL_RECIPIENT">
+		<obj-attribute name="instanceClass" type="java.lang.String" db-attribute-path="instanceClass"/>
+		<obj-attribute name="mail" type="java.lang.String" db-attribute-path="mail"/>
+	</obj-entity>
 	<obj-entity name="Participation" className="unidue.rc.model.Participation" dbEntityName="PARTICIPATION">
 		<obj-attribute name="accessKey" type="String" db-attribute-path="accesskey"/>
 		<obj-attribute name="collectionID" type="java.lang.Integer" db-attribute-path="reserveCollectionId"/>
@@ -701,6 +716,9 @@
 	<db-relationship name="childLocationsFk" source="LIBRARY_LOCATION" target="LIBRARY_LOCATION" toMany="true">
 		<db-attribute-pair source="id" target="parentId"/>
 	</db-relationship>
+	<db-relationship name="orderMailRecipientFk" source="LIBRARY_LOCATION" target="ORDER_MAIL_RECIPIENT" toMany="true">
+		<db-attribute-pair source="id" target="locationID"/>
+	</db-relationship>
 	<db-relationship name="parentLocationFk" source="LIBRARY_LOCATION" target="LIBRARY_LOCATION" toMany="false">
 		<db-attribute-pair source="parentId" target="id"/>
 	</db-relationship>
@@ -733,6 +751,9 @@
 	</db-relationship>
 	<db-relationship name="migrationFk" source="MIGRATION_MAIL" target="MIGRATION" toMany="false">
 		<db-attribute-pair source="migrationID" target="id"/>
+	</db-relationship>
+	<db-relationship name="locationFk" source="ORDER_MAIL_RECIPIENT" target="LIBRARY_LOCATION" toMany="false">
+		<db-attribute-pair source="locationID" target="id"/>
 	</db-relationship>
 	<db-relationship name="reserveCollectionFk" source="PARTICIPATION" target="RESERVE_COLLECTION" toMany="false">
 		<db-attribute-pair source="reserveCollectionId" target="id"/>
@@ -874,6 +895,7 @@
 	<obj-relationship name="role" source="Membership" target="Role" deleteRule="Nullify" db-relationship-path="roleFk"/>
 	<obj-relationship name="mails" source="Migration" target="Mail" deleteRule="Cascade" db-relationship-path="mailFk.mailFk"/>
 	<obj-relationship name="reserveCollection" source="Migration" target="ReserveCollection" deleteRule="Nullify" db-relationship-path="reserveCollectionFk"/>
+	<obj-relationship name="location" source="OrderMailRecipient" target="LibraryLocation" deleteRule="Nullify" db-relationship-path="locationFk"/>
 	<obj-relationship name="reserveCollection" source="Participation" target="ReserveCollection" deleteRule="Nullify" db-relationship-path="reserveCollectionFk"/>
 	<obj-relationship name="role" source="Participation" target="Role" deleteRule="Nullify" db-relationship-path="roleFk"/>
 	<obj-relationship name="action" source="Permission" target="Action" deleteRule="Nullify" db-relationship-path="actionFk"/>
