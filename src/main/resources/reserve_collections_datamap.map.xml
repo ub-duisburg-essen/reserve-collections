@@ -205,7 +205,7 @@
 	</db-entity>
 	<db-entity name="ORDER_MAIL_RECIPIENT">
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
-		<db-attribute name="instanceClass" type="VARCHAR" isMandatory="true" length="256"/>
+		<db-attribute name="instanceClass" type="VARCHAR" isMandatory="true" length="1024"/>
 		<db-attribute name="locationID" type="INTEGER" isMandatory="true"/>
 		<db-attribute name="mail" type="VARCHAR" isMandatory="true" length="512"/>
 		<db-key-generator>

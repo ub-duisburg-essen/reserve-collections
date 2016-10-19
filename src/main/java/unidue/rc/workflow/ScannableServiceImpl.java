@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2014 - 2016 Universitaet Duisburg-Essen (semapp|uni-due.de)
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,12 +25,10 @@ import unidue.rc.dao.CommitException;
 import unidue.rc.dao.DeleteException;
 import unidue.rc.dao.EntryDAO;
 import unidue.rc.dao.ScanJobDAO;
-import unidue.rc.model.Entry;
-import unidue.rc.model.ReserveCollection;
-import unidue.rc.model.Resource;
-import unidue.rc.model.Scannable;
+import unidue.rc.model.*;
 import unidue.rc.search.SolrService;
 
+import javax.mail.internet.InternetAddress;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -118,6 +116,21 @@ public class ScannableServiceImpl implements ScannableService {
         update(scannable);
         scanJobService.onScannableUpdated(scannable);
         return resource;
+    }
+
+    @Override
+    public OrderMailRecipient addOrderMailRecipient(LibraryLocation location, InternetAddress mail, Class instanceClass) throws CommitException {
+        OrderMailRecipient recipient = new OrderMailRecipient();
+        recipient.setInstanceClass(instanceClass.getName());
+        recipient.setLocation(location);
+        recipient.setMail(mail.toString());
+        entryDAO.create(recipient);
+        return recipient;
+    }
+
+    @Override
+    public void removeOrderMailRecipient(OrderMailRecipient recipient) throws DeleteException {
+        entryDAO.delete(recipient);
     }
 
     @Override

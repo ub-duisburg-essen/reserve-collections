@@ -704,4 +704,10 @@
         <format></format>
         <type>1</type>
     </defaultSetting>
+    <defaultSetting>
+        <label>Objekte für die Mailadressen zur Auftragsverwaltung hinterlegt werden</label>
+        <key>order.mail.recipient.classes</key>
+        <value>unidue.rc.model.BookChapter,unidue.rc.model.JournalArticle,unidue.rc.model.Book</value>
+        <type>1</type>
+    </defaultSetting>
 </defaultSettingsList>

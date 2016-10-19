@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2014 - 2016 Universitaet Duisburg-Essen (semapp|uni-due.de)
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,6 +20,7 @@ import unidue.rc.dao.CommitException;
 import unidue.rc.dao.DeleteException;
 import unidue.rc.model.*;
 
+import javax.mail.internet.InternetAddress;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -97,6 +98,24 @@ public interface ScannableService {
      * @throws IOException     thrown during save of the file
      */
     Resource update(Scannable scannable, String filename, InputStream input) throws CommitException, IOException;
+
+    /**
+     * Adds a mail address that is responsible to handle orders to a specific object instance in a given location.
+     *
+     * @param location      location where orders are created
+     * @param mail          mail of the user that is responsible of the order
+     * @param instanceClass instance class of the object
+     * @throws CommitException thrown if any object could not be saved in backend
+     */
+    OrderMailRecipient addOrderMailRecipient(LibraryLocation location, InternetAddress mail, Class instanceClass) throws CommitException;
+
+    /**
+     * Removes a mail that is responsible to handle orders of a location.
+     *
+     * @param recipient recipient that should be deleted
+     * @throws DeleteException thrown if any object could not be removed from
+     */
+    void removeOrderMailRecipient(OrderMailRecipient recipient) throws DeleteException;
 
     /**
      * Updates target scannable in backend
