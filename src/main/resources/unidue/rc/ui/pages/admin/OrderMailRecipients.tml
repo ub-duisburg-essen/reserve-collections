@@ -60,7 +60,7 @@
                                       blankOption="NEVER"/>
                         </td>
                         <td>
-                            <t:textfield class="form-control" t:id="mail" t:value="mail"/>
+                            <t:textfield class="form-control" t:id="mail" value="mail"/>
                         </td>
                         <td>
                             <input type="submit" value="${message:form-submit-label}"/>
