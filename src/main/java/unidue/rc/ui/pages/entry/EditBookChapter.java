@@ -198,9 +198,13 @@ public class EditBookChapter implements SecurityContextPage {
         }
 
         try {
-            if (resource != null)
-                resource.setCopyrightReviewStatus(copyrightStatus);
             scannableService.update(chapter, fullTextURL);
+
+            resource = chapter.getResource();
+            if (resource != null) {
+                resource.setCopyrightReviewStatus(copyrightStatus);
+                resourceService.update(resource);
+            }
         } catch (CommitException e) {
             form.recordError(messages.format("error.msg.could.not.commit.chapter", chapter));
         }

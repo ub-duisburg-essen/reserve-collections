@@ -193,9 +193,13 @@ public class EditJournal implements SecurityContextPage {
             updateResource(resource);
         }
         try {
-            if (resource != null)
-                resource.setCopyrightReviewStatus(copyrightStatus);
             scannableService.update(journal, fullTextURL);
+
+            resource = journal.getResource();
+            if (resource != null) {
+                resource.setCopyrightReviewStatus(copyrightStatus);
+                resourceService.update(resource);
+            }
         } catch (CommitException e){
                 form.recordError(messages.format("error.msg.could.not.commit.journal", journal));
         }
@@ -235,7 +239,7 @@ public class EditJournal implements SecurityContextPage {
 
         try {
             UploadedFile uploadedFile = uploads.get(0);
-            scannableService.update(journal, uploadedFile.getFileName(), uploadedFile.getStream());
+            Resource resource = scannableService.update(journal, uploadedFile.getFileName(), uploadedFile.getStream());
             uploads = null;
         } catch (IOException e) {
             form.recordError(messages.format("error.msg.could.not.save.file", journal));
