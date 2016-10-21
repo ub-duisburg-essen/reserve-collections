@@ -10,10 +10,7 @@ import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.slf4j.Logger;
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
-import unidue.rc.dao.BaseDAO;
-import unidue.rc.dao.CommitException;
-import unidue.rc.dao.DeleteException;
-import unidue.rc.dao.LibraryLocationDAO;
+import unidue.rc.dao.*;
 import unidue.rc.model.LibraryLocation;
 import unidue.rc.model.OrderMailRecipient;
 import unidue.rc.system.SystemConfigurationService;
@@ -23,7 +20,6 @@ import unidue.rc.ui.selectmodel.LibraryLocationListSelectModel;
 import unidue.rc.ui.valueencoder.BaseValueEncoder;
 import unidue.rc.ui.valueencoder.ClassNameValueEncoder;
 import unidue.rc.ui.valueencoder.LibraryLocationValueEncoder;
-import unidue.rc.workflow.ScannableService;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -66,7 +62,8 @@ public class OrderMailRecipients {
     private LibraryLocationDAO locationDAO;
 
     @Inject
-    private ScannableService scannableService;
+    @Service(OrderMailRecipientDAO.SERVICE_NAME)
+    private OrderMailRecipientDAO recipientDAO;
 
     @Inject
     private SystemConfigurationService config;
@@ -119,7 +116,7 @@ public class OrderMailRecipients {
     @OnEvent(value = "remove")
     void onRemoveRecipient(OrderMailRecipient recipient) {
         try {
-            scannableService.removeOrderMailRecipient(recipient);
+            recipientDAO.delete(recipient);
         } catch (DeleteException e) {
             log.error("could not remove recipient", e);
         }
@@ -143,7 +140,7 @@ public class OrderMailRecipients {
     void onSuccessFromRecipientsForm() {
 
         try {
-            scannableService.addOrderMailRecipient(location, validatedAddress, instanceClass);
+            recipientDAO.addOrderMailRecipient(location, validatedAddress, instanceClass);
         } catch (CommitException e) {
             recipientForm.recordError(messages.get("error.msg.could.not.commit.oder.mail.recipient"));
         }

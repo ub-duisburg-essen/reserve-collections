@@ -35,18 +35,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import unidue.rc.dao.*;
-import unidue.rc.model.ActionDefinition;
-import unidue.rc.model.CollectionAdmin;
-import unidue.rc.model.DefaultRole;
-import unidue.rc.model.Html;
-import unidue.rc.model.LibraryLocation;
-import unidue.rc.model.Mail;
-import unidue.rc.model.Participation;
-import unidue.rc.model.ReserveCollection;
-import unidue.rc.model.ReserveCollectionNumber;
-import unidue.rc.model.ReserveCollectionStatus;
-import unidue.rc.model.Role;
-import unidue.rc.model.Setting;
+import unidue.rc.model.*;
 import unidue.rc.model.solr.SolrCollectionView;
 import unidue.rc.search.SolrService;
 import unidue.rc.security.CollectionSecurityService;
@@ -115,6 +104,9 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Inject
     private EntryDAO entryDAO;
+
+    @Inject
+    private OrderMailRecipientDAO mailRecipientDAO;
 
     @Inject
     private SystemConfigurationService config;
@@ -687,7 +679,7 @@ public class CollectionServiceImpl implements CollectionService {
         if (authorID.isPresent())
             context.put("editUserLink", urlService.getEditUserLink(userDAO.getUserById(authorID.get())));
 
-        Set<String> recipients = CollectionAdmin.mails(collection.getLibraryLocation().getId());
+        List<OrderMailRecipient> recipients = mailRecipientDAO.getRecipients(collection.getLibraryLocation(), ReserveCollection.class);
         String from = config.getString("mail.from");
         String subject;
         switch (collection.getStatus()) {
@@ -708,7 +700,7 @@ public class CollectionServiceImpl implements CollectionService {
                     .from(from)
                     .subject(subject)
                     .context(context)
-                    .addRecipients(recipients.stream().toArray(String[]::new))
+                    .addRecipients(recipients.stream().map(OrderMailRecipient::getMail).toArray(String[]::new))
                     .create();
             mailService.sendMail(mail);
         } catch (CommitException e) {

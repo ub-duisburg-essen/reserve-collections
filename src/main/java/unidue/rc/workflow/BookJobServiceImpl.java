@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import unidue.rc.dao.BookJobDAO;
 import unidue.rc.dao.CommitException;
 import unidue.rc.dao.DeleteException;
+import unidue.rc.dao.OrderMailRecipientDAO;
 import unidue.rc.model.*;
 import unidue.rc.model.solr.SolrBookJobView;
 import unidue.rc.search.SolrService;
@@ -37,7 +38,7 @@ import unidue.rc.system.SystemMessageService;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author Nils Verheyen
@@ -54,6 +55,9 @@ public class BookJobServiceImpl implements BookJobService {
 
     @Inject
     private BookJobDAO bookJobDAO;
+
+    @Inject
+    private OrderMailRecipientDAO mailRecipientDAO;
 
     @Inject
     private SolrService solrService;
@@ -230,14 +234,14 @@ public class BookJobServiceImpl implements BookJobService {
 
         // send mail
 
-        Set<String> recipients = BookOrderAdmin.mails(collection.getLibraryLocation().getId());
+        List<OrderMailRecipient> recipients = mailRecipientDAO.getRecipients(collection.getLibraryLocation(), Book.class);
         String from = config.getString("mail.from");
         try {
             MailServiceImpl.MailBuilder mailBuilder = mailService.builder(templateFile)
                     .from(from)
                     .subject(subject.toString())
                     .context(context)
-                    .addRecipients(recipients.stream().toArray(String[]::new));
+                    .addRecipients(recipients.stream().map(OrderMailRecipient::getMail).toArray(String[]::new));
             if (currentUser != null && !StringUtils.isEmpty(currentUser.getEmail()))
                 mailBuilder.addReplyTo(currentUser.getEmail());
 

@@ -21,9 +21,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Created by nils on 03.08.15.
+ * Created by nils on 03.08.15.ap
  */
-public enum CollectionAdmin {
+public enum CollectionAdmin implements OrderAdmin {
 
     ONLINE("semapp@ub.uni-duisburg-essen.de", DefaultLocation.ONLINE),
     GW_GSW("semapp@ub.uni-duisburg-essen.de", DefaultLocation.GW_GSW),

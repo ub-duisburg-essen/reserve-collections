@@ -25,16 +25,7 @@ import org.apache.velocity.VelocityContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import unidue.rc.dao.*;
-import unidue.rc.model.BookChapter;
-import unidue.rc.model.Entry;
-import unidue.rc.model.JournalArticle;
-import unidue.rc.model.Mail;
-import unidue.rc.model.ReserveCollection;
-import unidue.rc.model.Role;
-import unidue.rc.model.ScanJob;
-import unidue.rc.model.ScanJobStatus;
-import unidue.rc.model.Scannable;
-import unidue.rc.model.ScannableOrderAdmin;
+import unidue.rc.model.*;
 import unidue.rc.model.solr.SolrScanJobView;
 import unidue.rc.search.SolrService;
 import unidue.rc.security.CollectionSecurityService;
@@ -44,6 +35,7 @@ import unidue.rc.system.SystemConfigurationService;
 import unidue.rc.system.SystemMessageService;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -82,6 +74,9 @@ public class ScanJobServiceImpl implements ScanJobService {
 
     @Inject
     private UserDAO userDAO;
+
+    @Inject
+    private OrderMailRecipientDAO mailRecipientDAO;
 
     @Inject
     private SystemMessageService messages;
@@ -227,25 +222,27 @@ public class ScanJobServiceImpl implements ScanJobService {
 
         String type = "";
 
+        List<OrderMailRecipient> recipients = Collections.EMPTY_LIST;
         if (scannable instanceof BookChapter) {
             templateFile = "/vt/mail.book.chapter.vm";
             type = cause.name() + ".book.chapter";
+            recipients = mailRecipientDAO.getRecipients(collection.getLibraryLocation(), BookChapter.class);
         } else if (scannable instanceof JournalArticle) {
             templateFile = "/vt/mail.journal.article.vm";
             type = cause.name() + ".journal.article";
+            recipients = mailRecipientDAO.getRecipients(collection.getLibraryLocation(), JournalArticle.class);
         }
         String subject = mailService.buildSubject(scannable.getEntry(), messages.get(type), mailService.buildAuthors(collection));
 
         // send mail
 
-        Set<String> recipients = ScannableOrderAdmin.mails(collection.getLibraryLocation().getId());
         User currentUser = securityService.getCurrentUser();
         try {
             MailServiceImpl.MailBuilder mailBuilder = mailService.builder(templateFile)
                     .from(config.getString("mail.from"))
                     .subject(subject.toString())
                     .context(contextBuilder.build())
-                    .addRecipients(recipients.stream().toArray(String[]::new));
+                    .addRecipients(recipients.stream().map(OrderMailRecipient::getMail).toArray(String[]::new));
             if (currentUser != null && StringUtils.isNotBlank(currentUser.getEmail()))
                 mailBuilder.addReplyTo(currentUser.getEmail());
 

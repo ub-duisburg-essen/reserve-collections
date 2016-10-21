@@ -100,24 +100,6 @@ public interface ScannableService {
     Resource update(Scannable scannable, String filename, InputStream input) throws CommitException, IOException;
 
     /**
-     * Adds a mail address that is responsible to handle orders to a specific object instance in a given location.
-     *
-     * @param location      location where orders are created
-     * @param mail          mail of the user that is responsible of the order
-     * @param instanceClass instance class of the object
-     * @throws CommitException thrown if any object could not be saved in backend
-     */
-    OrderMailRecipient addOrderMailRecipient(LibraryLocation location, InternetAddress mail, Class instanceClass) throws CommitException;
-
-    /**
-     * Removes a mail that is responsible to handle orders of a location.
-     *
-     * @param recipient recipient that should be deleted
-     * @throws DeleteException thrown if any object could not be removed from
-     */
-    void removeOrderMailRecipient(OrderMailRecipient recipient) throws DeleteException;
-
-    /**
      * Updates target scannable in backend
      *
      * @param scannable scannable to update

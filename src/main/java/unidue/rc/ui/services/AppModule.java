@@ -227,6 +227,12 @@ public class AppModule {
         return cayenneService.getInjector().getInstance(WarningDAOImpl.class);
     }
 
+    @ServiceId(OrderMailRecipientDAO.SERVICE_NAME)
+    public static OrderMailRecipientDAO buildOrderMailRecipientDAO(@InjectService("CayenneService") CayenneService
+                                                         cayenneService) {
+        return cayenneService.getInjector().getInstance(OrderMailRecipientDAO.class);
+    }
+
     public static BookService buildBookService(@InjectService("CayenneService") CayenneService
                                                        cayenneService) {
         return cayenneService.getInjector().getInstance(BookService.class);

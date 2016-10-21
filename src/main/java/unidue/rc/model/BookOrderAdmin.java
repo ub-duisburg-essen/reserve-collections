@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 /**
  * Created by nils on 25.06.15.
  */
-public enum BookOrderAdmin {
+public enum BookOrderAdmin implements OrderAdmin {
 
     GW_GSW("semapp@ub.uni-duisburg-essen.de", DefaultLocation.GW_GSW),
     MNT("jessica.peto@uni-due.de", DefaultLocation.MNT),

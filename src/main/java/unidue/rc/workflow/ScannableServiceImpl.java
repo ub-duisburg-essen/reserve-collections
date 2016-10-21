@@ -119,21 +119,6 @@ public class ScannableServiceImpl implements ScannableService {
     }
 
     @Override
-    public OrderMailRecipient addOrderMailRecipient(LibraryLocation location, InternetAddress mail, Class instanceClass) throws CommitException {
-        OrderMailRecipient recipient = new OrderMailRecipient();
-        recipient.setInstanceClass(instanceClass.getName());
-        recipient.setLocation(location);
-        recipient.setMail(mail.toString());
-        entryDAO.create(recipient);
-        return recipient;
-    }
-
-    @Override
-    public void removeOrderMailRecipient(OrderMailRecipient recipient) throws DeleteException {
-        entryDAO.delete(recipient);
-    }
-
-    @Override
     public void update(Scannable scannable) throws CommitException {
         scannable.setModified(new Date());
         scanJobService.onScannableUpdated(scannable);

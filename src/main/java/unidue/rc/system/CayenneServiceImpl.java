@@ -467,6 +467,7 @@ public class CayenneServiceImpl implements CayenneService, Module {
         binder.bind(StatisticDAO.class).to(StatisticDAOImpl.class);
         binder.bind(AlephDAO.class).to(AlephDAOImpl.class);
         binder.bind(WarningDAO.class).to(WarningDAOImpl.class);
+        binder.bind(OrderMailRecipientDAO.class).to(OrderMailRecipientDAOImpl.class);
 
         // other services
         binder.bind(OpacFacadeService.class).to(OpacFacadeServiceImpl.class);
@@ -511,6 +512,7 @@ public class CayenneServiceImpl implements CayenneService, Module {
         binder.bind(DurableCollectionMigrationCronJob.class).to(DurableCollectionMigrationCronJobImpl.class);
         binder.bind(CollectionWarningCronJob.class).to(CollectionWarningCronJobImpl.class);
         binder.bind(AutoDeactivationCronJob.class).to(AutoDeactivationCronJobImpl.class);
+        binder.bind(MigrateOrderMailRecipientsCronJob.class).to(MigrateOrderMailRecipientsCronJobImpl.class);
 
         // as default .inSingletonScope();
     }

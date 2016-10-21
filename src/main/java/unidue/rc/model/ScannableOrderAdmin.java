@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 /**
  * Created by nils on 25.06.15.
  */
-public enum ScannableOrderAdmin {
+public enum ScannableOrderAdmin implements OrderAdmin {
 
     DEFAULT("semapp-scan@ub.uni-duisburg-essen.de",
             DefaultLocation.GW_GSW,
@@ -41,11 +41,19 @@ public enum ScannableOrderAdmin {
         this.mail = mail;
     }
 
+    public DefaultLocation[] getLocations() {
+        return locations;
+    }
+
     public static Set<String> mails(int locationID) {
 
         return Arrays.stream(values())
                 .filter(admin -> Arrays.stream(admin.locations).anyMatch(location -> location.getId() == locationID))
                 .map(admin -> admin.mail)
                 .collect(Collectors.toSet());
+    }
+
+    public String getMail() {
+        return mail;
     }
 }
