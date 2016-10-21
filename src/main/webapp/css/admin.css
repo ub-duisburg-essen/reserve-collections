@@ -72,7 +72,7 @@ section {
 
 .admin-nav li a {
     color: #03a9f4;
-    font-size: 1.2em;
+    font-size: 1.1em;
 }
 
 .admin-nav li a:hover {
@@ -155,6 +155,7 @@ section {
         position: fixed;
         top: 0;
         height: 100%;
+        width: 8.33333333%;
     }
     .admin-nav ul {
         flex-direction: column;

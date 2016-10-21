@@ -261,6 +261,11 @@ public enum ActionDefinition {
      */
     EDIT_USER(Resource.USER, Name.UPDATE),
 
+    /**
+     * Defines the action if a {@link miless.model.User} wants to update order mail recipients
+     */
+    EDIT_ODER_MAIL_RECIPIENTS(Resource.ORDER_MAIL_RECIPIENT, Name.UPDATE),
+
     VIEW_ADMIN_PANEL(Resource.ADMIN_DASHBOARD, Name.READ)
     ;
 
@@ -308,6 +313,7 @@ public enum ActionDefinition {
         public static final String COLLECTION_SETTINGS = "collection-settings";
         public static final String MIGRATE = "migrate";
         public static final String USER = "user";
+        public static final String ORDER_MAIL_RECIPIENT = "order-mail-recipients";
         public static final String ADMIN_DASHBOARD = "admin-dashboard";
     }
 

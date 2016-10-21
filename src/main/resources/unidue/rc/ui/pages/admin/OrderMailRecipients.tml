@@ -1,75 +1,66 @@
-<html t:type="layout" title="${message:roles.page.title}"
-      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
-      actionBarBlock="recipientsBarBlock">
-
-<t:block t:id="recipientsBarBlock">
-    <t:reservecollectionactionslinklist/>
-</t:block>
+<html t:type="adminlayout" title="${message:order.mail.recipients}"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
 
 
+<t:if test="errorMessage">
+
+    <div class="alert alert-warning">
+        <span class="glyphicon glyphicon-warning-sign"/>
+        <t:outputraw value="message:error.msg.could.not.remove.order.mail.recipient"/>
+    </div>
+</t:if>
 <div class="row">
-    <div class="col-md-12">
-        <!--order.mail.recipient.classes-->
-        <div t:type="paper">
+    <div class="col-md-8">
 
-            <t:if test="errorMessage">
-
-                <div class="alert alert-warning">
-                    <span class="glyphicon glyphicon-warning-sign"/>
-                    <t:outputraw value="message:error.msg.could.not.remove.order.mail.recipient"/>
-                </div>
-            </t:if>
-
-            <form t:type="Form" class="form-horizontal" t:id="recipientForm" t:clientValidation="none">
-                <t:errors class="literal:alert alert-danger"/>
-                <table class="table">
-                    <thead>
+        <form t:type="Form" class="form-horizontal" t:id="recipientForm" t:clientValidation="none">
+            <t:errors class="literal:alert alert-danger"/>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>${message:location}</th>
+                    <th>${message:instance.class}</th>
+                    <th>${message:mail}</th>
+                    <th>${message:actions}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <t:loop source="recipients" value="recipient" encoder="recipientEncoder">
                     <tr>
-                        <th>${message:location}</th>
-                        <th>${message:instance.class}</th>
-                        <th>${message:mail}</th>
-                        <th>${message:actions}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <t:loop source="recipients" value="recipient" encoder="recipientEncoder">
-                        <tr>
-                            <td>${recipient.location.name}</td>
-                            <td>${instanceClassLabel}</td>
-                            <td>${recipient.mail}</td>
-                            <td>
-                                <t:eventlink event="remove" context="recipient">${message:remove}</t:eventlink>
-                            </td>
-                        </tr>
-                    </t:loop>
-
-                    <tr>
+                        <td>${recipient.location.name}</td>
+                        <td>${instanceClassLabel}</td>
+                        <td>${recipient.mail}</td>
                         <td>
-                            <t:select value="location" model="libraryLocationSelectModel"
-                                      t:id="location"
-                                      mixins="chosenSelect"
-                                      class="form-control autocomplete" encoder="libraryLocationEncoder"
-                                      blankOption="NEVER"
-                            />
-                        </td>
-                        <td>
-                            <t:select value="instanceClass" model="instanceClassModel"
-                                      t:id="instanceClass"
-                                      mixins="chosenSelect"
-                                      class="form-control autocomplete" encoder="instanceClassEncoder"
-                                      blankOption="NEVER"/>
-                        </td>
-                        <td>
-                            <t:textfield class="form-control" t:id="mail" value="mail"/>
-                        </td>
-                        <td>
-                            <input type="submit" value="${message:form-submit-label}"/>
+                            <t:eventlink event="remove" context="recipient">${message:remove}</t:eventlink>
                         </td>
                     </tr>
-                    </tbody>
-                </table>
-            </form>
-        </div>
+                </t:loop>
+
+                <tr>
+                    <td>
+                        <t:select value="location" model="libraryLocationSelectModel"
+                                  t:id="location"
+                                  mixins="chosenSelect"
+                                  class="form-control autocomplete" encoder="libraryLocationEncoder"
+                                  blankOption="NEVER"
+                        />
+                    </td>
+                    <td>
+                        <t:select value="instanceClass" model="instanceClassModel"
+                                  t:id="instanceClass"
+                                  mixins="chosenSelect"
+                                  class="form-control autocomplete" encoder="instanceClassEncoder"
+                                  blankOption="NEVER"/>
+                    </td>
+                    <td>
+                        <t:textfield class="form-control" t:id="mail" value="mail"/>
+                    </td>
+                    <td>
+                        <input type="submit" value="${message:form-submit-label}"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
     </div>
 </div>
 </html>

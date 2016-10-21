@@ -127,6 +127,12 @@
                                                class="${prop:getClassForLink('jobs/copyrightreviewjobs')}">${message:nav.item.review.jobs}</a>
                                         </li>
                                     </t:secureblock>
+                                    <t:secureblock action="EDIT_ODER_MAIL_RECIPIENTS">
+                                        <li>
+                                            <a t:type="pagelink" t:page="admin/ordermailrecipients"
+                                               class="${prop:getClassForLink('admin/ordermailrecipients')}">${message:nav.item.order.mail.recipients}</a>
+                                        </li>
+                                    </t:secureblock>
                                     <t:secureblock action="EDIT_ROLES">
                                         <li>
                                             <a t:type="pagelink" t:page="roles/index"
