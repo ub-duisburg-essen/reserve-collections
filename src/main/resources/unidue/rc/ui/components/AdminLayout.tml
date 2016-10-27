@@ -45,13 +45,15 @@
                 </div>
                 <ul>
                     <li class="${prop:getClassForLink('admin/scanjobs')}">
-                        <t:pagelink page="admin/scanjobs">${message:nav.item.scan.jobs}</t:pagelink>
+                        <t:pagelink page="admin/scanjobs"
+                                    title="${message:nav.item.scan.jobs}">${message:nav.item.scan.jobs}</t:pagelink>
                     </li>
                     <li>
                         <a href="#">${message:nav.item.book.jobs}</a>
                     </li>
                     <li class="${prop:getClassForLink('admin/ordermailrecipients')}">
-                        <t:pagelink page="admin/ordermailrecipients">${message:nav.item.order.mail.recipients}</t:pagelink>
+                        <t:pagelink page="admin/ordermailrecipients"
+                                    title="${message:nav.item.order.mail.recipients}">${message:nav.item.order.mail.recipients}</t:pagelink>
                     </li>
                 </ul>
             </nav>

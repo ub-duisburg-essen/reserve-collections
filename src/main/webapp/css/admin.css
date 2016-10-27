@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Open+Sans+Condensed:300|Source+Code+Pro');
+
 html,body {
     background-color: white;
     height: 100%;
@@ -59,20 +61,21 @@ section {
     padding: 0 16px;
 }
 
-.admin-nav li a {
+.admin-nav a {
+    font-family: 'Open Sans Condensed', 'Open Sans', Arial, sans-serif;
     display: block;
     text-align: right;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #03a9f4;
+    font-size: 1.2em;
 }
 
 .admin-nav li.current-page-item {
     box-shadow: -12px 0 12px -12px rgba(0, 0, 0, 0.4), /* left */
                 12px 0 12px -12px rgba(0, 0, 0, 0.4); /* right */
     border-bottom: 2px solid rgb(3, 169, 244);
-}
-
-.admin-nav li a {
-    color: #03a9f4;
-    font-size: 1.1em;
 }
 
 .admin-nav li a:hover {
