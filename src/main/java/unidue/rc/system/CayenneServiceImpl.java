@@ -512,7 +512,6 @@ public class CayenneServiceImpl implements CayenneService, Module {
         binder.bind(DurableCollectionMigrationCronJob.class).to(DurableCollectionMigrationCronJobImpl.class);
         binder.bind(CollectionWarningCronJob.class).to(CollectionWarningCronJobImpl.class);
         binder.bind(AutoDeactivationCronJob.class).to(AutoDeactivationCronJobImpl.class);
-        binder.bind(MigrateOrderMailRecipientsCronJob.class).to(MigrateOrderMailRecipientsCronJobImpl.class);
 
         // as default .inSingletonScope();
     }
