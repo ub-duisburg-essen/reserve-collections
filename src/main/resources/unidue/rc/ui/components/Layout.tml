@@ -164,8 +164,7 @@
                                         </ul>
                                     </t:if>
                                     <li>
-                                        <a t:type="pagelink" t:page="copyright/index"
-                                           class="${prop:getClassForLink('copyright/index')}">${message:nav.item.copyright.law}</a>
+                                        <a href="https://www.uni-due.de/ub/urheberrecht/" target="_blank">${message:nav.item.copyright.law}</a>
                                     </li>
                                     <li>
                                        <a t:type="pagelink" t:page="privacy/index" class="${prop:getClassForLink('privacy/index')}">${message:nav.item.privacy}</a>
