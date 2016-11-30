@@ -148,10 +148,18 @@ public class ResourceDAOImpl extends BaseDAOImpl implements ResourceDAO {
             java.io.File realFile = new java.io.File(filesDir, resource.getFilePath());
             if (realFile.exists()) {
 
-                boolean deleted = realFile.delete();
-                return deleted
-                        ? FileDeleteStatus.Deleted
-                        : FileDeleteStatus.NotDeleted;
+                boolean deleted = true;//realFile.delete();
+                if (deleted) {
+
+                    resource.setFilePath(null);
+                    try {
+                        update(resource);
+                    } catch (CommitException e) {
+                        LOG.warn("could not null filepath of resource " + resource, e);
+                    }
+                    return FileDeleteStatus.Deleted;
+                }
+                return FileDeleteStatus.NotDeleted;
             }
         }
         return FileDeleteStatus.NoFile;

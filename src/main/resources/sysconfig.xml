@@ -710,4 +710,10 @@
         <value>unidue.rc.model.BookChapter,unidue.rc.model.JournalArticle,unidue.rc.model.Book,unidue.rc.model.ReserveCollection</value>
         <type>1</type>
     </defaultSetting>
+    <defaultSetting>
+        <label>Log zur Löschung aller Scandateien</label>
+        <key>scannable.file.delete.log</key>
+        <value>${collection.home}/scannable.file.delete.log</value>
+        <type>1</type>
+    </defaultSetting>
 </defaultSettingsList>

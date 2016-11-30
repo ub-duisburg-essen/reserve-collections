@@ -19,7 +19,11 @@ package unidue.rc.workflow;
 import miless.model.User;
 import unidue.rc.dao.CommitException;
 import unidue.rc.dao.DeleteException;
-import unidue.rc.model.*;
+import unidue.rc.dao.ResourceDAO;
+import unidue.rc.model.Entry;
+import unidue.rc.model.ReserveCollection;
+import unidue.rc.model.Resource;
+import unidue.rc.model.ResourceContainer;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -132,5 +136,7 @@ public interface ResourceService {
 
     void afterEntryDelete(Entry entry);
 
-    void deleteFile(Resource resource) throws CommitException;
+    void setFileDeleted(Resource resource) throws CommitException;
+
+    ResourceDAO.FileDeleteStatus deleteFile(Resource resource) throws CommitException;
 }

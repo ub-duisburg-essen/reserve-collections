@@ -34,6 +34,8 @@ public class _ReserveCollectionsDatamap {
 
     public static final String COUNT_JOURNALS_QUERYNAME = "count_journals";
 
+    public static final String COUNT_NON_FREE_SCANNABLE_FILES_QUERYNAME = "count_non_free_scannable_files";
+
     public static final String COUNT_RESERVECOLLECTIONS_FOR_STATUS_QUERYNAME = "count_reservecollections_for_status";
 
     public static final String COUNT_TOTALFILES_QUERYNAME = "count_totalfiles";
@@ -67,6 +69,8 @@ public class _ReserveCollectionsDatamap {
     public static final String SELECT_GLOBAL_ROLES_BY_USER_QUERYNAME = "select_global_roles_by_user";
 
     public static final String SELECT_LARGER_THAN_MAX_NUMBERS_BY_LOCATION_QUERYNAME = "select_larger_than_max_numbers_by_location";
+
+    public static final String SELECT_NON_FREE_SCANNABLE_RESOURCES_QUERYNAME = "select_non_free_scannable_resources";
 
     public static final String SELECT_PERMISSION_BY_USER_ACTION_QUERYNAME = "select_permission_by_user_action";
 

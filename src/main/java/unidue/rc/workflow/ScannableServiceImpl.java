@@ -16,23 +16,28 @@
 package unidue.rc.workflow;
 
 
+import org.apache.cayenne.BaseContext;
+import org.apache.cayenne.DataRow;
+import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.Persistent;
 import org.apache.cayenne.di.Inject;
+import org.apache.cayenne.query.*;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import unidue.rc.dao.CommitException;
-import unidue.rc.dao.DeleteException;
-import unidue.rc.dao.EntryDAO;
-import unidue.rc.dao.ScanJobDAO;
+import unidue.rc.dao.*;
 import unidue.rc.model.*;
 import unidue.rc.search.SolrService;
+import unidue.rc.system.SystemConfigurationService;
 
-import javax.mail.internet.InternetAddress;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.io.File;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 /**
  * @author Nils Verheyen
@@ -41,6 +46,8 @@ import java.util.List;
 public class ScannableServiceImpl implements ScannableService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ScannableServiceImpl.class);
+
+    private static final String LINE_SEPARATOR = System.lineSeparator();
 
     @Inject
     private ScanJobDAO scanJobDAO;
@@ -56,6 +63,9 @@ public class ScannableServiceImpl implements ScannableService {
 
     @Inject
     private SolrService solrService;
+
+    @Inject
+    private SystemConfigurationService config;
 
     @Override
     public void create(Scannable scannable, ReserveCollection collection) throws CommitException {
@@ -168,7 +178,83 @@ public class ScannableServiceImpl implements ScannableService {
         if (resource == null)
             return;
 
-        resourceService.deleteFile(resource);
+        resourceService.setFileDeleted(resource);
         scanJobService.afterFileDeleted(scannable);
+    }
+
+    @Override
+    public void deleteAllFiles(String authorizationCode,
+                               BiConsumer<Integer, Integer> updateProgressObserver) throws CommitException, IllegalArgumentException, IOException {
+        ObjectContext context = BaseContext.getThreadObjectContext();
+
+        NamedQuery countQuery = new NamedQuery(ReserveCollectionsDatamap.COUNT_NON_FREE_SCANNABLE_FILES_QUERYNAME);
+        List records = context.performQuery(countQuery);
+        DataRow dr = (DataRow) records.get(0);
+        int nonFreeScannableFileCount = Integer.valueOf(dr.get("count").toString());
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("limit", Integer.toString(BaseDAO.MAX_RESULTS));
+        params.put("offset", "0");
+        NamedQuery objectQuery = new NamedQuery((ReserveCollectionsDatamap.SELECT_NON_FREE_SCANNABLE_RESOURCES_QUERYNAME), params);
+        int offset = 0;
+        int objectCount = 0;
+        List<Resource> resources;
+
+        File log = createFileDeleteLog();
+
+        while (!(resources = context.performQuery(objectQuery)).isEmpty()) {
+
+            resources.forEach(resource -> {
+
+                try {
+                    String filePath = resource.getFilePath();
+                    ResourceDAO.FileDeleteStatus fileDeleteStatus = resourceService.deleteFile(resource);
+                    switch (fileDeleteStatus) {
+                        case Deleted:
+                            log("deleted file: " + filePath, Level.INFO, log);
+                            break;
+                        case NoFile:
+                            log("file " + filePath + " does not exist in " + resource.getId(), Level.WARN, log);
+                            break;
+                        case NotDeleted:
+                            log("could not delete file " + filePath + " of resource " + resource.getId(), Level.ERROR, log);
+                            break;
+                    }
+                } catch (CommitException e) {
+                    LOG.error("could not update resource " + resource.getId(), e);
+                    log("could not update resource " + resource.getId() + "; cause: " + e.getMessage(), Level.ERROR, log);
+                }
+            });
+
+            objectCount += resources.size();
+            offset += resources.size() < BaseDAO.MAX_RESULTS
+                      ? resources.size()
+                      : BaseDAO.MAX_RESULTS;
+            params.put("offset", Integer.toString(offset));
+            updateProgressObserver.accept(objectCount, nonFreeScannableFileCount);
+            objectQuery = new NamedQuery((ReserveCollectionsDatamap.SELECT_NON_FREE_SCANNABLE_RESOURCES_QUERYNAME), params);
+        }
+    }
+
+    private void log(String msg, Level logLevel, File log) {
+        try {
+
+            FileUtils.writeStringToFile(log, String.format("%8s - %s%s", logLevel.toString(), msg, LINE_SEPARATOR), true);
+        } catch (IOException e) {
+            LOG.error("could not write string to file " + log, e);
+        }
+    }
+
+    private File createFileDeleteLog() throws IOException {
+        String logName = config.getString("scannable.file.delete.log");
+        File file = new File(logName);
+        if (file.exists()) {
+            int suffix = 1;
+            while ((file = new File(String.format("%s.%d", logName, suffix))).exists()) {
+                suffix++;
+            }
+        }
+        FileUtils.touch(file);
+        return file;
     }
 }

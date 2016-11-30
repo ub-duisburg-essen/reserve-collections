@@ -16,6 +16,8 @@
 package unidue.rc.workflow;
 
 
+import org.apache.log4j.Level;
+import org.slf4j.Logger;
 import unidue.rc.dao.CommitException;
 import unidue.rc.dao.DeleteException;
 import unidue.rc.model.*;
@@ -23,6 +25,8 @@ import unidue.rc.model.*;
 import javax.mail.internet.InternetAddress;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * @author Nils Verheyen
@@ -159,4 +163,16 @@ public interface ScannableService {
      * @throws CommitException thrown if any object could not be saved in backend
      */
     void deleteFile(Scannable scannable) throws CommitException;
+
+    /**
+     * Removes all files that belong of any {@link Scannable} object, that is stored inside the database. Proceed with
+     * care, as the operation can not be reversed! All files are permanently deleted.
+     *
+     * @param authorizationCode      contains the code that must match, otherwise the delete can not be executed
+     * @param updateProgressObserver observer that listens for progress updates
+     * @throws CommitException          thrown if any {@link Scannable} or {@link Resource} can not be saved.
+     * @throws IllegalArgumentException thrown if given authorization code is invalid
+     */
+    void deleteAllFiles(String authorizationCode,
+                        BiConsumer<Integer, Integer> updateProgressObserver) throws CommitException, IllegalArgumentException, IOException;
 }

@@ -976,6 +976,24 @@ LEFT JOIN entry e
 ON (a.id = e.id) 
 where e.deleted IS NULL]]></sql>
 	</query>
+	<query name="count_non_free_scannable_files" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="data-map" root-name="reserve_collections_datamap">
+		<property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
+		<sql><![CDATA[SELECT count(*) as count
+FROM (
+       SELECT
+         bc.id,
+         bc.resourceid,
+         'book_chapter' AS type
+       FROM book_chapter bc
+       UNION SELECT
+               ja.id,
+               ja.resourceid,
+               'journal_article' AS type
+             FROM journal_article ja) AS scannable
+  INNER JOIN resource res ON scannable.resourceid = res.id
+WHERE res.filepath IS NOT NULL
+      AND res.copyrightreviewstatus NOT IN (3, 6);]]></sql>
+	</query>
 	<query name="count_reservecollections_for_status" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="data-map" root-name="reserve_collections_datamap">
 		<property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
 		<sql><![CDATA[Select count(*) from reserve_collection rc 
@@ -1099,6 +1117,24 @@ WHERE number > ALL (SELECT n.number
 		LEFT JOIN LIBRARY_LOCATION l ON c.librarylocationid = l.id
 		WHERE l.id = $locationId)
 ORDER BY number ASC]]></sql>
+	</query>
+	<query name="select_non_free_scannable_resources" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="obj-entity" root-name="Resource">
+		<sql><![CDATA[SELECT res.*
+FROM (
+       SELECT
+         bc.id,
+         bc.resourceid,
+         'book_chapter' AS type
+       FROM book_chapter bc
+       UNION SELECT
+               ja.id,
+               ja.resourceid,
+               'journal_article' AS type
+             FROM journal_article ja) AS scannable
+  INNER JOIN resource res ON scannable.resourceid = res.id
+WHERE res.filepath IS NOT NULL
+      AND res.copyrightreviewstatus NOT IN (3, 6)
+LIMIT $limit OFFSET $offset]]></sql>
 	</query>
 	<query name="select_permission_by_user_action" factory="org.apache.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="Permission">
 		<prefetch>action</prefetch>
