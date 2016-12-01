@@ -25,6 +25,7 @@ import org.apache.cayenne.query.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Level;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import unidue.rc.dao.*;
@@ -198,6 +199,12 @@ public class ScannableServiceImpl implements ScannableService {
 
         runDeleteAllFiles(nonFreeScannableFileCount, log, updateProgressObserver);
 
+        try {
+            solrService.fullImport(SolrService.Core.ScanJob);
+        } catch (SolrServerException e) {
+            LOG.error("could not run full import on scan job core", e);
+        }
+
         return log;
     }
 
@@ -242,6 +249,7 @@ public class ScannableServiceImpl implements ScannableService {
         if (resourceContainer instanceof Scannable) {
             Scannable scannable = (Scannable) resourceContainer;
             scannable.setComment(comment);
+            scannable.setModified(new Date());
             scanJobDAO.update(scannable);
         }
     }

@@ -94,13 +94,13 @@ public class DeleteScannableFiles {
     }
 
     @OnEvent(value = EventConstants.VALIDATE, component = "delete_all_files_form")
-    void onValidateForm() {
+    Object onValidateForm() {
 
         if (StringUtils.isAnyBlank(authorizationCode, authorizationCodeConfirmation)
                 || !StringUtils.equals(authorizationCode, authorizationCodeConfirmation)) {
 
             form.recordError(messages.get("error.msg.auth.codes.does.not.match"));
-            return;
+            return this;
         }
 
         try {
@@ -113,6 +113,7 @@ public class DeleteScannableFiles {
             log.error("could not create log", e);
             form.recordError(messages.get("error.msg.could.not.write.log"));
         }
+        return this;
     }
 
     @OnEvent(EventConstants.SUBMIT)
@@ -125,7 +126,8 @@ public class DeleteScannableFiles {
     @OnEvent(component = "downloadDeleteLog")
     StreamResponse onDownloadDeleteLog(String deleteLogName) {
         String deleteLogFileURI = config.getString("scannable.file.delete.log");
-        File deleteLog = new File(deleteLogFileURI);
+        String deleteLogDir = FilenameUtils.getFullPath(deleteLogFileURI);
+        File deleteLog = new File(deleteLogDir, deleteLogName);
         return new AttachmentStreamResponse(deleteLog, FilenameUtils.getName(deleteLog.getAbsolutePath()), "text/plain");
     }
 
