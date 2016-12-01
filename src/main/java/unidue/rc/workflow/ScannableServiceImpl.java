@@ -187,8 +187,8 @@ public class ScannableServiceImpl implements ScannableService {
     }
 
     @Override
-    public void deleteAllFiles(String authorizationCode,
-                               BiConsumer<Integer, Integer> updateProgressObserver) throws CommitException, IllegalArgumentException, IOException {
+    public File deleteAllFiles(String authorizationCode,
+                               BiConsumer<Integer, Integer> updateProgressObserver) throws IllegalArgumentException, IOException {
 
         checkDeleteAllFilesAuthCode(authorizationCode);
 
@@ -197,6 +197,8 @@ public class ScannableServiceImpl implements ScannableService {
         File log = createFileDeleteLog();
 
         runDeleteAllFiles(nonFreeScannableFileCount, log, updateProgressObserver);
+
+        return log;
     }
 
     private void runDeleteAllFiles(int nonFreeScannableFileCount, File log, BiConsumer<Integer, Integer> updateProgressObserver) {

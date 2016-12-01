@@ -15,20 +15,25 @@
  */
 package unidue.rc.ui.pages.admin;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.PersistenceConstants;
+import org.apache.tapestry5.StreamResponse;
 import org.apache.tapestry5.annotations.*;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.slf4j.Logger;
-import unidue.rc.dao.CommitException;
+import unidue.rc.io.AttachmentStreamResponse;
+import unidue.rc.system.SystemConfigurationService;
 import unidue.rc.workflow.ScannableService;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -44,6 +49,9 @@ public class DeleteScannableFiles {
     private ScannableService scannableService;
 
     @Inject
+    private SystemConfigurationService config;
+
+    @Inject
     private AjaxResponseRenderer ajaxResponseRenderer;
 
     @Inject
@@ -51,6 +59,9 @@ public class DeleteScannableFiles {
 
     @Inject
     private Messages messages;
+
+    @Inject
+    private PageRenderLinkSource linkSource;
 
     @InjectComponent("delete_all_files_form")
     private Form form;
@@ -60,6 +71,9 @@ public class DeleteScannableFiles {
 
     @InjectComponent("progressZone")
     private Zone progressZone;
+
+    @InjectComponent("deleteLogZone")
+    private Zone deleteLogZone;
 
     @Property
     private String authorizationCode;
@@ -71,26 +85,27 @@ public class DeleteScannableFiles {
     @Persist(PersistenceConstants.FLASH)
     private String progress;
 
+    @Property
+    @Persist(PersistenceConstants.FLASH)
+    private String deleteLogName;
 
     @OnEvent(EventConstants.ACTIVATE)
     void onActivate() {
     }
 
     @OnEvent(value = EventConstants.VALIDATE, component = "delete_all_files_form")
-    Object onValidateForm() {
+    void onValidateForm() {
 
         if (StringUtils.isAnyBlank(authorizationCode, authorizationCodeConfirmation)
                 || !StringUtils.equals(authorizationCode, authorizationCodeConfirmation)) {
 
             form.recordError(messages.get("error.msg.auth.codes.does.not.match"));
-            return this;
+            return;
         }
 
         try {
-            scannableService.deleteAllFiles(authorizationCode, this::onUpdateProcess);
-        } catch (CommitException e) {
-            log.error("could not delete all files", e);
-            form.recordError(messages.get("error.msg.could.update.resources.check.log"));
+            File deleteLog = scannableService.deleteAllFiles(authorizationCode, this::onUpdateProcess);
+            deleteLogName = FilenameUtils.getName(deleteLog.getName());
         } catch (IllegalArgumentException e) {
             log.warn("invalid authorization code", e);
             form.recordError(messages.get("error.msg.invalid.auth.code"));
@@ -98,11 +113,20 @@ public class DeleteScannableFiles {
             log.error("could not create log", e);
             form.recordError(messages.get("error.msg.could.not.write.log"));
         }
-        return this;
     }
 
-    @OnEvent(value = EventConstants.SUCCESS, component = "delete_all_files_form")
-    void onSuccess() {
+    @OnEvent(EventConstants.SUBMIT)
+    void onSubmit() {
+        if (request.isXHR()) {
+            ajaxResponseRenderer.addRender(deleteLogZone);
+        }
+    }
+
+    @OnEvent(component = "downloadDeleteLog")
+    StreamResponse onDownloadDeleteLog(String deleteLogName) {
+        String deleteLogFileURI = config.getString("scannable.file.delete.log");
+        File deleteLog = new File(deleteLogFileURI);
+        return new AttachmentStreamResponse(deleteLog, FilenameUtils.getName(deleteLog.getAbsolutePath()), "text/plain");
     }
 
     private void onUpdateProcess(Integer current, Integer total) {

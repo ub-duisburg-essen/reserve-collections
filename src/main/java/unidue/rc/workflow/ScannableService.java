@@ -16,17 +16,17 @@
 package unidue.rc.workflow;
 
 
-import org.apache.log4j.Level;
-import org.slf4j.Logger;
 import unidue.rc.dao.CommitException;
 import unidue.rc.dao.DeleteException;
-import unidue.rc.model.*;
+import unidue.rc.model.Entry;
+import unidue.rc.model.ReserveCollection;
+import unidue.rc.model.Resource;
+import unidue.rc.model.Scannable;
 
-import javax.mail.internet.InternetAddress;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 /**
  * @author Nils Verheyen
@@ -171,10 +171,10 @@ public interface ScannableService {
      *
      * @param authorizationCode      contains the code that must match, otherwise the delete can not be executed
      * @param updateProgressObserver observer that listens for progress updates
-     * @throws CommitException          thrown if any {@link Scannable} or {@link Resource} can not be saved.
+     * @return the log file that was written
      * @throws IllegalArgumentException thrown if given authorization code is invalid
      * @throws IOException              thrown if any error occurred during accessing the delete log
      */
-    void deleteAllFiles(String authorizationCode,
-                        BiConsumer<Integer, Integer> updateProgressObserver) throws CommitException, IllegalArgumentException, IOException;
+    File deleteAllFiles(String authorizationCode,
+                        BiConsumer<Integer, Integer> updateProgressObserver) throws IllegalArgumentException, IOException;
 }

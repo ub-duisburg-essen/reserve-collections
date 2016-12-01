@@ -54,6 +54,14 @@
                 </div>
             </div>
 
+            <t:zone t:id="deleteLogZone" id="deleteLogZone" update="none">
+                <t:if test="deleteLogName">
+                    <h4>
+                        <t:actionlink t:id="downloadDeleteLog" context="deleteLogName"><span class="glyphicon glyphicon-download"/> ${message:download.delete.log}</t:actionlink>
+                    </h4>
+                </t:if>
+            </t:zone>
+
             <!-- -->
             <div t:id="progressZone" id="progressZone"
                  t:type="zone" t:update="none"
