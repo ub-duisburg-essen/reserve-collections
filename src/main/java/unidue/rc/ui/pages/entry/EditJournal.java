@@ -43,7 +43,6 @@ import unidue.rc.security.CollectionSecurityService;
 import unidue.rc.ui.ProtectedPage;
 import unidue.rc.ui.SecurityContextPage;
 import unidue.rc.ui.pages.collection.ViewCollection;
-import unidue.rc.workflow.EntryService;
 import unidue.rc.workflow.ResourceService;
 import unidue.rc.workflow.ScannableService;
 
@@ -251,7 +250,7 @@ public class EditJournal implements SecurityContextPage {
     private void deleteFile() {
 
         try {
-            scannableService.deleteFile(journal);
+            scannableService.setFileDeleted(journal);
         } catch (CommitException e) {
             form.recordError(messages.format("error.msg.could.not.commit.chapter", journal));
         }

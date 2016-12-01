@@ -165,4 +165,11 @@ public interface Scannable extends EntryValue, ResourceContainer, Cloneable {
      * @return see description
      */
     Scannable clone();
+
+    /**
+     * Sets the comment on this instance.
+     *
+     * @param comment Nullable
+     */
+    void setComment(String comment);
 }

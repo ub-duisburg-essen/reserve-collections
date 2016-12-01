@@ -378,7 +378,7 @@ public class ScanJobs {
 
         try {
             if (deleteFile)
-                scannableService.deleteFile(scannable);
+                scannableService.setFileDeleted(scannable);
 
             scannableService.update(scannable, url);
             if (file != null) {

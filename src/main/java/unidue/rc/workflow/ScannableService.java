@@ -162,7 +162,7 @@ public interface ScannableService {
      * @param scannable scannable to use
      * @throws CommitException thrown if any object could not be saved in backend
      */
-    void deleteFile(Scannable scannable) throws CommitException;
+    void setFileDeleted(Scannable scannable) throws CommitException;
 
     /**
      * Removes all files that belong of any {@link Scannable} object, that is stored inside the database. Proceed with

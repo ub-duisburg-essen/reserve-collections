@@ -31,6 +31,7 @@ import unidue.rc.dao.*;
 import unidue.rc.model.*;
 import unidue.rc.search.SolrService;
 import unidue.rc.system.SystemConfigurationService;
+import unidue.rc.system.SystemMessageService;
 
 import java.io.*;
 import java.io.File;
@@ -66,6 +67,9 @@ public class ScannableServiceImpl implements ScannableService {
 
     @Inject
     private SystemConfigurationService config;
+
+    @Inject
+    private SystemMessageService messages;
 
     @Override
     public void create(Scannable scannable, ReserveCollection collection) throws CommitException {
@@ -173,7 +177,7 @@ public class ScannableServiceImpl implements ScannableService {
     }
 
     @Override
-    public void deleteFile(Scannable scannable) throws CommitException {
+    public void setFileDeleted(Scannable scannable) throws CommitException {
         Resource resource = scannable.getResource();
         if (resource == null)
             return;
@@ -212,19 +216,8 @@ public class ScannableServiceImpl implements ScannableService {
             resources.forEach(resource -> {
 
                 try {
-                    String filePath = resource.getFilePath();
-                    ResourceDAO.FileDeleteStatus fileDeleteStatus = resourceService.deleteFile(resource);
-                    switch (fileDeleteStatus) {
-                        case Deleted:
-                            log("deleted file: " + filePath, Level.INFO, log);
-                            break;
-                        case NoFile:
-                            log("file " + filePath + " does not exist in resource " + resource.getId(), Level.WARN, log);
-                            break;
-                        case NotDeleted:
-                            log("could not delete file " + filePath + " of resource " + resource.getId(), Level.ERROR, log);
-                            break;
-                    }
+                    deleteFile(resource, log);
+                    setScannableComment(resource, messages.get("reference"));
                 } catch (CommitException e) {
                     LOG.error("could not update resource " + resource.getId(), e);
                     log("could not update resource " + resource.getId() + "; cause: " + e.getMessage(), Level.ERROR, log);
@@ -238,6 +231,33 @@ public class ScannableServiceImpl implements ScannableService {
             params.put("offset", Integer.toString(offset));
             updateProgressObserver.accept(objectCount, nonFreeScannableFileCount);
             objectQuery = new NamedQuery((ReserveCollectionsDatamap.SELECT_NON_FREE_SCANNABLE_RESOURCES_QUERYNAME), params);
+        }
+    }
+
+    private void setScannableComment(Resource resource, String comment) throws CommitException {
+
+        ResourceContainer resourceContainer = resource.getResourceContainer();
+        if (resourceContainer instanceof Scannable) {
+            Scannable scannable = (Scannable) resourceContainer;
+            scannable.setComment(comment);
+            scanJobDAO.update(scannable);
+        }
+    }
+
+    private void deleteFile(Resource resource, File log) throws CommitException {
+
+        String filePath = resource.getFilePath();
+        ResourceDAO.FileDeleteStatus fileDeleteStatus = resourceService.deleteFile(resource);
+        switch (fileDeleteStatus) {
+            case Deleted:
+                log("deleted file: " + filePath, Level.INFO, log);
+                break;
+            case NoFile:
+                log("file " + filePath + " does not exist in resource " + resource.getId(), Level.WARN, log);
+                break;
+            case NotDeleted:
+                log("could not delete file " + filePath + " of resource " + resource.getId(), Level.ERROR, log);
+                break;
         }
     }
 
@@ -263,8 +283,8 @@ public class ScannableServiceImpl implements ScannableService {
 
     private void log(String msg, Level logLevel, File log) {
         try {
-
-            FileUtils.writeStringToFile(log, String.format("%8s - %s%s", logLevel.toString(), msg, LINE_SEPARATOR), true);
+            String data = String.format("%8s - %s%s", logLevel.toString(), msg, LINE_SEPARATOR);
+            FileUtils.writeStringToFile(log, data, true);
         } catch (IOException e) {
             LOG.error("could not write string to file " + log, e);
         }
