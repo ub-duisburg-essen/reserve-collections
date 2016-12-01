@@ -11,6 +11,8 @@
 
                 <form t:type="form" t:clientValidation="none" t:id="delete_all_files_form"
                       class="form-horizontal" zone="^">
+
+                    <t:errors class="literal:alert alert-danger"/>
                     <fieldset>
                         <div class="form-group">
                             <label for="authorizationCode"

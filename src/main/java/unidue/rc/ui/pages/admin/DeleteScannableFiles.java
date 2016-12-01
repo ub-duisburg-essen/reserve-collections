@@ -21,6 +21,7 @@ import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.annotations.*;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
@@ -48,6 +49,9 @@ public class DeleteScannableFiles {
     @Inject
     private Request request;
 
+    @Inject
+    private Messages messages;
+
     @InjectComponent("delete_all_files_form")
     private Form form;
 
@@ -73,21 +77,32 @@ public class DeleteScannableFiles {
     }
 
     @OnEvent(value = EventConstants.VALIDATE, component = "delete_all_files_form")
-    void onValidateForm() {
+    Object onValidateForm() {
 
-    }
+        if (StringUtils.isAnyBlank(authorizationCode, authorizationCodeConfirmation)
+                || !StringUtils.equals(authorizationCode, authorizationCodeConfirmation)) {
 
-    @OnEvent(value = EventConstants.SUCCESS, component = "delete_all_files_form")
-    void onSuccess() {
+            form.recordError(messages.get("error.msg.auth.codes.does.not.match"));
+            return this;
+        }
+
         try {
             scannableService.deleteAllFiles(authorizationCode, this::onUpdateProcess);
         } catch (CommitException e) {
             log.error("could not delete all files", e);
+            form.recordError(messages.get("error.msg.could.update.resources.check.log"));
         } catch (IllegalArgumentException e) {
-            log.error("invalid authorization code", e);
+            log.warn("invalid authorization code", e);
+            form.recordError(messages.get("error.msg.invalid.auth.code"));
         } catch (IOException e) {
             log.error("could not create log", e);
+            form.recordError(messages.get("error.msg.could.not.write.log"));
         }
+        return this;
+    }
+
+    @OnEvent(value = EventConstants.SUCCESS, component = "delete_all_files_form")
+    void onSuccess() {
     }
 
     private void onUpdateProcess(Integer current, Integer total) {

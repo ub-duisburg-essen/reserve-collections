@@ -166,12 +166,14 @@ public interface ScannableService {
 
     /**
      * Removes all files that belong of any {@link Scannable} object, that is stored inside the database. Proceed with
-     * care, as the operation can not be reversed! All files are permanently deleted.
+     * care, as the operation can not be reversed! All files are permanently deleted. During delete a log file
+     * is written configured through <code>scannable.file.delete.log</code>.
      *
      * @param authorizationCode      contains the code that must match, otherwise the delete can not be executed
      * @param updateProgressObserver observer that listens for progress updates
      * @throws CommitException          thrown if any {@link Scannable} or {@link Resource} can not be saved.
      * @throws IllegalArgumentException thrown if given authorization code is invalid
+     * @throws IOException              thrown if any error occurred during accessing the delete log
      */
     void deleteAllFiles(String authorizationCode,
                         BiConsumer<Integer, Integer> updateProgressObserver) throws CommitException, IllegalArgumentException, IOException;

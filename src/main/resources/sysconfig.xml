@@ -716,4 +716,10 @@
         <value>${collection.home}/scannable.file.delete.log</value>
         <type>1</type>
     </defaultSetting>
+    <defaultSetting>
+        <label>Passwortdatei zur Löschung aller Scandateien</label>
+        <key>scannable.file.delete.passwd</key>
+        <value>${collection.home}/scannable.file.delete.passwd</value>
+        <type>1</type>
+    </defaultSetting>
 </defaultSettingsList>

@@ -185,12 +185,19 @@ public class ScannableServiceImpl implements ScannableService {
     @Override
     public void deleteAllFiles(String authorizationCode,
                                BiConsumer<Integer, Integer> updateProgressObserver) throws CommitException, IllegalArgumentException, IOException {
-        ObjectContext context = BaseContext.getThreadObjectContext();
 
-        NamedQuery countQuery = new NamedQuery(ReserveCollectionsDatamap.COUNT_NON_FREE_SCANNABLE_FILES_QUERYNAME);
-        List records = context.performQuery(countQuery);
-        DataRow dr = (DataRow) records.get(0);
-        int nonFreeScannableFileCount = Integer.valueOf(dr.get("count").toString());
+        checkDeleteAllFilesAuthCode(authorizationCode);
+
+        int nonFreeScannableFileCount = getNonFreeScannableFileCount();
+
+        File log = createFileDeleteLog();
+
+        runDeleteAllFiles(nonFreeScannableFileCount, log, updateProgressObserver);
+    }
+
+    private void runDeleteAllFiles(int nonFreeScannableFileCount, File log, BiConsumer<Integer, Integer> updateProgressObserver) {
+
+        ObjectContext context = BaseContext.getThreadObjectContext();
 
         HashMap<String, String> params = new HashMap<>();
         params.put("limit", Integer.toString(BaseDAO.MAX_RESULTS));
@@ -199,8 +206,6 @@ public class ScannableServiceImpl implements ScannableService {
         int offset = 0;
         int objectCount = 0;
         List<Resource> resources;
-
-        File log = createFileDeleteLog();
 
         while (!(resources = context.performQuery(objectQuery)).isEmpty()) {
 
@@ -214,7 +219,7 @@ public class ScannableServiceImpl implements ScannableService {
                             log("deleted file: " + filePath, Level.INFO, log);
                             break;
                         case NoFile:
-                            log("file " + filePath + " does not exist in " + resource.getId(), Level.WARN, log);
+                            log("file " + filePath + " does not exist in resource " + resource.getId(), Level.WARN, log);
                             break;
                         case NotDeleted:
                             log("could not delete file " + filePath + " of resource " + resource.getId(), Level.ERROR, log);
@@ -234,6 +239,26 @@ public class ScannableServiceImpl implements ScannableService {
             updateProgressObserver.accept(objectCount, nonFreeScannableFileCount);
             objectQuery = new NamedQuery((ReserveCollectionsDatamap.SELECT_NON_FREE_SCANNABLE_RESOURCES_QUERYNAME), params);
         }
+    }
+
+    private int getNonFreeScannableFileCount() {
+
+        ObjectContext context = BaseContext.getThreadObjectContext();
+        NamedQuery countQuery = new NamedQuery(ReserveCollectionsDatamap.COUNT_NON_FREE_SCANNABLE_FILES_QUERYNAME);
+        List records = context.performQuery(countQuery);
+        DataRow dr = (DataRow) records.get(0);
+        return Integer.valueOf(dr.get("count").toString());
+    }
+
+    private void checkDeleteAllFilesAuthCode(String authorizationCode) throws IOException {
+
+        List<String> passwdLines = FileUtils.readLines(new File(config.getString("scannable.file.delete.passwd")));
+        String passwd = passwdLines.size() > 0
+                        ? passwdLines.get(0)
+                        : null;
+        authorizationCode = StringUtils.defaultIfBlank(authorizationCode, "");
+        if (!StringUtils.equals(passwd, authorizationCode))
+            throw new IllegalArgumentException("auth code to delete all scan files is invalid");
     }
 
     private void log(String msg, Level logLevel, File log) {
