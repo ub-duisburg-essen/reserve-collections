@@ -19,12 +19,12 @@ package unidue.rc.ui.pages;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.EventContext;
-import org.apache.tapestry5.StreamResponse;
 import org.apache.tapestry5.annotations.OnEvent;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.HttpError;
 import org.apache.tapestry5.services.RequestGlobals;
 import unidue.rc.dao.ResourceDAO;
-import unidue.rc.io.AttachmentStreamResponse;
 import unidue.rc.io.InlineStreamResponse;
 import unidue.rc.io.RangeOutputStreamResponse;
 import unidue.rc.model.Resource;
@@ -54,6 +54,9 @@ public class Media implements SecurityContextPage {
     private RequestGlobals globals;
 
     @Inject
+    private Messages messages;
+
+    @Inject
     private ResourceDAO resourceDAO;
 
     @Inject
@@ -64,9 +67,11 @@ public class Media implements SecurityContextPage {
     @OnEvent(EventConstants.ACTIVATE)
     Object onActivate(Integer resourceID) {
 
-        this.resourceID = resourceID;
 
+        this.resourceID = resourceID;
         Resource resource = resourceDAO.get(Resource.class, resourceID);
+        if (resource == null || !resource.isFileAvailable())
+            return new HttpError(HttpServletResponse.SC_NOT_FOUND, messages.get("not.found"));
 
         HttpServletRequest request = globals.getHTTPServletRequest();
         HttpServletResponse response = globals.getHTTPServletResponse();

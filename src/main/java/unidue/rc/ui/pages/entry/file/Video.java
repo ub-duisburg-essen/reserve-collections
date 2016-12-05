@@ -31,7 +31,9 @@ import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.annotations.*;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.HttpError;
 import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.slf4j.Logger;
@@ -48,8 +50,8 @@ import unidue.rc.ui.pages.Media;
 import unidue.rc.ui.services.MimeService;
 import unidue.rc.workflow.ResourceService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
@@ -89,6 +91,9 @@ public class Video implements SecurityContextPage {
     private JavaScriptSupport javaScriptSupport;
 
     @Inject
+    private Messages messages;
+
+    @Inject
     private MimeService mimeService;
 
     @Inject
@@ -118,8 +123,10 @@ public class Video implements SecurityContextPage {
     }
 
     @OnEvent(EventConstants.ACTIVATE)
-    void onActivate(Integer resourceID) {
+    Object onActivate(Integer resourceID) {
         video = resourceDAO.get(Resource.class, resourceID);
+        if (video == null || !video.isFileAvailable())
+            return new HttpError(HttpServletResponse.SC_NOT_FOUND, messages.get("not.found"));
 
         protocols = new LinkedHashMap<>();
         Iterator<String> keys = config.getKeys("stream.protocol.port");
@@ -127,6 +134,7 @@ public class Video implements SecurityContextPage {
             String key = keys.next();
             protocols.put(key.substring(key.lastIndexOf('.') + 1), config.getInt(key));
         }
+        return null;
     }
 
     @OnEvent(EventConstants.PASSIVATE)

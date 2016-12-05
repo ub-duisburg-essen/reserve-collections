@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2014 - 2016 Universitaet Duisburg-Essen (semapp|uni-due.de)
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -59,12 +59,14 @@ public class Download {
             return linkSource.createPageRenderLink(Error403.class);
 
         Resource resource = resourceDAO.get(Resource.class, request.getResourceID());
-        if (resource == null || resource.getFileDeleted() != null)
+        if (resource == null || !resource.isFileAvailable())
             return linkSource.createPageRenderLink(Error404.class);
 
         User user = userDAO.getUser(request.getUsername(), moodleService.getRealm(request.getAuthtype()));
 
         java.io.File file = resourceService.download(resource, user);
-        return new AttachmentStreamResponse(file, resource);
+        return file != null && file.exists()
+               ? new AttachmentStreamResponse(file, resource)
+               : linkSource.createPageRenderLink(Error404.class);
     }
 }

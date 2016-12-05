@@ -92,6 +92,9 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Override
     public File download(Resource resource, User user) {
+        if (!resource.isFileAvailable())
+            return null;
+
         String filesDir = config.getString("files.store");
 
         if (user != null) {

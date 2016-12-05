@@ -24,7 +24,9 @@ import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.HttpError;
 import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.slf4j.Logger;
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
@@ -37,6 +39,8 @@ import unidue.rc.ui.SecurityContextPage;
 import unidue.rc.ui.ResourcePageUtil;
 import unidue.rc.ui.pages.Media;
 import unidue.rc.workflow.ResourceService;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Nils Verheyen
@@ -58,6 +62,9 @@ public class Audio implements SecurityContextPage {
     private PageRenderLinkSource linkSource;
 
     @Inject
+    private Messages messages;
+
+    @Inject
     private ResourceDAO resourceDAO;
 
     @Inject
@@ -75,8 +82,11 @@ public class Audio implements SecurityContextPage {
     }
 
     @OnEvent(EventConstants.ACTIVATE)
-    void onActivate(Integer resourceID) {
+    Object onActivate(Integer resourceID) {
         audio = resourceDAO.get(Resource.class, resourceID);
+        return audio == null || !audio.isFileAvailable()
+               ? new HttpError(HttpServletResponse.SC_NOT_FOUND, messages.get("not.found"))
+               : null;
     }
 
     @OnEvent(EventConstants.PASSIVATE)

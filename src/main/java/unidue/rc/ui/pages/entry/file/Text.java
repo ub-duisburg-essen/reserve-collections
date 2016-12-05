@@ -22,7 +22,9 @@ import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.annotations.*;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.HttpError;
 import org.slf4j.Logger;
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbList;
@@ -33,8 +35,10 @@ import unidue.rc.system.SystemConfigurationService;
 import unidue.rc.ui.ProtectedPage;
 import unidue.rc.ui.ResourcePageUtil;
 import unidue.rc.ui.SecurityContextPage;
+import unidue.rc.ui.pages.Error404;
 import unidue.rc.workflow.ResourceService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -61,6 +65,9 @@ public class Text implements SecurityContextPage {
     private Logger log;
 
     @Inject
+    private Messages messages;
+
+    @Inject
     private SystemConfigurationService config;
 
     @Inject
@@ -85,10 +92,14 @@ public class Text implements SecurityContextPage {
     }
 
     @OnEvent(EventConstants.ACTIVATE)
-    void onActivate(Integer resourceID) {
+    Object onActivate(Integer resourceID) {
         text = resourceDAO.get(Resource.class, resourceID);
+        if (text == null || !text.isFileAvailable())
+            return new HttpError(HttpServletResponse.SC_NOT_FOUND, messages.get("not.found"));
+
         List<String> extensionList = config.getStringArray("syntax.highlight.extensions");
         brushes = new HashSet<>(extensionList);
+        return null;
     }
 
     @OnEvent(EventConstants.PASSIVATE)

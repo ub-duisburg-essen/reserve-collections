@@ -65,4 +65,11 @@ public class Resource extends _Resource implements IntPrimaryKey, CollectionVisi
     public void accept(CollectionVisitor visitor) {
         visitor.visit(this);
     }
+
+    public boolean isFileAvailable() {
+        String filePath = getFilePath();
+        return filePath != null
+                && !filePath.isEmpty()
+                && getFileDeleted() == null;
+    }
 }

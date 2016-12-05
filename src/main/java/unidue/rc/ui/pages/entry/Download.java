@@ -84,14 +84,12 @@ public class Download implements SecurityContextPage {
 
     private Object getStreamResponse(Integer resourceID, BaseURLService.DownloadMethod downloadMethod) {
         resource = resourceDAO.get(Resource.class, resourceID);
-        if (resource == null)
+        if (resource == null || !resource.isFileAvailable())
             return new HttpError(HttpServletResponse.SC_NOT_FOUND, messages.get("not.found"));
 
         java.io.File file = resourceService.download(resource);
 
-        return resource.getFileDeleted() != null || file == null || !file.exists()
-               ? new HttpError(HttpServletResponse.SC_NOT_FOUND, messages.get("not.found"))
-               : BaseURLService.DownloadMethod.Attachment.equals(downloadMethod)
+        return BaseURLService.DownloadMethod.Attachment.equals(downloadMethod)
                  ? new AttachmentStreamResponse(file, resource)
                  : new InlineStreamResponse(file, resource);
     }
