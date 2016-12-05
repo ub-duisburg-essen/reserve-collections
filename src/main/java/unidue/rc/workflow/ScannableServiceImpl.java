@@ -36,8 +36,8 @@ import unidue.rc.system.SystemMessageService;
 
 import java.io.*;
 import java.io.File;
+import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.function.BiConsumer;
 
@@ -212,34 +212,38 @@ public class ScannableServiceImpl implements ScannableService {
 
         ObjectContext context = BaseContext.getThreadObjectContext();
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("limit", Integer.toString(BaseDAO.MAX_RESULTS));
-        params.put("offset", "0");
-        NamedQuery objectQuery = new NamedQuery((ReserveCollectionsDatamap.SELECT_NON_FREE_SCANNABLE_RESOURCES_QUERYNAME), params);
-        int offset = 0;
+        int i = 0;
+        int skipped = 0;
         int objectCount = 0;
-        List<Resource> resources;
 
-        while (!(resources = context.performQuery(objectQuery)).isEmpty()) {
+        while (i < nonFreeScannableFileCount) {
 
-            resources.forEach(resource -> {
+            NamedQuery objectQuery = new NamedQuery((ReserveCollectionsDatamap.SELECT_NON_FREE_SCANNABLE_RESOURCES_QUERYNAME),
+                    Collections.singletonMap("offset", Integer.toString(skipped)));
+            List<Resource> resources = (List<Resource>) context.performQuery(objectQuery);
+
+            LOG.debug("objects: " + resources.size());
+            LOG.debug("skipped: " + skipped);
+
+            for (Resource resource : resources) {
 
                 try {
-                    deleteFile(resource, log);
+                    ResourceDAO.FileDeleteStatus deleteStatus = deleteFile(resource, log);
+                    objectCount += deleteStatus.equals(ResourceDAO.FileDeleteStatus.Deleted)
+                                   ? 1
+                                   : 0;
+                    skipped += deleteStatus.equals(ResourceDAO.FileDeleteStatus.NotDeleted)
+                               ? 1
+                               : 0;
                     setScannableComment(resource, messages.get("reference"));
                 } catch (CommitException e) {
                     LOG.error("could not update resource " + resource.getId(), e);
                     log("could not update resource " + resource.getId() + "; cause: " + e.getMessage(), Level.ERROR, log);
                 }
-            });
+            }
 
-            objectCount += resources.size();
-            offset += resources.size() < BaseDAO.MAX_RESULTS
-                      ? resources.size()
-                      : BaseDAO.MAX_RESULTS;
-            params.put("offset", Integer.toString(offset));
             updateProgressObserver.accept(objectCount, nonFreeScannableFileCount);
-            objectQuery = new NamedQuery((ReserveCollectionsDatamap.SELECT_NON_FREE_SCANNABLE_RESOURCES_QUERYNAME), params);
+            i += BaseDAO.MAX_RESULTS;
         }
     }
 
@@ -254,7 +258,7 @@ public class ScannableServiceImpl implements ScannableService {
         }
     }
 
-    private void deleteFile(Resource resource, File log) throws CommitException {
+    private ResourceDAO.FileDeleteStatus deleteFile(Resource resource, File log) throws CommitException {
 
         String filePath = resource.getFilePath();
         ResourceDAO.FileDeleteStatus fileDeleteStatus = resourceService.deleteFile(resource);
@@ -269,6 +273,7 @@ public class ScannableServiceImpl implements ScannableService {
                 log("could not delete file " + filePath + " of resource " + resource.getId(), Level.ERROR, log);
                 break;
         }
+        return fileDeleteStatus;
     }
 
     private int getNonFreeScannableFileCount() {

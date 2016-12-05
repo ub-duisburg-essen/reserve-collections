@@ -65,7 +65,7 @@
             <!-- -->
             <div t:id="progressZone" id="progressZone"
                  t:type="zone" t:update="none"
-                 t:mixins="zoneRefresh" t:period="1">
+                 t:mixins="zoneRefresh" t:period="2">
 
 
                 <span class="hidden" id="currentProgress" data-progress="${progress}"/>

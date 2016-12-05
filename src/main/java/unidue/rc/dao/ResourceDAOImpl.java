@@ -23,6 +23,7 @@ import org.apache.cayenne.di.Inject;
 import org.apache.cayenne.query.NamedQuery;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -143,26 +144,36 @@ public class ResourceDAOImpl extends BaseDAOImpl implements ResourceDAO {
     @Override
     public FileDeleteStatus deleteFile(Resource resource) {
 
-        if (resource.getFilePath() != null) {
+        if (StringUtils.isNotBlank(resource.getFilePath())) {
 
             java.io.File realFile = new java.io.File(filesDir, resource.getFilePath());
             if (realFile.exists()) {
-
+                // file exists -> delete
                 boolean deleted = realFile.delete();
                 if (deleted) {
-
-                    resource.setFilePath(null);
-                    try {
-                        update(resource);
-                    } catch (CommitException e) {
-                        LOG.warn("could not null filepath of resource " + resource, e);
-                    }
+                    // set path to null as file was deleted
+                    setNullPath(resource);
                     return FileDeleteStatus.Deleted;
+                } else {
+                    // file could not be delete (ex. permissions not given)
+                    return FileDeleteStatus.NotDeleted;
                 }
-                return FileDeleteStatus.NotDeleted;
+            } else {
+                // file path is set but no file exists
+                setNullPath(resource);
             }
         }
         return FileDeleteStatus.NoFile;
+    }
+
+    private void setNullPath(Resource resource) {
+
+        resource.setFilePath(null);
+        try {
+            update(resource);
+        } catch (CommitException e) {
+            LOG.warn("could not null filepath of resource " + resource, e);
+        }
     }
 
     @Override

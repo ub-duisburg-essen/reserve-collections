@@ -30,7 +30,10 @@ import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.slf4j.Logger;
 import unidue.rc.io.AttachmentStreamResponse;
+import unidue.rc.model.ActionDefinition;
+import unidue.rc.security.RequiresActionPermission;
 import unidue.rc.system.SystemConfigurationService;
+import unidue.rc.ui.ProtectedPage;
 import unidue.rc.workflow.ScannableService;
 
 import java.io.File;
@@ -40,6 +43,7 @@ import java.io.IOException;
  * Created by nils on 28.11.16.
  */
 @Import(library = {"context:js/delete.scannable.files.js"})
+@ProtectedPage
 public class DeleteScannableFiles {
 
     @Inject
@@ -90,6 +94,7 @@ public class DeleteScannableFiles {
     private String deleteLogName;
 
     @OnEvent(EventConstants.ACTIVATE)
+    @RequiresActionPermission(ActionDefinition.VIEW_ADMIN_PANEL)
     void onActivate() {
     }
 
@@ -132,9 +137,9 @@ public class DeleteScannableFiles {
     }
 
     private void onUpdateProcess(Integer current, Integer total) {
-        log.info("deleted " + current + " of " + total);
         progress = current == 0
                    ? StringUtils.EMPTY
                    : Integer.toString((int) ((100.0 * current) / total));
+        log.info("deleted " + current + " of " + total + " = " + progress + "%");
     }
 }

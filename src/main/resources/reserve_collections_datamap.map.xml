@@ -1119,6 +1119,7 @@ WHERE number > ALL (SELECT n.number
 ORDER BY number ASC]]></sql>
 	</query>
 	<query name="select_non_free_scannable_resources" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="obj-entity" root-name="Resource">
+		<property name="cayenne.GenericSelectQuery.fetchLimit" value="200"/>
 		<sql><![CDATA[SELECT res.*
 FROM (
        SELECT
@@ -1134,7 +1135,8 @@ FROM (
   INNER JOIN resource res ON scannable.resourceid = res.id
 WHERE res.filepath IS NOT NULL
       AND res.copyrightreviewstatus NOT IN (3, 6)
-LIMIT $limit OFFSET $offset]]></sql>
+ORDER BY res.id
+OFFSET $offset]]></sql>
 	</query>
 	<query name="select_permission_by_user_action" factory="org.apache.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="Permission">
 		<prefetch>action</prefetch>
