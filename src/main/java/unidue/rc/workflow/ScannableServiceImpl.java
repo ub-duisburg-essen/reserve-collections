@@ -21,11 +21,11 @@ import org.apache.cayenne.DataRow;
 import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.Persistent;
 import org.apache.cayenne.di.Inject;
-import org.apache.cayenne.query.*;
+import org.apache.cayenne.query.NamedQuery;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Level;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import unidue.rc.dao.*;
@@ -34,8 +34,9 @@ import unidue.rc.search.SolrService;
 import unidue.rc.system.SystemConfigurationService;
 import unidue.rc.system.SystemMessageService;
 
-import java.io.*;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -197,7 +198,9 @@ public class ScannableServiceImpl implements ScannableService {
 
         File log = createFileDeleteLog();
 
+        log("[", log);
         runDeleteAllFiles(nonFreeScannableFileCount, log, updateProgressObserver);
+        log("]", log);
 
         try {
             solrService.fullImport(SolrService.Core.ScanJob);
@@ -222,26 +225,24 @@ public class ScannableServiceImpl implements ScannableService {
                     Collections.singletonMap("offset", Integer.toString(skipped)));
             List<Resource> resources = (List<Resource>) context.performQuery(objectQuery);
 
-            LOG.debug("objects: " + resources.size());
-            LOG.debug("skipped: " + skipped);
-
             for (Resource resource : resources) {
 
                 try {
-                    ResourceDAO.FileDeleteStatus deleteStatus = deleteFile(resource, log);
-                    objectCount += deleteStatus.equals(ResourceDAO.FileDeleteStatus.Deleted)
-                                   ? 1
-                                   : 0;
-                    skipped += deleteStatus.equals(ResourceDAO.FileDeleteStatus.NotDeleted)
-                               ? 1
-                               : 0;
+                    setFileDeleted(resource, log);
+                    objectCount++;
                     setScannableComment(resource, messages.get("reference"));
                 } catch (CommitException e) {
                     LOG.error("could not update resource " + resource.getId(), e);
-                    log("could not update resource " + resource.getId() + "; cause: " + e.getMessage(), Level.ERROR, log);
+                    skipped++;
+                    String err = String.format("{ \"id\": \"%s\", \"path\": \"%s\", \"error\": \"%s\" }",
+                            resource.getId(),
+                            JSONObject.escape(resource.getFilePath()),
+                            e.getMessage());
+                    log(err, log);
+                } finally {
+                    log(",", log);
                 }
             }
-
             updateProgressObserver.accept(objectCount, nonFreeScannableFileCount);
             i += BaseDAO.MAX_RESULTS;
         }
@@ -258,22 +259,14 @@ public class ScannableServiceImpl implements ScannableService {
         }
     }
 
-    private ResourceDAO.FileDeleteStatus deleteFile(Resource resource, File log) throws CommitException {
+    private void setFileDeleted(Resource resource, File log) throws CommitException {
 
-        String filePath = resource.getFilePath();
-        ResourceDAO.FileDeleteStatus fileDeleteStatus = resourceService.deleteFile(resource);
-        switch (fileDeleteStatus) {
-            case Deleted:
-                log("deleted file: " + filePath, Level.INFO, log);
-                break;
-            case NoFile:
-                log("file " + filePath + " does not exist in resource " + resource.getId(), Level.WARN, log);
-                break;
-            case NotDeleted:
-                log("could not delete file " + filePath + " of resource " + resource.getId(), Level.ERROR, log);
-                break;
-        }
-        return fileDeleteStatus;
+        resourceService.setFileDeleted(resource);
+        String json = String.format("{ \"id\": \"%s\", \"path\": \"%s\", \"timestamp\": \"%s\" }",
+                resource.getId(),
+                JSONObject.escape(resource.getFilePath()),
+                resource.getFileDeleted().toString());
+        log(json, log);
     }
 
     private int getNonFreeScannableFileCount() {
@@ -296,9 +289,9 @@ public class ScannableServiceImpl implements ScannableService {
             throw new IllegalArgumentException("auth code to delete all scan files is invalid");
     }
 
-    private void log(String msg, Level logLevel, File log) {
+    private void log(String msg, File log) {
         try {
-            String data = String.format("%8s - %s%s", logLevel.toString(), msg, LINE_SEPARATOR);
+            String data = String.format("%s%s", msg, LINE_SEPARATOR);
             FileUtils.writeStringToFile(log, data, true);
         } catch (IOException e) {
             LOG.error("could not write string to file " + log, e);

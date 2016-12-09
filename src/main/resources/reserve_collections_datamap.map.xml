@@ -992,7 +992,8 @@ FROM (
              FROM journal_article ja) AS scannable
   INNER JOIN resource res ON scannable.resourceid = res.id
 WHERE res.filepath IS NOT NULL
-      AND res.copyrightreviewstatus NOT IN (3, 6);]]></sql>
+      AND res.copyrightreviewstatus NOT IN (3, 6)
+      AND res.filedeleted IS NULL;]]></sql>
 	</query>
 	<query name="count_reservecollections_for_status" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="data-map" root-name="reserve_collections_datamap">
 		<property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
@@ -1135,6 +1136,7 @@ FROM (
   INNER JOIN resource res ON scannable.resourceid = res.id
 WHERE res.filepath IS NOT NULL
       AND res.copyrightreviewstatus NOT IN (3, 6)
+      AND res.filedeleted IS NULL
 ORDER BY res.id
 OFFSET $offset]]></sql>
 	</query>
