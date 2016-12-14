@@ -233,6 +233,8 @@ public class CollectionServiceImpl implements CollectionService {
             participationDAO.update(p);
         }
 
+        collection.setReadKey(RandomStringUtils.randomAlphanumeric(6));
+        collection.setWriteKey(RandomStringUtils.randomAlphanumeric(10));
         collection.setStatus(ReserveCollectionStatus.DEACTIVATED);
         update(collection);
 
