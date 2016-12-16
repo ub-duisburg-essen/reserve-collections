@@ -1145,20 +1145,27 @@ OFFSET $offset]]></sql>
 		<qualifier><![CDATA[(userID = $userID) and (action.resource = $resource) and (action.name = $name)]]></qualifier>
 	</query>
 	<query name="select_resources_by_collection" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="obj-entity" root-name="Resource">
-		<sql><![CDATA[SELECT t0.copyrightReviewStatus, t0.filePath, t0.fullTextURL, t0.mimeType, t0.id
-FROM RESOURCE t0
-  LEFT JOIN BOOK_CHAPTER t1 ON (t0.id = t1.resourceID)
-  LEFT JOIN ENTRY t2 ON (t1.id = t2.id)
-  LEFT JOIN RESERVE_COLLECTION t3 ON (t2.reserveCollectionId = t3.id)
-  LEFT JOIN JOURNAL_ARTICLE t4 ON (t0.id = t4.resourceID)
-  LEFT JOIN ENTRY t5 ON (t4.id = t5.id)
-  LEFT JOIN RESERVE_COLLECTION t6 ON (t5.reserveCollectionId = t6.id)
-  LEFT JOIN FILE t7 ON (t0.id = t7.resourceID)
-  LEFT JOIN ENTRY t8 ON (t7.id = t8.id)
-  LEFT JOIN RESERVE_COLLECTION t9 ON (t8.reserveCollectionId = t9.id)
-WHERE (((t2.deleted IS NULL) AND t3.id = $collectionID)
-       OR ((t5.deleted IS NULL) AND t6.id = $collectionID)
-       OR ((t8.deleted IS NULL) AND t9.id = $collectionID));]]></sql>
+		<sql><![CDATA[SELECT res.*
+FROM (
+       SELECT
+         bc.resourceid,
+         bc.id
+       FROM book_chapter bc
+       UNION SELECT
+               ja.resourceid,
+               ja.id
+             FROM journal_article ja
+       UNION SELECT
+               f.resourceid,
+               f.id
+             FROM file f
+     ) AS container
+  INNER JOIN resource res ON container.resourceid = res.id
+  INNER JOIN entry e ON container.id = e.id
+WHERE e.deleted IS NULL
+      AND res.filedeleted IS NULL
+      AND res.filepath IS NOT NULL
+      AND e.reservecollectionid = $collectionID;]]></sql>
 	</query>
 	<query name="select_scan_jobs_by_collection" factory="org.apache.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="ScanJob">
 		<prefetch>bookChapter.entry.reserveCollection</prefetch>

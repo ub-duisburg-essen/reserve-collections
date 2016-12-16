@@ -21,6 +21,9 @@
                         <t:pagelink page="collection/rss" context="[collection.id, participation.userId, participation.accessKey]">${message:rss}</t:pagelink>
                     </li>
                 </t:if>
+                <li>
+                    <t:eventlink event="zip">${message:download.zip}</t:eventlink>
+                </li>
             </ul>
         </li>
     </ul>

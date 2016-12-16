@@ -48,6 +48,7 @@ public class OutputStreamResponseResultProcessor implements ComponentEventResult
     @Override
     public void processResultValue(OutputStreamResponse streamResponse)
             throws IOException {
+        streamResponse.prepareResponse(response);
         streamResponse.processRequest(response.getOutputStream(streamResponse.getContentType()));
     }
 }

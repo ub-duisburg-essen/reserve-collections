@@ -121,6 +121,15 @@ public interface CollectionService {
     void delete(ReserveCollection collection) throws DeleteException;
 
     /**
+     * Returns all files of {@link ResourceContainer}s that contain a {@link java.io.File} and are available to
+     * the user.
+     *
+     * @param collection contains the collection, whose files should be returned
+     * @return never null
+     */
+    List<java.io.File> getFiles(ReserveCollection collection);
+
+    /**
      * Should be called after a {@link LibraryLocation} was updated.
      *
      * @param location location that was updated

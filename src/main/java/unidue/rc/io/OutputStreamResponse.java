@@ -50,4 +50,12 @@ public interface OutputStreamResponse {
      * @throws IOException thrown on any error during write
      */
     void processRequest(OutputStream out) throws IOException;
+
+    /**
+     * Prepares the response before it is sent to the client. This is the place to set any response headers (e.g.
+     * content-disposition).
+     *
+     * @param response Response that will be sent.
+     */
+    default void prepareResponse(Response response) { }
 }

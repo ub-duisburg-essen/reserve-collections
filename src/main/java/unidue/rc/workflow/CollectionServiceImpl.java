@@ -19,6 +19,7 @@ package unidue.rc.workflow;
 import miless.model.User;
 import org.apache.cayenne.di.Inject;
 import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ContextedException;
@@ -44,8 +45,8 @@ import unidue.rc.system.MailService;
 import unidue.rc.system.SystemConfigurationService;
 import unidue.rc.system.SystemMessageService;
 
-import java.io.IOException;
-import java.io.StringWriter;
+import java.io.*;
+import java.io.File;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -107,6 +108,9 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Inject
     private OrderMailRecipientDAO mailRecipientDAO;
+
+    @Inject
+    private ResourceDAO resourceDAO;
 
     @Inject
     private SystemConfigurationService config;
@@ -307,6 +311,15 @@ public class CollectionServiceImpl implements CollectionService {
 
         // inform services that entries where deleted
         entryService.afterCollectionDelete(collection);
+    }
+
+    @Override
+    public List<File> getFiles(ReserveCollection collection) {
+        File filesDir = new File(config.getString("files.store"));
+        return resourceDAO.getResourcesByCollection(collection)
+                .stream()
+                .map(r -> r.getFile(filesDir))
+                .collect(Collectors.toList());
     }
 
     @Override

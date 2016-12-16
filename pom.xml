@@ -314,6 +314,11 @@
             <artifactId>json-simple</artifactId>
             <version>${json-simple-version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>${apache-commons-compress-version}</version>
+        </dependency>
 
     </dependencies>
 
@@ -518,6 +523,7 @@
     <properties>
         <!-- dependendy versioning -->
         <apache-commons-mail-version>1.4</apache-commons-mail-version>
+        <apache-commons-compress-version>1.12</apache-commons-compress-version>
         <apache-tika-version>1.4</apache-tika-version>
         <apache-velocity-version>1.7</apache-velocity-version>
         <bouncy-castle-version>1.52</bouncy-castle-version>

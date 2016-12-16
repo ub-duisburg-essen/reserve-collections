@@ -53,6 +53,8 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumbInfo;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbList;
 import unidue.rc.dao.*;
 import unidue.rc.io.InlineStreamResponse;
+import unidue.rc.io.OutputStreamResponse;
+import unidue.rc.io.ZIPStreamResponse;
 import unidue.rc.model.ActionDefinition;
 import unidue.rc.model.Book;
 import unidue.rc.model.BookChapter;
@@ -305,6 +307,16 @@ public class ViewCollection {
             return response;
         }
 
+    }
+
+    @OnEvent("zip")
+    OutputStreamResponse onZipReserveCollection() {
+        List<java.io.File> files = collectionService.getFiles(collection);
+        String zipFilename = String.join("_",
+                StringUtils.replace(collection.getLibraryLocation().getName(), "/", "_"),
+                Integer.toString(collection.getNumber().getNumber()),
+                collection.getTitle());
+        return new ZIPStreamResponse(zipFilename, zipFilename, files);
     }
 
     public List<String> getDocents() {
