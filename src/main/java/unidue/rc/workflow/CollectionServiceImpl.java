@@ -83,6 +83,9 @@ public class CollectionServiceImpl implements CollectionService {
     private MailService mailService;
 
     @Inject
+    private ResourceService resourceService;
+
+    @Inject
     private SystemMessageService messages;
 
     @Inject
@@ -318,6 +321,7 @@ public class CollectionServiceImpl implements CollectionService {
         File filesDir = new File(config.getString("files.store"));
         return resourceDAO.getResourcesByCollection(collection)
                 .stream()
+                .filter(r -> resourceService.isDownloadAllowed(r))
                 .map(r -> r.getFile(filesDir))
                 .collect(Collectors.toList());
     }
