@@ -17,6 +17,7 @@ package unidue.rc.ui.pages.collection;
 
 
 import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ContextedException;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -122,6 +123,9 @@ public class ProlongCollection {
         this.prolongCode = prolongCode;
 
         this.collection = baseDAO.get(ReserveCollection.class, collectionID);
+        this.expectedParticipations = collection != null
+                                      ? collection.getExpectedParticipations()
+                                      : null;
     }
 
     @OnEvent(EventConstants.PASSIVATE)
