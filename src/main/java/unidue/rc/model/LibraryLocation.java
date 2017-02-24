@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import unidue.rc.model.auto._LibraryLocation;
 
 import java.util.List;
+import java.util.Objects;
 
 public class LibraryLocation extends _LibraryLocation implements CollectionVisitable {
 
@@ -44,17 +45,18 @@ public class LibraryLocation extends _LibraryLocation implements CollectionVisit
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof LibraryLocation))
-            return false;
-
-        LibraryLocation other = (LibraryLocation) obj;
-        return objectId.equals(other.objectId);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LibraryLocation that = (LibraryLocation) o;
+        return isPhysical() == that.isPhysical() &&
+                Objects.equals(getId(), that.getId()) &&
+                Objects.equals(getName(), that.getName());
     }
 
     @Override
     public int hashCode() {
-        return objectId.hashCode();
+        return Objects.hash(getId(), getName(), isPhysical());
     }
 
     @Override

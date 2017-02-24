@@ -17,6 +17,8 @@ package unidue.rc.model;
 
 import unidue.rc.model.auto._OrderMailRecipient;
 
+import java.util.Objects;
+
 public class OrderMailRecipient extends _OrderMailRecipient implements IntPrimaryKey {
 
     @Override
@@ -24,5 +26,20 @@ public class OrderMailRecipient extends _OrderMailRecipient implements IntPrimar
         return (getObjectId() != null && !getObjectId().isTemporary())
                ? (Integer) getObjectId().getIdSnapshot().get(ID_PK_COLUMN)
                : null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderMailRecipient that = (OrderMailRecipient) o;
+        return Objects.equals(getId(), that.getId()) &&
+                Objects.equals(getMail(), that.getMail()) &&
+                Objects.equals(getLocation(), that.getLocation());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getMail(), getLocation());
     }
 }
