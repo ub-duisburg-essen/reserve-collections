@@ -12,21 +12,26 @@
         <td>Standort:</td>
         <td>$collection.LibraryLocation.Name</td>
     </tr>
+    #if($collectionLink)
     <tr>
         <td>Semesterapparat:</td>
         <td><a href="$collectionLink">$collectionLink</a></td>
     </tr>
-
+    #end
     <tr>
         <td>Titel:</td>
         <td>$collection.Title</td>
     </tr>
+    #if($authors)
     <tr>
         <td>Autor(Innen):</td>
         <td>$authors</td>
     </tr>
+    #end
+    #if($origin)
     <tr>
         <td>Fakult&auml;t:</td>
         <td>$origin</td>
     </tr>
+    #end
 </table>

@@ -1,0 +1,38 @@
+<html>
+<head>
+    <title></title>
+    #include("mail.style.vm")
+</head>
+<body>
+#foreach($collection in $collections)
+
+    #foreach($clink in $collectionLinks.keySet())
+        #if($clink.equals($collection))
+            #set($collectionLink = $collectionLinks.get($clink))
+        #end
+    #end
+
+    #parse("collection.vm")
+    <table>
+        <th>Titel</th>
+        <th>Autor(Innen)</th>
+        <th>Signatur</th>
+        #foreach($book in $books)
+            <tr>
+                <td>$book.Title</td>
+                <td>
+                #if($book.Authors)
+                    $book.Authors
+                #end
+                </td>
+                <td>
+                #if($book.Signature)
+                    $book.Signature
+                #end
+                </td>
+            </tr>
+        #end
+    </table>
+#end
+</body>
+</html>
