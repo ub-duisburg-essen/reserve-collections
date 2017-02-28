@@ -17,11 +17,10 @@ package unidue.rc.ui.pages.privacy;
 
 
 import miless.model.User;
+import org.apache.commons.io.IOUtils;
+import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.EventConstants;
-import org.apache.tapestry5.annotations.InjectComponent;
-import org.apache.tapestry5.annotations.OnEvent;
-import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.annotations.*;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -33,6 +32,9 @@ import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import unidue.rc.dao.CommitException;
 import unidue.rc.dao.UserDAO;
 import unidue.rc.security.CollectionSecurityService;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by marcus.koesters on 29.06.15.
@@ -63,6 +65,13 @@ public class Index {
     @InjectComponent
     private Zone privacyObjectionZone;
 
+    @Inject
+    @Path("context:privacy/privacy.html")
+    private Asset privacyAsset;
+
+    @Property
+    private String privacy;
+
     @Property
     private boolean isTrackingPermitted;
 
@@ -76,6 +85,12 @@ public class Index {
     void init() {
         String cookieValue = cookies.readCookieValue(TRACKING_COOKIE);
         isTrackingPermitted = cookieValue != null && cookieValue.equals(TRACKING_PERMITTED);
+
+        try (InputStream input = privacyAsset.getResource().openStream()) {
+            privacy = IOUtils.toString(input);
+        } catch (IOException e) {
+            log.error("could not read privacy asset", e);
+        }
     }
 
     @OnEvent(value = EventConstants.SUCCESS, component = "privacyObjectionForm")
