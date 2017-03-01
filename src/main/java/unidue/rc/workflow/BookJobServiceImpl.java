@@ -201,11 +201,11 @@ public class BookJobServiceImpl implements BookJobService {
                     booksByAction.forEach(book -> {
                         try {
                             createBookJob(book);
+                            sendNotificationMail(book, MailSubjectCause.created);
                         } catch (CommitException e) {
                             LOG.error("could not create book job for book " + book);
                         }
                     });
-                    sendNotificationMail(books, MailSubjectCause.created);
                     break;
                 case Update:
                     booksByAction.stream()
