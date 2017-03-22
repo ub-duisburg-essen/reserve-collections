@@ -126,6 +126,7 @@ public class LDAPRealmImpl extends LDAPRealm {
             } else {
                 // otherwise just set last login
                 user.setLastlogin(new Date());
+                loadUserProperties(authenticationContext, user);
                 userDAO.update(user);
             }
             return user;
