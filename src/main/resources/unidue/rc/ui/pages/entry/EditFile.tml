@@ -17,8 +17,9 @@
         <fieldset>
 
             <div class="form-group">
-                <label class="col-md-3 control-label" for="filename">${message:filename}</label>
+                <t:copyrightuploadwarning offset="col-md-3" layoutClass="col-md-6"/>
 
+                <label class="col-md-3 control-label" for="filename">${message:filename}</label>
                 <div class="col-md-6">
                     <input t:type="TextField" t:id="filename" id="filename" class="form-control"
                            t:value="filename"/>

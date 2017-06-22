@@ -1,0 +1,21 @@
+<t:container xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+    <div>
+
+        <t:if test="offset">
+            <div class="${offset}"></div>
+        </t:if>
+
+        <div class="${layoutClass}">
+            <div class="alert alert-warning">
+                <p><t:outputraw value="message:warning.msg.copyright.upload"/></p>
+            </div>
+        </div>
+
+        <t:if test="trail">
+            <div class="${trail}"></div>
+        </t:if>
+        <div class="clearfix"></div>
+    </div>
+</t:container>

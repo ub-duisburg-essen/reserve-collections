@@ -15,6 +15,7 @@
     <t:form t:id="fileForm" clientValidation="false" class="form-horizontal">
         <fieldset>
             <div class="form-group focused">
+                <t:copyrightuploadwarning layoutClass="col-md-12"/>
                 <div class="col-md-12">
                     <div t:type="udetapestry/ajaxupload" t:id="uploads" maxFiles="10"/>
                     <t:error for="uploads"/>

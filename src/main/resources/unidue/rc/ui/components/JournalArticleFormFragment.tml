@@ -168,8 +168,9 @@
 
         <div class="form-group">
 
-            <label class="col-md-3 control-label" for="uploads">${message:file-label}</label>
+            <t:copyrightuploadwarning offset="col-md-3" layoutClass="col-md-6"/>
 
+            <label class="col-md-3 control-label" for="uploads">${message:file-label}</label>
             <div class="col-md-6">
                 <div t:type="udetapestry/ajaxupload" t:id="uploads" id="uploads" maxFiles="1"/>
 
