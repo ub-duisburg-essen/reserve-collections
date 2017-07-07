@@ -22,7 +22,7 @@ import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.slf4j.Logger;
 import unidue.rc.dao.ResourceDAO;
 import unidue.rc.dao.UserDAO;
-import unidue.rc.io.AttachmentStreamResponse;
+import unidue.rc.io.InlineStreamResponse;
 import unidue.rc.model.Resource;
 import unidue.rc.plugins.moodle.model.ResourceRequest;
 import unidue.rc.plugins.moodle.services.MoodleService;
@@ -66,7 +66,7 @@ public class Download {
 
         java.io.File file = resourceService.download(resource, user);
         return file != null && file.exists()
-               ? new AttachmentStreamResponse(file, resource)
+               ? new InlineStreamResponse(file, resource)
                : linkSource.createPageRenderLink(Error404.class);
     }
 }
