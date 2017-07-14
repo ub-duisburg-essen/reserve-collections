@@ -40,6 +40,7 @@ import unidue.rc.ui.valueencoder.BaseValueEncoder;
 import unidue.rc.workflow.CollectionService;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -98,7 +99,7 @@ public class Participations implements SecurityContextPage {
         Stream<LibraryLocation> locations = activeParticipations.stream()
                 .map(participation -> participation.getReserveCollection().getLibraryLocation())
                 .distinct()
-                .sorted((l1, l2) -> l1.getName().compareTo(l2.getName()));
+                .sorted(Comparator.comparing(LibraryLocation::getName));
 
         this.participations = new ArrayList<>();
 
@@ -108,7 +109,7 @@ public class Participations implements SecurityContextPage {
             // sort participations by number
             List<Participation> participationsByLocation = activeParticipations.stream()
                     .filter(p -> p.getReserveCollection().getLibraryLocation().equals(location))
-                    .sorted((p1, p2) -> p1.getReserveCollection().getNumber().compareTo(p2.getReserveCollection().getNumber()))
+                    .sorted(Comparator.comparing(p -> p.getReserveCollection().getNumber()))
                     .collect(Collectors.toList());
             this.participations.addAll(participationsByLocation);
         });
@@ -134,8 +135,7 @@ public class Participations implements SecurityContextPage {
     }
 
     public boolean isParticipationEndingAllowed() {
-        return collectionService.isParticipationEndingAllowed(participation)
-                || securityService.isPermitted(ActionDefinition.DELETE_OWN_PARTICIPATION, participation.getReserveCollection().getId());
+        return collectionService.isParticipationEndingAllowed(participation);
     }
 
     public String getCaption() {

@@ -427,17 +427,27 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public boolean isParticipationEndingAllowed(Participation participation) {
-        final Role role = participation.getRole();
-        final Integer collectionID = participation.getReserveCollection().getId();
+        Role role = participation.getRole();
+        Integer collectionID = participation.getReserveCollection().getId();
+        User currentUser = securityService.getCurrentUser();
+        User participationUser = userDAO.getUserById(participation.getUserId());
 
-        if (role.getName().equals(DefaultRole.DOCENT.getName())) {
-            return securityService.isPermitted(ActionDefinition.EDIT_DOCENT_PARTICIPATION, collectionID);
-        } else if (role.getName().equals(DefaultRole.ASSISTANT.getName())) {
-            return securityService.isPermitted(ActionDefinition.EDIT_ASSISTANT_PARTICIPATION, collectionID);
-        } else if (role.getName().equals(DefaultRole.STUDENT.getName())
-                || !role.getIsDefault()) {
-            return securityService.isPermitted(ActionDefinition.EDIT_STUDENT_PARTICIPATION, collectionID);
+        // does the user wants to end the own participation
+        if (currentUser.equals(participationUser)) {
+            return securityService.isPermitted(ActionDefinition.DELETE_OWN_PARTICIPATION, collectionID);
+        } else {
+
+            // does the user wants to end the participation of another user
+            if (role.getName().equals(DefaultRole.DOCENT.getName())) {
+                return securityService.isPermitted(ActionDefinition.EDIT_DOCENT_PARTICIPATION, collectionID);
+            } else if (role.getName().equals(DefaultRole.ASSISTANT.getName())) {
+                return securityService.isPermitted(ActionDefinition.EDIT_ASSISTANT_PARTICIPATION, collectionID);
+            } else if (role.getName().equals(DefaultRole.STUDENT.getName())
+                    || !role.getIsDefault()) {
+                return securityService.isPermitted(ActionDefinition.EDIT_STUDENT_PARTICIPATION, collectionID);
+            }
         }
+
         return false;
     }
 
