@@ -1,0 +1,26 @@
+<html t:type="layout" title="${message:reserve-collection.activate}"
+      actionBarBlock="editNumberBlock"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+<t:block t:id="editNumberBlock">
+    <t:reservecollectionactionslinklist/>
+</t:block>
+
+<div t:type="paper">
+
+    <form t:type="Form" class="form-horizontal" t:id="choose_number_form" t:clientValidation="none">
+        <t:numberintervalchooser from="from" to="to"
+                                 collection="collection"
+                                 t:id="numberFormFragment"/>
+    </form>
+
+    <t:if test="freeNumbers">
+        <div class="row">
+            <div class="col-md-12">
+                <hr/>
+            </div>
+        </div>
+        <t:choosenumber numbers="freeNumbers" event="number_chosen"/>
+    </t:if>
+</div>
+</html>
