@@ -1,0 +1,17 @@
+<t:container xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+
+    <div class="row">
+        <div class="col-md-offset-1 col-md-4">
+            <h4>${message:free.numbers}</h4>
+            <div class="list-group">
+                <t:loop source="numbers" value="number">
+                    <t:eventlink event="${event}"
+                                 context="number"
+                                 class="list-group-item">${number}
+                    </t:eventlink>
+                </t:loop>
+            </div>
+        </div>
+    </div>
+</t:container>

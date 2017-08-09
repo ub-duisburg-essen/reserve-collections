@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 - 2016 Universitaet Duisburg-Essen (semapp|uni-due.de)
+ * Copyright (C) 2014 - 2017 Universitaet Duisburg-Essen (semapp|uni-due.de)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ public interface CollectionService {
      * @param code       code to use for prolong
      * @param to         new valid to date
      * @throws unidue.rc.dao.CommitException thrown if the collection could not be prolonged
-     * @throws ContextedException  thrown if any value inside the collection is not allowed
+     * @throws ContextedException            thrown if any value inside the collection is not allowed
      */
     void prolong(ReserveCollection collection, String code, Date to) throws CommitException, ContextedException;
 
@@ -76,17 +76,19 @@ public interface CollectionService {
      * Activates target {@linkplain ReserveCollection} in backend.
      *
      * @param collection {@linkplain ReserveCollection} to activate.
-     * @throws unidue.rc.dao.CommitException thrown if the collection could not be activated
+     * @throws unidue.rc.workflow.CheckNumberException thrown if the collection can not be immediately activated and
+     *                                                 a number has to be assigned
+     * @throws unidue.rc.dao.CommitException           thrown if the collection could not be activated
      */
-    void activate(ReserveCollection collection) throws CommitException;
+    void activate(ReserveCollection collection) throws CheckNumberException, CommitException;
 
     /**
      * Activates target {@linkplain ReserveCollection} in backend and tries to use target number.
      *
      * @param collection {@linkplain ReserveCollection} to activate.
      * @param number     number to use for activation.
-     * @throws unidue.rc.dao.CommitException         thrown if the collection could not be saved
-     * @throws unidue.rc.dao.NumberAssignedException thrown if the number can not be used
+     * @throws unidue.rc.dao.CommitException           thrown if the collection could not be saved
+     * @throws unidue.rc.dao.NumberAssignedException   thrown if the number can not be used
      */
     void activate(ReserveCollection collection, Integer number) throws CommitException, NumberAssignedException;
 
@@ -119,6 +121,15 @@ public interface CollectionService {
      * @throws unidue.rc.dao.DeleteException thrown if the collection could not be deleted
      */
     void delete(ReserveCollection collection) throws DeleteException;
+
+    /**
+     * Checks if the current user is allowed to activate target reserve collection. The current user is read from
+     * session storage.
+     *
+     * @param collection collection whose status should be changed
+     * @return <code>true</code> if the collection can become active, <code>false</code> otherwise
+     */
+    boolean canActivate(ReserveCollection collection);
 
     /**
      * Returns all files of {@link ResourceContainer}s that contain a {@link java.io.File} and are available to
@@ -295,4 +306,12 @@ public interface CollectionService {
      * @return <code>true</code> if the collection is prolongable
      */
     boolean isCollectionProlongable(ReserveCollection collection);
+
+    /**
+     * Returns the url which should be shown if a user wants to activate a collection.
+     *
+     * @param collection see description
+     * @return a url in string form that points to the activation page
+     */
+    String getActivationLink(ReserveCollection collection);
 }

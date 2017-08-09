@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 - 2016 Universitaet Duisburg-Essen (semapp|uni-due.de)
+ * Copyright (C) 2014 - 2017 Universitaet Duisburg-Essen (semapp|uni-due.de)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package unidue.rc.workflow;
 import miless.model.User;
 import org.apache.cayenne.di.Inject;
 import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ContextedException;
@@ -196,19 +195,36 @@ public class CollectionServiceImpl implements CollectionService {
         update(collection);
     }
 
+    private void validateActivation(ReserveCollection collection) throws CommitException {
+
+        if (!canActivate(collection))
+            throw new CommitException("collection " + collection.getId() + " can not be activated");
+    }
+
     @Override
-    public void activate(ReserveCollection collection) throws CommitException {
+    public void activate(ReserveCollection collection) throws CheckNumberException, CommitException {
+
+        validateActivation(collection);
+
+        if (securityService.isPermitted(ActionDefinition.EDIT_RESERVE_COLLECTION_NUMBER))
+            throw new CheckNumberException();
+
+        // use original number if it is free otherwise choose a new one
+        if (!numberDAO.isNumberFree(collection.getNumber().getNumber(), collection.getLibraryLocation())) {
+
+            ReserveCollectionNumber number = buildNumber(collection.getLibraryLocation());
+            collection.setNumber(number);
+        }
 
         collection.setStatus(ReserveCollectionStatus.ACTIVE);
-
-        ReserveCollectionNumber number = buildNumber(collection.getLibraryLocation());
-        collection.setNumber(number);
 
         update(collection);
     }
 
     @Override
     public void activate(ReserveCollection collection, Integer number) throws CommitException, NumberAssignedException {
+
+        validateActivation(collection);
 
         ReserveCollectionNumber numberInDB = numberDAO.getNumber(number);
         if (numberInDB == null)
@@ -314,6 +330,20 @@ public class CollectionServiceImpl implements CollectionService {
 
         // inform services that entries where deleted
         entryService.afterCollectionDelete(collection);
+    }
+
+    @Override
+    public boolean canActivate(final ReserveCollection collection) {
+        /*
+         a collection can become active if:
+
+         - the status is not active and ..
+            - the user is allowed to activate the collection or
+            - the collection is e-only
+          */
+        return collection.isActivateable()
+                && (securityService.isPermitted(ActionDefinition.ACTIVATE_RESERVE_COLLECTION)
+                    || !collection.getLibraryLocation().isPhysical());
     }
 
     @Override
@@ -628,6 +658,13 @@ public class CollectionServiceImpl implements CollectionService {
     public boolean isCollectionProlongable(ReserveCollection collection) {
         return collection.getProlongUsed() == null
                 && collection.isActive();
+    }
+
+    @Override
+    public String getActivationLink(final ReserveCollection collection) {
+        return collection.getLibraryLocation().isPhysical()
+               ? String.format("%s/collection/activate/%d", urlService.getApplicationURL(), collection.getId())
+               : urlService.getViewCollectionURL(collection);
     }
 
     private DateTime getDateTime(String key) throws ConfigurationException {

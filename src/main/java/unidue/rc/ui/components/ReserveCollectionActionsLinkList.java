@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 - 2016 Universitaet Duisburg-Essen (semapp|uni-due.de)
+ * Copyright (C) 2014 - 2017 Universitaet Duisburg-Essen (semapp|uni-due.de)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,9 @@ import unidue.rc.dao.DeleteException;
 import unidue.rc.model.ReserveCollection;
 import unidue.rc.model.ReserveCollectionStatus;
 import unidue.rc.ui.pages.Index;
+import unidue.rc.ui.pages.collection.ActivateCollection;
 import unidue.rc.ui.pages.collection.ViewCollection;
+import unidue.rc.workflow.CheckNumberException;
 import unidue.rc.workflow.CollectionService;
 
 /**
@@ -89,6 +91,8 @@ public class ReserveCollectionActionsLinkList {
             return viewCollectionLink;
         } catch (CommitException e) {
             return resources.getPageName();
+        } catch (CheckNumberException e) {
+            return linkSource.createPageRenderLinkWithContext(ActivateCollection.class, collection.getId());
         }
     }
 
@@ -138,5 +142,9 @@ public class ReserveCollectionActionsLinkList {
         } catch (DeleteException e) {
             return resources.getPageName();
         }
+    }
+
+    public Boolean getActivateable() {
+        return collectionService.canActivate(collection);
     }
 }

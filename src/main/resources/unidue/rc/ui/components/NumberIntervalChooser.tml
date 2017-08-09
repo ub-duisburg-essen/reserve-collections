@@ -1,0 +1,42 @@
+<t:container xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+    <!-- base form style from bootstrap. see http://twitter.github.io/bootstrap/base-css.html#forms -->
+    <t:formfragment t:id="chooseNumberFragment" visible="true">
+        <t:if test="errorMessage">
+            <div class="alert alert-danger">
+                <t:outputraw value="errorMessage"/>
+            </div>
+        </t:if>
+        <t:errors class="literal:alert alert-danger"/>
+        <fieldset>
+            <h4>${message:find.number.title}</h4>
+            <!-- from -->
+            <div class="form-group">
+                <label class="col-md-3 control-label">${message:from}</label>
+
+                <div class="col-md-6">
+
+                    <input t:type="TextField" t:id="fromField" class="form-control"
+                           t:value="from"/>
+                    <t:error for="fromField"/>
+                </div>
+            </div>
+            <!-- to -->
+            <div class="form-group">
+                <label class="col-md-3 control-label">${message:to}</label>
+
+                <div class="col-md-6">
+                    <input t:type="TextField" t:id="toField" class="form-control"
+                           t:value="to"/>
+                    <t:error for="toField"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-3 col-md-9">
+                    <input type="submit" value="${message:search}"/>
+                </div>
+            </div>
+        </fieldset>
+    </t:formfragment>
+</t:container>

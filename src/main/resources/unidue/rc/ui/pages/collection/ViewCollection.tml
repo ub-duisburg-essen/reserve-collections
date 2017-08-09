@@ -73,7 +73,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-offset-3 col-md-9">
+            <div class="col-md-offset-2 col-md-9">
                 <dl class="hide-on-js">
                     <dt>${message:meta.label.number}</dt>
                     <!-- get integer value of collections number if a number is given-->
