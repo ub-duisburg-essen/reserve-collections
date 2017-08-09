@@ -39,7 +39,6 @@ import unidue.rc.model.ReserveCollection;
 import unidue.rc.model.ReserveCollectionStatus;
 import unidue.rc.security.RequiresActionPermission;
 import unidue.rc.ui.ProtectedPage;
-import unidue.rc.ui.components.NumberIntervalChooser;
 import unidue.rc.workflow.CollectionService;
 
 import java.util.Collection;

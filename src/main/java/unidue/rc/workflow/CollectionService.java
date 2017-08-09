@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2014 - 2017 Universitaet Duisburg-Essen (semapp|uni-due.de)
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -87,8 +87,8 @@ public interface CollectionService {
      *
      * @param collection {@linkplain ReserveCollection} to activate.
      * @param number     number to use for activation.
-     * @throws unidue.rc.dao.CommitException           thrown if the collection could not be saved
-     * @throws unidue.rc.dao.NumberAssignedException   thrown if the number can not be used
+     * @throws unidue.rc.dao.CommitException         thrown if the collection could not be saved
+     * @throws unidue.rc.dao.NumberAssignedException thrown if the number can not be used
      */
     void activate(ReserveCollection collection, Integer number) throws CommitException, NumberAssignedException;
 
@@ -314,4 +314,13 @@ public interface CollectionService {
      * @return a url in string form that points to the activation page
      */
     String getActivationLink(ReserveCollection collection);
+
+    /**
+     * Creates and sets a {@linkplain ReserveCollectionNumber} to target collection.
+     *
+     * @param number     the number to set
+     * @param collection the collection that should use the number
+     * @throws CommitException thrown if the collection could not be saved or the number is in use
+     */
+    void setNumber(Integer number, ReserveCollection collection) throws CommitException;
 }

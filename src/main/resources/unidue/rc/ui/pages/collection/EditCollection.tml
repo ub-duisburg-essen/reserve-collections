@@ -30,6 +30,11 @@
                     </t:secureblock>
                     <t:error for="number"/>
                 </div>
+                <div class="col-md-3">
+                    <t:secureblock action="EDIT_RESERVE_COLLECTION_NUMBER" objectID="collection.id">
+                        <t:pagelink page="collection/editnumber" context="collection.id" class="button">${message:search.number}</t:pagelink>
+                    </t:secureblock>
+                </div>
             </div>
 
             <!-- docents -->

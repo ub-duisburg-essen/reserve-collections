@@ -667,6 +667,17 @@ public class CollectionServiceImpl implements CollectionService {
                : urlService.getViewCollectionURL(collection);
     }
 
+    @Override
+    public void setNumber(final Integer number, final ReserveCollection collection) throws CommitException {
+
+        ReserveCollectionNumber collectionNumber = numberDAO.getNumber(number);
+        if (collectionNumber == null) {
+            collectionNumber = numberDAO.create(number);
+        }
+        collection.setNumber(collectionNumber);
+        update(collection);
+    }
+
     private DateTime getDateTime(String key) throws ConfigurationException {
         Setting sett = config.getSetting(key);
         DateTimeFormatter format = DateTimeFormat.forPattern(sett.getFormat());
