@@ -20,15 +20,20 @@
   limitations under the License.
   #L%
   -->
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
 
-<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
-         version="2.4">
     <display-name>reserve-collections Tapestry 5 Application</display-name>
 
     <listener>
         <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup</listener-class>
     </listener>
+
+    <session-config>
+        <tracking-mode>COOKIE</tracking-mode>
+    </session-config>
 
     <context-param>
         <!-- The only significant configuration for Tapestry 5, this informs Tapestry of where to look for pages, components and mixins. -->
