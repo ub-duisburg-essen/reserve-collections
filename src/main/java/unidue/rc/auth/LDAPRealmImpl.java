@@ -235,6 +235,9 @@ public class LDAPRealmImpl extends LDAPRealm {
         ldapEnv.put(Context.SECURITY_CREDENTIALS, credentials);
         try {
             return new InitialDirContext(ldapEnv);
+        } catch (javax.naming.AuthenticationException e) {
+            LOG.warn("an authentication error occurred for principal " + principal + ";  cause: " + e.getMessage());
+            throw e;
         } catch (NamingException e) {
             LOG.error("could not create authentication context for principal " + principal, e);
             throw e;
