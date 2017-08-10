@@ -18,6 +18,7 @@ package unidue.rc.search;
 
 import org.apache.solr.client.solrj.SolrQuery;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -27,7 +28,9 @@ import java.util.Optional;
  * @author Nils Verheyen
  * @since 24.11.14 09:26
  */
-public class SolrSortField {
+public class SolrSortField implements Serializable {
+
+    private static final long serialVersionUID = -7624041395924712521L;
 
     private String fieldName;
 
