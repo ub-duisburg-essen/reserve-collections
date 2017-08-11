@@ -24,8 +24,22 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.velocity.VelocityContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import unidue.rc.dao.*;
-import unidue.rc.model.*;
+import unidue.rc.dao.CommitException;
+import unidue.rc.dao.DeleteException;
+import unidue.rc.dao.OrderMailRecipientDAO;
+import unidue.rc.dao.RoleDAO;
+import unidue.rc.dao.ScanJobDAO;
+import unidue.rc.dao.UserDAO;
+import unidue.rc.model.BookChapter;
+import unidue.rc.model.Entry;
+import unidue.rc.model.JournalArticle;
+import unidue.rc.model.Mail;
+import unidue.rc.model.OrderMailRecipient;
+import unidue.rc.model.ReserveCollection;
+import unidue.rc.model.Role;
+import unidue.rc.model.ScanJob;
+import unidue.rc.model.ScanJobStatus;
+import unidue.rc.model.Scannable;
 import unidue.rc.model.solr.SolrScanJobView;
 import unidue.rc.search.SolrService;
 import unidue.rc.security.CollectionSecurityService;
@@ -37,7 +51,6 @@ import unidue.rc.system.SystemMessageService;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -224,11 +237,11 @@ public class ScanJobServiceImpl implements ScanJobService {
 
         List<OrderMailRecipient> recipients = Collections.EMPTY_LIST;
         if (scannable instanceof BookChapter) {
-            templateFile = "/vt/mail.book.chapter.vm";
+            templateFile = "/vt/text.mail.book.chapter.vm";
             type = cause.name() + ".book.chapter";
             recipients = mailRecipientDAO.getRecipients(collection.getLibraryLocation(), BookChapter.class);
         } else if (scannable instanceof JournalArticle) {
-            templateFile = "/vt/mail.journal.article.vm";
+            templateFile = "/vt/text.mail.journal.article.vm";
             type = cause.name() + ".journal.article";
             recipients = mailRecipientDAO.getRecipients(collection.getLibraryLocation(), JournalArticle.class);
         }
@@ -239,6 +252,7 @@ public class ScanJobServiceImpl implements ScanJobService {
         User currentUser = securityService.getCurrentUser();
         try {
             MailServiceImpl.MailBuilder mailBuilder = mailService.builder(templateFile)
+                    .of(MailServiceImpl.MailBuilder.MailType.Text)
                     .from(config.getString("mail.from"))
                     .subject(subject.toString())
                     .context(contextBuilder.build())

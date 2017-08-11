@@ -20,6 +20,7 @@ public abstract class _Mail extends CayenneDataObject {
     public static final String NUM_TRIES_PROPERTY = "numTries";
     public static final String SEND_PROPERTY = "send";
     public static final String SEND_DATE_PROPERTY = "sendDate";
+    public static final String SEND_TYPE_PROPERTY = "sendType";
     public static final String SUBJECT_PROPERTY = "subject";
     public static final String TEXT_MAIL_BODY_PROPERTY = "textMailBody";
     public static final String NODES_PROPERTY = "nodes";
@@ -61,6 +62,13 @@ public abstract class _Mail extends CayenneDataObject {
     }
     public Date getSendDate() {
         return (Date)readProperty(SEND_DATE_PROPERTY);
+    }
+
+    public void setSendType(String sendType) {
+        writeProperty(SEND_TYPE_PROPERTY, sendType);
+    }
+    public String getSendType() {
+        return (String)readProperty(SEND_TYPE_PROPERTY);
     }
 
     public void setSubject(String subject) {

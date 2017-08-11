@@ -1,0 +1,93 @@
+#set($collection = $chapter.Entry.ReserveCollection)
+#set($entry = $chapter.Entry)
+
+Bearbeitet durch
+----------------
+
+Rolle:
+#foreach($role in $roles)
+- $role.Name
+#end
+
+Semesterapparat
+---------------
+
+Semesterapparats-ID: $collection.Id
+Nummer: $collection.Number.Number
+Standort: $collection.LibraryLocation.Name
+#if($collectionLink)
+Semesterapparat: $collectionLink
+#end
+Titel: $collection.Title
+#if($authors)
+Autor(Innen): $authors
+#end
+#if($origin)
+Fakultät: $origin
+#end
+
+Eintrag
+-------
+
+#if($DateFormatter)
+    #set($created = $DateFormatter.format($entry.Created))
+#else
+    #set($created = $entry.Created)
+#end
+Datum: $created
+Link Eintrag: $entryLink
+
+Buchauszug
+----------
+
+Kapiteltitel: $chapter.ChapterTitle
+#if($chapter.BookAuthors)
+Autor(Innen) (Buch): $chapter.BookAuthors
+#end
+#if($chapter.ChapterAuthors)
+Autor(Innen) (Kapitel): $chapter.ChapterAuthors
+#end
+#if($chapter.Comment)
+Kommentar: $chapter.Comment
+#end
+Seiten: von $chapter.PageStart bis $chapter.PageEnd
+#if($oldPageStart || $oldPageEnd)
+Seiten (alt): von $oldPageStart bis $oldPageEnd
+#end
+#if($chapter.BookTitle)
+Titel des Buches: $chapter.BookTitle
+#end
+#if($chapter.Editor)
+Herausgeber: $chapter.Editor
+#end
+#if($chapter.Edition)
+Ausgabe/Auflage: $chapter.Edition
+#end
+#if($chapter.PlaceOfPublication)
+Erscheinungsort: $chapter.PlaceOfPublication
+#end
+#if($chapter.Publisher)
+Verlag: $chapter.Publisher
+#end
+#if($chapter.YearOfPublication)
+Erscheinungsjahr: $chapter.YearOfPublication
+#end
+#if($chapter.Isbn)
+ISBN: $chapter.Isbn
+#end
+#if($chapter.ReferenceNumber)
+Referenznummer: $chapter.ReferenceNumber
+#end
+#if($chapter.Signature)
+Signatur: $chapter.Signature
+Link zum Katalog: http://primo.ub.uni-due.de/primo_library/libweb/action/dlSearch.do?vid=UDE&institution=UDE&search_scope=default_scope&bulkSize=10&lang=ger&indx=1&onCampus=false&query=lsr11,contains,$chapter.Signature
+#end
+
+#if($entry.Deleted)
+Der Status des Eintrags ist noch "Neueintrag". Falls Sie den Text gerade beschaffen, ist dies nicht mehr erforderlich, Sie können den Vorgang stornieren.
+Auch die Überprüfung der bibliographischen Angaben ist nicht mehr erforderlich.
+#else
+Überprüfen Sie die bibligraphischen Angaben
+Korrigieren Sie diese ggf. im Online Semesterapparat
+Beschaffen Sie den Text als PDF-Dokument und stellen Sie ihn via Formular zum Online-Semesterapparat hinzu
+#end

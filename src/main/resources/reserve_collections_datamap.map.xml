@@ -163,6 +163,7 @@
 		<db-attribute name="numTries" type="INTEGER"/>
 		<db-attribute name="send" type="BOOLEAN"/>
 		<db-attribute name="sendDate" type="TIMESTAMP"/>
+		<db-attribute name="sendType" type="VARCHAR" length="64"/>
 		<db-attribute name="subject" type="VARCHAR" length="1024"/>
 		<db-attribute name="textMailBody" type="VARCHAR" length="131072"/>
 		<db-key-generator>
@@ -501,6 +502,7 @@
 		<obj-attribute name="numTries" type="int" db-attribute-path="numTries"/>
 		<obj-attribute name="send" type="boolean" db-attribute-path="send"/>
 		<obj-attribute name="sendDate" type="java.util.Date" db-attribute-path="sendDate"/>
+		<obj-attribute name="sendType" type="java.lang.String" db-attribute-path="sendType"/>
 		<obj-attribute name="subject" type="java.lang.String" db-attribute-path="subject"/>
 		<obj-attribute name="textMailBody" type="java.lang.String" db-attribute-path="textMailBody"/>
 	</obj-entity>

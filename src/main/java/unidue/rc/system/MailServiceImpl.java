@@ -23,8 +23,10 @@ import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.PersistenceState;
 import org.apache.cayenne.di.Inject;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
+import org.apache.commons.mail.SimpleEmail;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -32,8 +34,20 @@ import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import unidue.rc.dao.*;
-import unidue.rc.model.*;
+import unidue.rc.dao.CommitException;
+import unidue.rc.dao.MCRCategoryDAO;
+import unidue.rc.dao.MailDAO;
+import unidue.rc.dao.OriginDAO;
+import unidue.rc.dao.ParticipationDAO;
+import unidue.rc.dao.RoleDAO;
+import unidue.rc.dao.UserDAO;
+import unidue.rc.model.DefaultRole;
+import unidue.rc.model.Entry;
+import unidue.rc.model.Mail;
+import unidue.rc.model.MailNode;
+import unidue.rc.model.MailNodeType;
+import unidue.rc.model.Participation;
+import unidue.rc.model.ReserveCollection;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -130,8 +144,7 @@ public class MailServiceImpl implements MailService {
             throw new IllegalArgumentException(errMsg.toString());
 
         // build email
-        HtmlEmail email = new HtmlEmail();
-        email.setCharset(config.getString("mail.charset"));
+        Email email = createEmail(mail);
         email.setHostName(smtpHost);
         email.setSmtpPort(smtpPort);
         email.setAuthentication(smtpUser, smtpPassword);
@@ -139,8 +152,6 @@ public class MailServiceImpl implements MailService {
         email.setFrom(from);
         email.setSubject(subject);
         email.setDebug(useDebug);
-        if (StringUtils.isNotBlank(textMailBody))
-            email.setTextMsg(textMailBody);
 
         // set recipients
         email.setTo(buildAddressList(recipients));
@@ -154,7 +165,6 @@ public class MailServiceImpl implements MailService {
         if (!replyTo.isEmpty())
             email.setReplyTo(replyTo);
 
-        email.setHtmlMsg(mailBody);
 
         try {
             // save mail in backend for later use
@@ -176,6 +186,37 @@ public class MailServiceImpl implements MailService {
         }
 
         LOG.info("mail send from " + from + " to " + recipients);
+    }
+
+    private Email createEmail(Mail mail) throws EmailException
+    {
+        Email email;
+        if (StringUtils.equals(mail.getSendType(), MailBuilder.MailType.Text.name())) {
+            email = buildTextMail(mail);
+        } else {
+            email = buildHtmlMail(mail);
+        }
+        return email;
+    }
+
+    private Email buildTextMail(Mail mail) throws EmailException
+    {
+        SimpleEmail email = new SimpleEmail();
+        email.setMsg(mail.getMailBody());
+        email.setCharset(config.getString("mail.charset"));
+        mail.setSendType(MailBuilder.MailType.Text.name());
+        return email;
+    }
+
+    private Email buildHtmlMail(Mail mail) throws EmailException
+    {
+        HtmlEmail email = new HtmlEmail();
+        email.setMsg(mail.getMailBody());
+        if (StringUtils.isNoneBlank(mail.getTextMailBody()))
+            email.setTextMsg(mail.getTextMailBody());
+        email.setCharset(config.getString("mail.charset"));
+        mail.setSendType(MailBuilder.MailType.Html.name());
+        return email;
     }
 
     public String buildSubject(Entry entry, String bookType, String authors) {
@@ -201,7 +242,9 @@ public class MailServiceImpl implements MailService {
         Integer originId = collection.getOriginId();
         if (originId != null) {
             MCRCategory category = categoryDAO.getCategoryById(originId);
-            return buildOrigin(category);
+            return category != null
+                   ? buildOrigin(category)
+                   : StringUtils.EMPTY;
         }
         return StringUtils.EMPTY;
     }
@@ -211,7 +254,9 @@ public class MailServiceImpl implements MailService {
         String originId = user.getOrigin();
         if (originId != null) {
             MCRCategory category = originDAO.getOrigin(originId);
-            return buildOrigin(category);
+            return category != null
+                   ? buildOrigin(category)
+                   : StringUtils.EMPTY;
         }
         return StringUtils.EMPTY;
     }
@@ -310,6 +355,11 @@ public class MailServiceImpl implements MailService {
 
     public static class MailBuilder {
 
+        public enum MailType {
+            Text,
+            Html
+        }
+
         private final Mail mail;
         private final List<MailNode> nodes;
         private final String templateName;
@@ -319,6 +369,11 @@ public class MailServiceImpl implements MailService {
             this.mail = new Mail();
             this.nodes = new ArrayList<>();
             this.templateName = templateName;
+        }
+
+        public MailBuilder of(MailType type) {
+            mail.setSendType(type.name());
+            return this;
         }
 
         public MailBuilder from(String from) {
