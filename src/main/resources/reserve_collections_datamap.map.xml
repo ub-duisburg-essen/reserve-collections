@@ -11,7 +11,7 @@
 		<db-attribute name="resource" type="VARCHAR" length="128"/>
 		<db-attribute name="resourceID" type="INTEGER"/>
 		<db-attribute name="timestamp" type="BIGINT"/>
-		<db-attribute name="userAgent" type="VARCHAR" length="256"/>
+		<db-attribute name="userAgent" type="VARCHAR" length="512"/>
 	</db-entity>
 	<db-entity name="ACTION">
 		<db-attribute name="attribute" type="VARCHAR" length="256"/>
