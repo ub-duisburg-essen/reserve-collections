@@ -78,9 +78,6 @@ public class ProlongCollection {
     @Component(id = "expiry")
     private Select expirationField;
 
-    @Component(id = "expected_participations")
-    private TextField expectedParticipationsField;
-
     @Component(id = "dissolve_form")
     private Form dissolveForm;
 
@@ -96,9 +93,6 @@ public class ProlongCollection {
 
     @Property
     private String prolongCode;
-
-    @Property
-    private Integer expectedParticipations;
 
     @Property
     private ReserveCollection collection;
@@ -123,9 +117,6 @@ public class ProlongCollection {
         this.prolongCode = prolongCode;
 
         this.collection = baseDAO.get(ReserveCollection.class, collectionID);
-        this.expectedParticipations = collection != null
-                                      ? collection.getExpectedParticipations()
-                                      : null;
     }
 
     @OnEvent(EventConstants.PASSIVATE)
@@ -136,13 +127,8 @@ public class ProlongCollection {
     @OnEvent(value = EventConstants.VALIDATE, component = "prolong_form")
     void onValidateProlong() {
 
-        if (expectedParticipations == null) {
-            prolongForm.recordError(expectedParticipationsField, messages.format("error.msg.expected.participations.required"));
-            return;
-        }
 
         try {
-            collection.setExpectedParticipations(expectedParticipations);
             collectionService.prolong(collection, prolongCode, expiry.getTime());
         } catch (ContextedException e) {
             log.warn("could not prolong collection " + collection + " with code " + prolongCode, e);
