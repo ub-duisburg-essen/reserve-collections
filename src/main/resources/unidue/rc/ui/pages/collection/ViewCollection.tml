@@ -1,7 +1,13 @@
 <html t:type="layout" title="${collection.title} #${collection.libraryLocation?.name} ${collection.number?.number}"
       actionBarBlock="viewCollectionBlock"
+      headBarBlock="headBlock"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
+
+
+<t:block t:id="headBlock">
+    <meta name="Cache-Control" content="max-age=86400"/>
+</t:block>
 
 <t:block t:id="viewCollectionBlock">
     <t:reservecollectionactionslinklist collection="collection"/>

@@ -4,6 +4,7 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
 
 <t:block t:id="headBlock">
+    <meta name="Cache-Control" content="no-cache"/>
     <noscript>
         <meta http-equiv="refresh" content="0; URL=nojs"/>
     </noscript>
