@@ -22,6 +22,7 @@ import unidue.rc.model.Reference;
 public abstract class _Resource extends CayenneDataObject {
 
     public static final String COPYRIGHT_REVIEW_STATUS_PROPERTY = "copyrightReviewStatus";
+    public static final String EXTENSION_PROPERTY = "extension";
     public static final String FILE_DELETED_PROPERTY = "fileDeleted";
     public static final String FILE_PATH_PROPERTY = "filePath";
     public static final String FULL_TEXT_URL_PROPERTY = "fullTextURL";
@@ -40,6 +41,13 @@ public abstract class _Resource extends CayenneDataObject {
     }
     public CopyrightReviewStatus getCopyrightReviewStatus() {
         return (CopyrightReviewStatus)readProperty(COPYRIGHT_REVIEW_STATUS_PROPERTY);
+    }
+
+    public void setExtension(String extension) {
+        writeProperty(EXTENSION_PROPERTY, extension);
+    }
+    public String getExtension() {
+        return (String)readProperty(EXTENSION_PROPERTY);
     }
 
     public void setFileDeleted(Date fileDeleted) {

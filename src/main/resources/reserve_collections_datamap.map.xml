@@ -307,6 +307,7 @@
 	</db-entity>
 	<db-entity name="RESOURCE">
 		<db-attribute name="copyrightReviewStatus" type="INTEGER"/>
+		<db-attribute name="extension" type="VARCHAR" length="16"/>
 		<db-attribute name="fileDeleted" type="TIMESTAMP"/>
 		<db-attribute name="filePath" type="VARCHAR" length="512"/>
 		<db-attribute name="fullTextURL" type="VARCHAR" length="1024"/>
@@ -579,6 +580,7 @@
 	</obj-entity>
 	<obj-entity name="Resource" className="unidue.rc.model.Resource" dbEntityName="RESOURCE">
 		<obj-attribute name="copyrightReviewStatus" type="unidue.rc.model.CopyrightReviewStatus" db-attribute-path="copyrightReviewStatus"/>
+		<obj-attribute name="extension" type="java.lang.String" db-attribute-path="extension"/>
 		<obj-attribute name="fileDeleted" type="java.util.Date" db-attribute-path="fileDeleted"/>
 		<obj-attribute name="filePath" type="java.lang.String" db-attribute-path="filePath"/>
 		<obj-attribute name="fullTextURL" type="java.lang.String" db-attribute-path="fullTextURL"/>
