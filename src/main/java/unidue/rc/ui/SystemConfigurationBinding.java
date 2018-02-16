@@ -16,7 +16,7 @@
 package unidue.rc.ui;
 
 
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.apache.tapestry5.Binding;
 import org.apache.tapestry5.ioc.internal.util.TapestryException;
 import unidue.rc.system.SystemConfigurationService;

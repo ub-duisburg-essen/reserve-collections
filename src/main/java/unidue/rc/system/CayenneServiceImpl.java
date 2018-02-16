@@ -26,8 +26,8 @@ import org.apache.cayenne.di.Injector;
 import org.apache.cayenne.di.Module;
 import org.apache.cayenne.exp.ExpressionFactory;
 import org.apache.cayenne.query.SelectQuery;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.DatabaseConfiguration;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.DatabaseConfiguration;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -434,12 +434,9 @@ public class CayenneServiceImpl implements CayenneService, Module {
         LOG.info("binding interfaces to implementations");
         SettingDAO settingDAO = new SettingDAOImpl();
         binder.bind(SettingDAO.class).toInstance(settingDAO);
-        try {
-            SystemConfigurationServiceImpl config = new SystemConfigurationServiceImpl(getDatabaseConfiguration(), settingDAO);
-            binder.bind(SystemConfigurationService.class).toInstance(config);
-        } catch (ConfigurationException e) {
-            LOG.error("could not create configuration service", e);
-        }
+
+        SystemConfigurationServiceImpl config = new SystemConfigurationServiceImpl(getDatabaseConfiguration(), settingDAO);
+        binder.bind(SystemConfigurationService.class).toInstance(config);
         binder.bind(SystemMessageService.class).to(SystemMessageServiceImpl.class);
 
         // daos
@@ -537,7 +534,11 @@ public class CayenneServiceImpl implements CayenneService, Module {
 
     protected DatabaseConfiguration getDatabaseConfiguration() {
         DataSource source = getCollectionDataSource();
-        DatabaseConfiguration config = new DatabaseConfiguration(source, "setting", "key", "value");
+        DatabaseConfiguration config = new DatabaseConfiguration();
+        config.setDataSource(source);
+        config.setTable("setting");
+        config.setKeyColumn("key");
+        config.setValueColumn("value");
         return config;
     }
 

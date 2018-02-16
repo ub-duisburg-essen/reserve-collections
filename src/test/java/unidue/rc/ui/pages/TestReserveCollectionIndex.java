@@ -18,7 +18,7 @@ package unidue.rc.ui.pages;
 
 import com.thoughtworks.selenium.Wait;
 import miless.model.User;
-import org.apache.commons.configuration.DatabaseConfiguration;
+import org.apache.commons.configuration2.DatabaseConfiguration;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;

@@ -17,7 +17,7 @@ package unidue.rc.workflow;
 
 
 import org.apache.cayenne.di.Inject;
-import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import unidue.rc.system.BaseCronJob;

@@ -16,7 +16,7 @@
 package unidue.rc.migration;
 
 
-import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import unidue.rc.model.Migration;
 import unidue.rc.model.ReserveCollection;
 

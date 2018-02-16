@@ -26,7 +26,7 @@ public interface SystemMessageService {
      *
      * @param key key for message
      * @return the message or <code>null</code> if none was be found
-     * @see org.apache.commons.configuration.Configuration#getString(String)
+     * @see org.apache.commons.configuration2.Configuration#getString(String)
      */
     String get(String key);
 }

@@ -16,8 +16,12 @@
 package unidue.rc.system;
 
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 /**
  * Created by nils on 25.06.15.
@@ -26,8 +30,12 @@ public class SystemMessageServiceImpl implements SystemMessageService {
 
     private final PropertiesConfiguration properties;
 
-    public SystemMessageServiceImpl() throws ConfigurationException {
-        this.properties = new PropertiesConfiguration(SystemMessageServiceImpl.class.getResource("/system.messages_de.properties"));
+    public SystemMessageServiceImpl() throws ConfigurationException, IOException {
+        this.properties = new PropertiesConfiguration();
+        try (Reader input = new InputStreamReader(SystemMessageServiceImpl.class.getResourceAsStream("/system.messages_de.properties"))) {
+
+            this.properties.read(input);
+        }
     }
 
     @Override

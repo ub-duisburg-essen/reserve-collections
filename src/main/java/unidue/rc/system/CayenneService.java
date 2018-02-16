@@ -19,7 +19,7 @@ package unidue.rc.system;
 import org.apache.cayenne.BaseContext;
 import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.di.Injector;
-import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.quartz.spi.JobFactory;
 import unidue.rc.dao.DatabaseException;
 

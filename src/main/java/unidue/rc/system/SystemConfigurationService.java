@@ -53,7 +53,7 @@ public interface SystemConfigurationService {
      * @param key key of the config value
      * @return The value according to target key or <code>null</code> if it does not exist
      * @throws IllegalArgumentException thrown if the key is <code>null</code>
-     * @see org.apache.commons.configuration.Configuration#getInt(String)
+     * @see org.apache.commons.configuration2.Configuration#getInt(String)
      */
     Integer getInt(String key);
 
@@ -64,7 +64,7 @@ public interface SystemConfigurationService {
      * @param defaultValue default value if the key could not be found
      * @return The value according to target key or target default if it does not exist
      * @throws IllegalArgumentException thrown if the key is <code>null</code>
-     * @see org.apache.commons.configuration.Configuration#getLong(String)
+     * @see org.apache.commons.configuration2.Configuration#getLong(String)
      */
     Long getLong(String key, long defaultValue);
 
@@ -75,7 +75,7 @@ public interface SystemConfigurationService {
      * @param defaultValue default value if the key could not be found
      * @return The value according to target key or target default if it does not exist
      * @throws IllegalArgumentException thrown if the key is <code>null</code>
-     * @see org.apache.commons.configuration.Configuration#getInt(String, int)
+     * @see org.apache.commons.configuration2.Configuration#getInt(String, int)
      */
     int getInt(String key, int defaultValue);
 
@@ -84,7 +84,7 @@ public interface SystemConfigurationService {
      *
      * @param prefix key prefix which values should be returned for
      * @return an {@code Iterator} with the keys of this configuration
-     * @see org.apache.commons.configuration.Configuration#getKeys(String)
+     * @see org.apache.commons.configuration2.Configuration#getKeys(String)
      */
     Iterator<String> getKeys(String prefix);
 
@@ -101,13 +101,13 @@ public interface SystemConfigurationService {
      *
      * @param key key of the config value
      * @return see description
-     * @see org.apache.commons.configuration.PropertiesConfiguration
+     * @see org.apache.commons.configuration2.PropertiesConfiguration
      */
     List<String> getStringArray(String key);
 
     /**
      * Returns the <code>boolean</code> value that belongs to target key by the use of
-     * {@link org.apache.commons.configuration.PropertyConverter#toBoolean(Object)}.
+     * {@link org.apache.commons.configuration2.convert.PropertyConverter#toBoolean(Object)}.
      *
      * @param key key of the config value
      * @return see description
@@ -116,7 +116,7 @@ public interface SystemConfigurationService {
 
     /**
      * Returns the <code>boolean</code> value that belongs to target key by the use of
-     * {@link org.apache.commons.configuration.PropertyConverter#toBoolean(Object)}.
+     * {@link org.apache.commons.configuration2.convert.PropertyConverter#toBoolean(Object)}.
      *
      * @param key          key of the config value
      * @param defaultValue default value if the key could not be found

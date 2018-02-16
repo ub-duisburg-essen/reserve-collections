@@ -24,8 +24,8 @@ import org.apache.cayenne.access.dbsync.SchemaUpdateStrategy;
 import org.apache.cayenne.configuration.server.ServerRuntime;
 import org.apache.cayenne.exp.ExpressionFactory;
 import org.apache.cayenne.query.SelectQuery;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.DatabaseConfiguration;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.DatabaseConfiguration;
 import org.h2.jdbcx.JdbcDataSource;
 import org.osjava.sj.memory.MemoryContextFactory;
 import org.simpleframework.xml.Serializer;
@@ -451,7 +451,12 @@ public class DbTestUtils {
 
     public DatabaseConfiguration getDatabaseConfiguration() {
         DataSource dataSource = runtime.getDataSource("reserve_collections_datanode");
-        return new DatabaseConfiguration(dataSource, "setting", "key", "value");
+        DatabaseConfiguration configuration = new DatabaseConfiguration();
+        configuration.setDataSource(dataSource);
+        configuration.setTable("setting");
+        configuration.setKeyColumn("key");
+        configuration.setValueColumn("value");
+        return configuration;
     }
 
     public ReserveCollection createMockReserveCollection(String title) throws CommitException {

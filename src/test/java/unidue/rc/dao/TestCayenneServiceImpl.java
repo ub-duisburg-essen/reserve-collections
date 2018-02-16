@@ -17,7 +17,6 @@ package unidue.rc.dao;
 
 
 import org.apache.cayenne.di.Binder;
-import org.apache.commons.configuration.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import unidue.rc.DbTestUtils;

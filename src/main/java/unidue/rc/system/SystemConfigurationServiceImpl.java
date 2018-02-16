@@ -16,9 +16,9 @@
 package unidue.rc.system;
 
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.DatabaseConfiguration;
-import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.DatabaseConfiguration;
+import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import unidue.rc.dao.SettingDAO;
 import unidue.rc.model.Setting;
 
@@ -37,8 +37,9 @@ public class SystemConfigurationServiceImpl implements SystemConfigurationServic
     private final DatabaseConfiguration config;
     private final SettingDAO settingDAO;
 
-    public SystemConfigurationServiceImpl(DatabaseConfiguration config, SettingDAO settingDAO) throws ConfigurationException {
+    public SystemConfigurationServiceImpl(DatabaseConfiguration config, SettingDAO settingDAO) {
         this.config = config;
+        this.config.setListDelimiterHandler(new DefaultListDelimiterHandler(','));
         this.settingDAO = settingDAO;
     }
 

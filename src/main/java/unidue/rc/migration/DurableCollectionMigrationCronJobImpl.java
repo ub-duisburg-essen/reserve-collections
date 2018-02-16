@@ -17,7 +17,7 @@ package unidue.rc.migration;
 
 
 import org.apache.cayenne.di.Inject;
-import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
 import org.apache.velocity.VelocityContext;

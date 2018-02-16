@@ -19,7 +19,7 @@ package unidue.rc.ui.pages.collection;
 
 import miless.model.User;
 import org.apache.cayenne.Persistent;
-import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.tapestry5.Block;

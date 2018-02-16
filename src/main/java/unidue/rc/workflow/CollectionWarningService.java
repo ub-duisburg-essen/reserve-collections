@@ -16,7 +16,7 @@
 package unidue.rc.workflow;
 
 
-import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 
 import java.time.LocalDate;
 

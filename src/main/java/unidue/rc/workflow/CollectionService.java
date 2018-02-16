@@ -17,7 +17,7 @@ package unidue.rc.workflow;
 
 
 import miless.model.User;
-import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.lang3.exception.ContextedException;
 import unidue.rc.dao.CommitException;
 import unidue.rc.dao.DeleteException;
