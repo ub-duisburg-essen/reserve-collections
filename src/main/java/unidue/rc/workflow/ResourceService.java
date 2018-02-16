@@ -104,6 +104,14 @@ public interface ResourceService {
     Resource upload(ReserveCollection collection, String filename, InputStream input) throws CommitException, IOException;
 
     /**
+     * Returns the collection that target resource is associated to.
+     *
+     * @param resource  the resource
+     * @return the {@linkplain ReserveCollection} or null
+     */
+    ReserveCollection getCollection(Resource resource);
+
+    /**
      * Updates target {@link Resource} and saves target input in a file. Old files are deleted if present.
      *
      * @param resource resource to update

@@ -1,7 +1,13 @@
 <html t:type="layout" title="${video.fileName}"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       actionBarBlock="videoBlock"
+      headBarBlock="videoHeadBlock"
        >
+
+<t:block t:id="videoHeadBlock">
+    <link href="//vjs.zencdn.net/6.6.3/video-js.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="${context:vendor/videojs/css/videojs-iplayer-theme.min.css}"/>
+</t:block>
 
 <t:block t:id="videoBlock">
     <t:reservecollectionactionslinklist/>
@@ -21,11 +27,31 @@
     <section>
         <div class="row">
             <div class="col-md-12">
-                <div id="jwcontainer">
-                    <p>${message:info.msg.flash.required}</p>
-                </div>
+                <video id="videocontainer" class="video-js" controls="controls" preload="auto" width="832" height="468">
+                    <t:loop source="videoSources" value="videoSource">
+                        <source src="${videoSourceURI}" type="${videoSource.type}"/>
+                    </t:loop>
+                    <p class="vjs-no-js">
+                        <t:outputraw value="${message:info.msg.video.requires.javascript}"/>
+                    </p>
+                </video>
             </div>
         </div>
     </section>
 </div>
+
+<script src="//vjs.zencdn.net/6.6.3/video.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.12.2/videojs-contrib-hls.min.js"></script>
+<script>
+    // must be set before player initialization!
+    videojs.options.hls.overrideNative = true;
+    var hlsPlayer = videojs('videocontainer', {
+        html5: {
+            nativeAudioTracks: false,
+            nativeVideoTracks: false
+        }
+    });
+    // var hlsPlayer = videojs('hls');
+    hlsPlayer.play();
+</script>
 </html>

@@ -43,6 +43,7 @@ import org.tynamo.security.SecuritySymbols;
 import org.tynamo.security.services.SecurityFilterChainFactory;
 import org.tynamo.security.services.impl.SecurityFilterChain;
 import unidue.rc.auth.LDAPRealm;
+import unidue.rc.auth.LocalRealm;
 import unidue.rc.dao.*;
 import unidue.rc.io.CollectionRSSWriter;
 import unidue.rc.io.OutputStreamResponse;
@@ -52,9 +53,10 @@ import unidue.rc.model.ActionDefinition;
 import unidue.rc.plugins.alephsync.AlephSynchronizer;
 import unidue.rc.plugins.moodle.services.MoodleRequestHandler;
 import unidue.rc.plugins.moodle.services.MoodleService;
+import unidue.rc.plugins.videostreaming.VideoStreamingService;
+import unidue.rc.plugins.videostreaming.WowzaStreamingService;
 import unidue.rc.search.SolrService;
 import unidue.rc.security.CollectionSecurityService;
-import unidue.rc.auth.LocalRealm;
 import unidue.rc.statistic.DBStatService;
 import unidue.rc.system.*;
 import unidue.rc.ui.CollectionBaseURLSource;
@@ -89,6 +91,7 @@ public class AppModule {
         binder.bind(QuartzService.class, QuartzServiceImpl.class);
         binder.bind(SecurityRequestFilter.class, SecurityRequestFilter.class);
         binder.bind(ClientFilter.class, ClientFilter.class);
+        binder.bind(VideoStreamingService.class, WowzaStreamingService.class);
     }
 
     @ServiceId(LDAPRealm.NAME)

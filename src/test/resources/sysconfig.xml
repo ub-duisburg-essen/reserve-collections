@@ -8,37 +8,9 @@
         <type>1</type>
     </defaultSetting>
     <defaultSetting>
-        <label>Streaming Port für HTTP</label>
-        <key>stream.protocol.port.http</key>
-        <value>4887</value>
-        <format>[0-9]+</format>
-        <type>1</type>
-    </defaultSetting>
-    <defaultSetting>
-        <label>Streaming Protokoll für FLV</label>
-        <key>stream.format.protocol.flv</key>
-        <value>rtmp</value>
-        <format></format>
-        <type>1</type>
-    </defaultSetting>
-    <defaultSetting>
-        <label>Streaming Protokoll für MP3</label>
-        <key>stream.format.protocol.mp3</key>
-        <value>rtsp</value>
-        <format></format>
-        <type>1</type>
-    </defaultSetting>
-    <defaultSetting>
         <label>Temporäres Verzeichnis für Dateiuploads</label>
         <key>upload.repository-location</key>
         <value>${collection.home}/fileupload</value>
-        <format></format>
-        <type>1</type>
-    </defaultSetting>
-    <defaultSetting>
-        <label>Streaming Protokoll für MP4</label>
-        <key>stream.format.protocol.mp4</key>
-        <value>rtmp</value>
         <format></format>
         <type>1</type>
     </defaultSetting>
@@ -99,13 +71,6 @@
         <type>1</type>
     </defaultSetting>
     <defaultSetting>
-        <label>Streaming Port für HTTPS</label>
-        <key>stream.protocol.port.https</key>
-        <value>4888</value>
-        <format>[0-9]+</format>
-        <type>1</type>
-    </defaultSetting>
-    <defaultSetting>
         <label>DuEPublico A-Z URL</label>
         <key>duepublico.az.url</key>
         <value>${duepublico.url}/about/abisz.xml</value>
@@ -124,13 +89,6 @@
         <key>solr.core.scanjobs</key>
         <value>${solr.server}/scanjobs</value>
         <format></format>
-        <type>1</type>
-    </defaultSetting>
-    <defaultSetting>
-        <label>RTMP Port</label>
-        <key>stream.protocol.port.rtmp</key>
-        <value>1935</value>
-        <format>[0-9]+</format>
         <type>1</type>
     </defaultSetting>
     <defaultSetting>
@@ -197,23 +155,9 @@
         <type>1</type>
     </defaultSetting>
     <defaultSetting>
-        <label>Streaming Port für MMS</label>
-        <key>stream.protocol.port.mms</key>
-        <value>1755</value>
-        <format>[0-9]+</format>
-        <type>1</type>
-    </defaultSetting>
-    <defaultSetting>
         <label>Streaming Server URL</label>
         <key>streaming.server.url</key>
         <value>streaming.uni-due.de</value>
-        <format></format>
-        <type>1</type>
-    </defaultSetting>
-    <defaultSetting>
-        <label>URLProcessor zur Erstellung von sicheren URLs zum Abruf von Videos</label>
-        <key>streaming.server.url.processor</key>
-        <value></value>
         <format></format>
         <type>1</type>
     </defaultSetting>
@@ -285,13 +229,6 @@
         <key>ldap.mapping.name</key>
         <value>cn</value>
         <format></format>
-        <type>1</type>
-    </defaultSetting>
-    <defaultSetting>
-        <label>Streaming Port für RSTP</label>
-        <key>stream.protocol.port.rtsp</key>
-        <value>7877</value>
-        <format>[0-9]+</format>
         <type>1</type>
     </defaultSetting>
     <defaultSetting>

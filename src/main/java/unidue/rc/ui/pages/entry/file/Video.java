@@ -36,11 +36,15 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.HttpError;
 import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbList;
 import unidue.rc.dao.ResourceDAO;
+import unidue.rc.model.ReserveCollection;
 import unidue.rc.model.Resource;
+import unidue.rc.plugins.videostreaming.VideoSource;
+import unidue.rc.plugins.videostreaming.VideoStreamingService;
 import unidue.rc.security.CollectionSecurityService;
 import unidue.rc.system.SystemConfigurationService;
 import unidue.rc.ui.ProtectedPage;
@@ -61,12 +65,6 @@ import java.util.*;
  * @author Nils Verheyen
  * @since 25.08.14 09:27
  */
-@Import(library = {
-        "context:vendor/jwplayer-5.10/jwplayer.js",
-        "context:js/jwplayer.js",
-}, stylesheet = {
-        "context:vendor/video-js/video-js.min.css"
-})
 @BreadCrumb(titleKey = "play.video")
 @ProtectedPage
 public class Video implements SecurityContextPage {
@@ -75,44 +73,25 @@ public class Video implements SecurityContextPage {
     private Logger log;
 
     @Inject
-    private SystemConfigurationService config;
-
-    @Inject
-    @Path("context:vendor/jwplayer-5.10/player.swf")
-    @Property
-    private Asset jwPlayer;
-
-    @Inject
-    @Path("context:vendor/jwplayer-5.10/skins/modieus.zip")
-    @Property
-    private Asset jwPlayerSkin;
-
-    @Inject
-    private JavaScriptSupport javaScriptSupport;
-
-    @Inject
     private Messages messages;
-
-    @Inject
-    private MimeService mimeService;
 
     @Inject
     private ResourceService resourceService;
 
     @Inject
-    private ResourceDAO resourceDAO;
+    private VideoStreamingService streamingService;
 
     @Inject
-    private PageRenderLinkSource linkSource;
+    private ResourceDAO resourceDAO;
 
     @Property
     private Resource video;
 
-    @Persist(PersistenceConstants.FLASH)
-    private Map<String, Integer> protocols;
+    @Property
+    private List<VideoSource> videoSources;
 
     @Property
-    private String protocol;
+    private VideoSource videoSource;
 
     @SessionState
     private BreadCrumbList breadCrumbList;
@@ -128,12 +107,8 @@ public class Video implements SecurityContextPage {
         if (video == null || !video.isFileAvailable())
             return new HttpError(HttpServletResponse.SC_NOT_FOUND, messages.get("not.found"));
 
-        protocols = new LinkedHashMap<>();
-        Iterator<String> keys = config.getKeys("stream.protocol.port");
-        while (keys.hasNext()) {
-            String key = keys.next();
-            protocols.put(key.substring(key.lastIndexOf('.') + 1), config.getInt(key));
-        }
+        videoSources = streamingService.getVideoSources(video.getExtension());
+
         return null;
     }
 
@@ -142,72 +117,15 @@ public class Video implements SecurityContextPage {
         return video.getId();
     }
 
-    @AfterRender
-    void afterRender() {
-        String sourceURI = getSource("rtmp");
-        String streamingMountPoint = config.getString("streaming.server.mount.point");
+    public String getVideoSourceURI() throws URISyntaxException {
+        Map<String, String> pathParams = new HashMap<>();
+        ReserveCollection collection = resourceService.getCollection(video);
+        if (collection != null)
+            pathParams.put("collectionid", Integer.toString(collection.getId()));
+        pathParams.put("resourceid", Integer.toString(video.getId()));
+        pathParams.put("filename", video.getFileName());
 
-        try {
-            String rtmpSourcePath = null;
-            if (!sourceURI.equals('#')) {
-
-                URIBuilder sourceURIBuilder = new URIBuilder(sourceURI);
-                URI rtmpSourceURI = sourceURIBuilder.build();
-                rtmpSourcePath = rtmpSourceURI.getPath();
-                rtmpSourcePath = rtmpSourcePath.substring(streamingMountPoint.length());
-                rtmpSourcePath = rtmpSourcePath + '?' + rtmpSourceURI.getQuery();
-            }
-
-            javaScriptSupport.addScript(buildJWStartScript(getFallbackURL(), rtmpSourcePath));
-        } catch (URISyntaxException e) {
-            log.error("could not build uri from " + sourceURI, e);
-        }
-    }
-
-    private String buildJWStartScript(String htmlSource, String rtmpSource) {
-        StringBuilder builder = new StringBuilder("jQuery.fn.startjw({");
-        builder.append(String.format("  player: '%s',", jwPlayer.toClientURL()));
-        builder.append(String.format("  skin: '%s',", jwPlayerSkin.toClientURL()));
-
-        if (htmlSource != null)
-            builder.append(String.format("  html5Source: '%s',", htmlSource));
-
-        if (rtmpSource != null)
-            builder.append(String.format("  rtmpSource: '%s',", rtmpSource));
-
-        builder.append("});");
-        return builder.toString();
-    }
-
-    public String getSource(String protocol) {
-        Integer port = protocols.get(protocol);
-        return port != null
-                ? getVideoSourceURL(video, protocol, port)
-                : "#";
-    }
-
-    public String getVideoSourceURL(Resource video, String protocol, Integer port) {
-        /*
-        <source src="${protocol}://${sys:streaming.server.url}:${port}${sys:streaming.server.mount.point}${video.filePath}"
-                                type="${mimeType}"/>
-         */
-        try {
-            URI videoURI = new URIBuilder()
-                    .setScheme(protocol)
-                    .setHost(config.getString("streaming.server.url"))
-                    .setPort(port)
-                    .setPath(config.getString("streaming.server.mount.point") + video.getFilePath())
-                    .build();
-
-            String videoURIStr = videoURI.toString();
-            String urlProcessor = config.getString("streaming.server.url.processor");
-            return StringUtils.isEmpty(urlProcessor)
-                    ? videoURIStr
-                    : requestVideoURL(urlProcessor, videoURIStr);
-        } catch (URISyntaxException e) {
-            log.error("could not build video uri for " + video.getId(), e);
-        }
-        return null;
+        return streamingService.getSourceURI(videoSource, pathParams).toString();
     }
 
     private String requestVideoURL(String urlProcessor, String videoURIStr) {
@@ -226,15 +144,6 @@ public class Video implements SecurityContextPage {
             log.error("could not get request url from " + urlProcessor + " for " + videoURIStr, e);
         }
         return null;
-    }
-
-    public String getFallbackURL() {
-        return linkSource.createPageRenderLinkWithContext(Media.class, video.getId(),
-                video.getFileName()).toAbsoluteURI();
-    }
-
-    public Integer getPort() {
-        return mimeService.getStreamingPort(protocol);
     }
 
     public boolean isDownloadAllowed() {

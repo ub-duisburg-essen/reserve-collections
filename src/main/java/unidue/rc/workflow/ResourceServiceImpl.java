@@ -168,6 +168,14 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
+    public ReserveCollection getCollection(final Resource resource) {
+        Entry entry = resource.getEntry();
+        return entry != null
+               ? entry.getReserveCollection()
+               : null;
+    }
+
+    @Override
     public void update(Resource resource, String filename, InputStream input) throws CommitException, IOException {
 
         Entry e = resource.getEntry();
