@@ -660,9 +660,86 @@
         <type>1</type>
     </defaultSetting>
     <defaultSetting>
-        <label>Aktivierte Streamer</label>
+        <label>Aktivierte Streamer (Neustart der Anwendung bei Änderung)</label>
         <key>video.streaming.enabled</key>
-        <value>hls, local</value>
+        <value>hls-secure,local</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Scheme für den HLS Streamer</label>
+        <key>video.streaming.sources.hls-secure.scheme</key>
+        <value>https</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Hostname des HLS Streamers</label>
+        <key>video.streaming.sources.hls-secure.host</key>
+        <value>streaming.uni-due.de</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Port des HLS Streamers</label>
+        <key>video.streaming.sources.hls-secure.port</key>
+        <value>443</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Pfad unter der das Video über den HLS Streamer erreicht wird</label>
+        <key>video.streaming.sources.hls-secure.path</key>
+        <value>/semapp/_definst_/mp4:${collectionid}/${resourceid}/${filename}</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Suffix der zum Pfad des Streams benötigt wird</label>
+        <key>video.streaming.sources.hls-secure.path.suffix</key>
+        <value>/playlist.m3u8</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>html source type Attribut für HLS Streaming</label>
+        <key>video.streaming.sources.hls-secure.type</key>
+        <value>application/x-mpegURL</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Sind erzeugte URLs für gesichert</label>
+        <key>video.streaming.sources.hls-secure.secured</key>
+        <value>false</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Shared Secret durch das URLs gesichert sind</label>
+        <key>video.streaming.sources.hls-secure.secret</key>
+        <value></value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Algorithmus der zur Erzeugung des Hash verwendet wird</label>
+        <key>video.streaming.sources.hls-secure.hash.digest</key>
+        <value>SHA-512</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Algorithmus der zur Erzeugung des Hash verwendet wird</label>
+        <key>video.streaming.sources.hls-secure.param.prefix</key>
+        <value>wowzatoken</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Dateitypen, die über HLS gestreamt werden können</label>
+        <key>video.streaming.sources.hls-secure.extensions</key>
+        <value>mp4, f4v, mov, m4a, m4v, mp4a, mp4v, 3gp, 3g2</value>
         <format></format>
         <type>1</type>
     </defaultSetting>
@@ -690,7 +767,14 @@
     <defaultSetting>
         <label>Pfad unter der das Video über den HLS Streamer erreicht wird</label>
         <key>video.streaming.sources.hls.path</key>
-        <value>/semapp/_definst_/mp4:${collectionid}/${resourceid}/${filename}/playlist.m3u8</value>
+        <value>/semapp/_definst_/mp4:${collectionid}/${resourceid}/${filename}</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Suffix der zum Pfad des Streams benötigt wird</label>
+        <key>video.streaming.sources.hls.path.suffix</key>
+        <value>/playlist.m3u8</value>
         <format></format>
         <type>1</type>
     </defaultSetting>
@@ -698,6 +782,13 @@
         <label>html source type Attribut für HLS Streaming</label>
         <key>video.streaming.sources.hls.type</key>
         <value>application/x-mpegURL</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
+        <label>Sind erzeugte URLs für gesichert</label>
+        <key>video.streaming.sources.hls.secured</key>
+        <value>false</value>
         <format></format>
         <type>1</type>
     </defaultSetting>
