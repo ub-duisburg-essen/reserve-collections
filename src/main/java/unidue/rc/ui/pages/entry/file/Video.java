@@ -16,27 +16,18 @@
 package unidue.rc.ui.pages.entry.file;
 
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.http.Header;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
+import org.apache.commons.codec.EncoderException;
+import org.apache.commons.codec.net.URLCodec;
 import org.apache.shiro.authz.AuthorizationException;
-import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.EventContext;
-import org.apache.tapestry5.PersistenceConstants;
-import org.apache.tapestry5.annotations.*;
+import org.apache.tapestry5.annotations.OnEvent;
+import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SessionState;
+import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.HttpError;
-import org.apache.tapestry5.services.PageRenderLinkSource;
-import org.apache.tapestry5.services.javascript.JavaScriptSupport;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import se.unbound.tapestry.breadcrumbs.BreadCrumb;
 import se.unbound.tapestry.breadcrumbs.BreadCrumbList;
@@ -46,20 +37,16 @@ import unidue.rc.model.Resource;
 import unidue.rc.plugins.videostreaming.VideoSource;
 import unidue.rc.plugins.videostreaming.VideoStreamingService;
 import unidue.rc.security.CollectionSecurityService;
-import unidue.rc.system.SystemConfigurationService;
 import unidue.rc.ui.ProtectedPage;
 import unidue.rc.ui.ResourcePageUtil;
 import unidue.rc.ui.SecurityContextPage;
-import unidue.rc.ui.pages.Media;
-import unidue.rc.ui.services.MimeService;
 import unidue.rc.workflow.ResourceService;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Nils Verheyen
@@ -68,6 +55,8 @@ import java.util.*;
 @BreadCrumb(titleKey = "play.video")
 @ProtectedPage
 public class Video implements SecurityContextPage {
+
+    private static final URLCodec URL_CODEC = new URLCodec("UTF-8");
 
     @Inject
     private Logger log;
@@ -120,30 +109,26 @@ public class Video implements SecurityContextPage {
     public String getVideoSourceURI() throws URISyntaxException {
         Map<String, String> pathParams = new HashMap<>();
         ReserveCollection collection = resourceService.getCollection(video);
+
+        // collection id parameter
         if (collection != null)
             pathParams.put("collectionid", Integer.toString(collection.getId()));
+
+        // resource id parameter
         pathParams.put("resourceid", Integer.toString(video.getId()));
-        pathParams.put("filename", video.getFileName());
+
+        // filename parameter
+        try {
+            pathParams.put("filename", URL_CODEC.encode(video.getFileName()));
+        } catch (EncoderException e) {
+            log.error("could not url encode video file name", e);
+        }
 
         return streamingService.getSourceURI(videoSource, pathParams).toString();
     }
 
-    private String requestVideoURL(String urlProcessor, String videoURIStr) {
-        CloseableHttpClient client = HttpClientBuilder.create().disableRedirectHandling().build();
-        HttpClientContext context = HttpClientContext.create();
-        try {
-            HttpGet get = new HttpGet(urlProcessor + URLEncoder.encode(videoURIStr, "UTF-8"));
-            CloseableHttpResponse response = client.execute(get, context);
-            Header redirectHeader = response.getFirstHeader("Location");
-            String redirectLocation = redirectHeader != null ? redirectHeader.getValue() : null;
-
-            EntityUtils.consume(response.getEntity());
-            client.close();
-            return redirectLocation;
-        } catch (IOException e) {
-            log.error("could not get request url from " + urlProcessor + " for " + videoURIStr, e);
-        }
-        return null;
+    public boolean getHasVideoSources() {
+        return videoSources != null && !videoSources.isEmpty();
     }
 
     public boolean isDownloadAllowed() {

@@ -1,4 +1,5 @@
 <html t:type="layout" title="${video.fileName}"
+      xmlns:p="tapestry:parameter"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       actionBarBlock="videoBlock"
       headBarBlock="videoHeadBlock"
@@ -27,14 +28,19 @@
     <section>
         <div class="row">
             <div class="col-md-12">
-                <video id="videocontainer" class="video-js" controls="controls" preload="auto" width="832" height="468">
-                    <t:loop source="videoSources" value="videoSource">
-                        <source src="${videoSourceURI}" type="${videoSource.type}"/>
-                    </t:loop>
-                    <p class="vjs-no-js">
-                        <t:outputraw value="${message:info.msg.video.requires.javascript}"/>
-                    </p>
-                </video>
+                <t:if test="hasVideoSources">
+                    <video id="videocontainer" class="video-js vjs-16-9" controls="controls" preload="auto">
+                        <t:loop source="videoSources" value="videoSource">
+                            <source src="${videoSourceURI}" type="${videoSource.type}"/>
+                        </t:loop>
+                        <p class="vjs-no-js">
+                            <t:outputraw value="${message:info.msg.video.requires.javascript}"/>
+                        </p>
+                    </video>
+                    <p:else>
+                        <p class="alert alert-warning">${message:warning.msg.video.not.streamable}</p>
+                    </p:else>
+                </t:if>
             </div>
         </div>
     </section>
