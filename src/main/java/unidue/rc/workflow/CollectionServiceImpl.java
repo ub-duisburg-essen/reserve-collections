@@ -244,11 +244,14 @@ public class CollectionServiceImpl implements CollectionService {
 
         // get all docents of collection
         Role docentRole = roleDAO.getRole(DefaultRole.DOCENT);
+        Role assistantRole = roleDAO.getRole(DefaultRole.ASSISTANT);
 
-        // get all non docent participations
+        Predicate<Participation> concernedRoles = p -> !(p.getRole().equals(docentRole) || p.getRole().equals(assistantRole));
+
+        // get all non docent|assistant participations
         List<Participation> participations = participationDAO.getActiveParticipations(collection)
                 .stream()
-                .filter(p -> !p.getRole().equals(docentRole))
+                .filter(concernedRoles)
                 .collect(Collectors.toList());
         for (Participation p : participations) {
 
