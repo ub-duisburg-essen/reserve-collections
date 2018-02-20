@@ -1,0 +1,46 @@
+{
+  "protocols": [
+    {
+      "name": "Adobe HDS",
+      "url-scheme": "https://{wowza-host}/{application}/{stream-name}/manifest.f4m"
+    },
+    {
+      "name": "Apple HLS",
+      "url-scheme": "https://{wowza-host}/{application}/{stream-name}/playlist.m3u8"
+    },
+    {
+      "name": "Microsoft Smooth Streaming",
+      "url-scheme": "https://{wowza-host}/{application}/{stream-name}/Manifest"
+    },
+    {
+      "name": "MPEG-DASH",
+      "url-scheme": "https://{wowza-host}/{application}/{stream-name}/manifest.mpd"
+    },
+    {
+      "name": "Adobe RTMP",
+      "url-scheme": "rtmps://{wowza-host}/{application}/{stream-name}"
+    },
+    {
+      "name": "RTSP/RTP",
+      "url-scheme": "rtsps://{wowza-host}/{application}/{stream-name}"
+    }
+  ],
+  "fileformats": [
+    {
+      "extensions": ["mp4", "f4v", "mov", "m4a", "m4v", "mp4a", "mp4v", "3gp", "3g2"],
+      "prefix": "mp4"
+    },
+    {
+      "extensions": ["flv"],
+      "prefix": "flv"
+    },
+    {
+      "extensions": ["mp3"],
+      "prefix": "mp3"
+    },
+    {
+      "extensions": ["smil"],
+      "prefix": "smil"
+    }
+  ]
+}
