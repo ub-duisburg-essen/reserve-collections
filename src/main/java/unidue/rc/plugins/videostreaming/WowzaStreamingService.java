@@ -8,6 +8,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.slf4j.Logger;
 import unidue.rc.system.SystemConfigurationService;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
@@ -82,21 +83,30 @@ public class WowzaStreamingService implements VideoStreamingService {
             uriBuilder.setHost(source.getHost());
         if (source.getPort() > 0)
             uriBuilder.setPort(source.getPort());
-        if (StringUtils.isNotBlank(source.getPath()))
-            uriBuilder.setPath(StrSubstitutor.replace(source.getPath(), pathFmt));
-        if (StringUtils.isNotBlank(source.getPathSuffix()))
-            uriBuilder.setPath(uriBuilder.getPath() + source.getPathSuffix());
+        if (StringUtils.isNotBlank(source.getPath())) {
+
+            String path = StringUtils.isNotBlank(source.getPathSuffix())
+                          ? StrSubstitutor.replace(source.getPath(), pathFmt) + source.getPathSuffix()
+                          : StrSubstitutor.replace(source.getPath(), pathFmt);
+
+            uriBuilder.setPath(path);
+        }
 
         uriBuilder.setParameters(queryParams);
+        URI uri = uriBuilder.build();
 
         if (source.isSecured()) {
-            addSecurityParameters(uriBuilder, source);
+            try {
+                addSecurityParameters(uriBuilder, uri.toURL().getPath(), source);
+            } catch (MalformedURLException e) {
+                log.error("could not convert uri " + uri + " to url");
+            }
         }
 
         return uriBuilder.build();
     }
 
-    private void addSecurityParameters(final URIBuilder uriBuilder, final VideoSource source) {
+    private void addSecurityParameters(final URIBuilder uriBuilder, final String encodedPath, final VideoSource source) {
         StringBuilder hashBuilder = new StringBuilder();
 
         /*
@@ -106,18 +116,17 @@ public class WowzaStreamingService implements VideoStreamingService {
         end of the stream name or file name. Be sure to exclude all HTTP request keywords after the
         stream name or file name (for example, /manifest.m3u8...).
          */
-        int pathStartIdx = StringUtils.startsWith(uriBuilder.getPath(), "/")
+        int pathStartIdx = StringUtils.startsWith(encodedPath, "/")
                            ? 1
                            : 0;
-        int pathEndIdx = uriBuilder.getPath()
+        int pathEndIdx = encodedPath
                 .length();
         pathEndIdx -= StringUtils.isNotBlank(source.getPathSuffix())
                       ? source.getPathSuffix()
                               .length()
                       : 0;
 
-        hashBuilder.append(uriBuilder.getPath()
-                .substring(pathStartIdx, pathEndIdx));
+        hashBuilder.append(encodedPath.substring(pathStartIdx, pathEndIdx));
 
         /*
         Append the '?' character to the path that you created in the previous step. This character

@@ -118,11 +118,7 @@ public class Video implements SecurityContextPage {
         pathParams.put("resourceid", Integer.toString(video.getId()));
 
         // filename parameter
-        try {
-            pathParams.put("filename", URL_CODEC.encode(video.getFileName()));
-        } catch (EncoderException e) {
-            log.error("could not url encode video file name", e);
-        }
+        pathParams.put("filename", video.getFileName());
 
         return streamingService.getSourceURI(videoSource, pathParams).toString();
     }
