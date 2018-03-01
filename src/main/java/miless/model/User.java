@@ -17,13 +17,23 @@ package miless.model;
 
 
 import miless.model.auto._User;
+import org.apache.commons.lang3.StringUtils;
 import unidue.rc.model.IntPrimaryKey;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class User extends _User implements IntPrimaryKey {
 
     private static final long serialVersionUID = 5276803396295368737L;
     
     public static final String USER_SESSION_ATTRIBUTE = "unidue.rc.currentuser";
+
+    private List<String> affiliations;
+
+    public User() {
+        this.affiliations = new ArrayList<>();
+    }
 
     @Override
     public Integer getId() {
@@ -35,6 +45,19 @@ public class User extends _User implements IntPrimaryKey {
             username = username.trim().toLowerCase();
 
         super.setUsername(username);
+    }
+
+    public void addAffiliation(String affiliation) {
+        int idx = StringUtils.indexOf(affiliation, '@');
+        if (idx >= 0)
+            affiliation = StringUtils.substring(affiliation, 0, idx);
+
+        if (StringUtils.isNotBlank(affiliation))
+            affiliations.add(affiliation);
+    }
+
+    public List<String> getAffiliations() {
+        return affiliations;
     }
 
     @Override

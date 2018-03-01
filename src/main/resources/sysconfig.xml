@@ -239,6 +239,13 @@
         <type>1</type>
     </defaultSetting>
     <defaultSetting>
+        <label>LDAP Mapping Affiliation</label>
+        <key>ldap.mapping.affiliation</key>
+        <value>eduPersonScopedAffiliation</value>
+        <format></format>
+        <type>1</type>
+    </defaultSetting>
+    <defaultSetting>
         <label>Solr Core für Copyright</label>
         <key>solr.core.copyright</key>
         <value>${solr.server}/copyright</value>

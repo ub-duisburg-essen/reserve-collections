@@ -20,6 +20,18 @@
         <td>Fakultät:</td>
         <td>$userOrigin</td>
     </tr>
+    #if($user.Affiliations)
+        <tr>
+            <td>LDAP-Zugehörigkeiten:</td>
+            <td>
+                <ul>
+                    #foreach($affiliation in $user.Affiliations)
+                        <li>$affiliation</li>
+                    #end
+                </ul>
+            </td>
+        </tr>
+    #end
     #if($editUserLink)
         <tr>
             <td>Link:</td>

@@ -148,6 +148,7 @@ public class LDAPRealmImpl extends LDAPRealm {
 
         String mapName = config.getString("ldap.mapping.name");
         String mapEMail = config.getString("ldap.mapping.email");
+        String affiliation = config.getString("ldap.mapping.affiliation");
         NamingEnumeration<SearchResult> searchResults = search(context, user.getUsername());
 
         while (searchResults.hasMore()) {
@@ -173,6 +174,9 @@ public class LDAPRealmImpl extends LDAPRealm {
                         // set email if mapping for it is found
                         if (attributeID.equals(mapEMail) && (user.getEmail() == null))
                             user.setEmail(attributeValue);
+
+                        if (attributeID.equals(affiliation))
+                            user.addAffiliation(attributeValue);
                     }
                 }
             } catch (NamingException e) {
