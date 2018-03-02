@@ -182,9 +182,6 @@ public class CollectionServiceImpl implements CollectionService {
                 && collection.getProlongUsed() != null)
             throw new ContextedException("prolong code already used.");
 
-        if (collection.getExpectedParticipations() == null)
-            throw new ContextedException("expected participations must not be null");
-
         if (!StringUtils.equals(collection.getProlongCode(), code))
             throw new ContextedException("illegal prolong code used")
                     .addContextValue("is", collection.getProlongCode())
