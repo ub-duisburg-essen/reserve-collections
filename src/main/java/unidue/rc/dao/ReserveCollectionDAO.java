@@ -68,4 +68,13 @@ public interface ReserveCollectionDAO extends BaseDAO {
      * @return a list with all collections that matches the conditions or an empty list.
      */
     List<ReserveCollection> getExpiringCollections(LocalDate baseDate, int daysUntilExpiration, ReserveCollectionStatus status);
+
+    /**
+     * Returns a list of collections that contain a {@linkplain ReserveCollection#PROLONG_USED_PROPERTY} property.
+     *
+     * @param offset     offset from where to search
+     * @param maxResults maximum results
+     * @return a list with all collections that matches the conditions or an empty list.
+     */
+    List<ReserveCollection> getProlongedCollections(int offset, int maxResults);
 }

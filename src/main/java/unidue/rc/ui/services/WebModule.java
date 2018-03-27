@@ -45,6 +45,7 @@ import unidue.rc.system.QuartzService;
 import unidue.rc.system.SystemConfigurationService;
 import unidue.rc.workflow.AutoDeactivationCronJob;
 import unidue.rc.workflow.CollectionWarningCronJob;
+import unidue.rc.workflow.ResetProlongCronJob;
 import unidue.rc.workflow.ScanJobSyncCronJob;
 
 import java.util.Arrays;
@@ -179,6 +180,9 @@ public class WebModule {
         // deactivate collections that expired
         quartzService.add(createCronJob(AutoDeactivationCronJob.class, jobMapData),
                 createCronJobTrigger(CronScheduleBuilder.dailyAtHourAndMinute(3, 0)));
+
+        quartzService.add(createCronJob(ResetProlongCronJob.class, jobMapData),
+                createCronJobTrigger(CronScheduleBuilder.dailyAtHourAndMinute(2, 45)));
     }
 
     private static JobDetail createCronJob(Class clazz, Map<String, Object> mapData) {

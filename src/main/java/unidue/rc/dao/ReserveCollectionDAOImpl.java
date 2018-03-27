@@ -24,6 +24,7 @@ import org.apache.cayenne.exp.ExpressionFactory;
 import org.apache.cayenne.query.NamedQuery;
 import org.apache.cayenne.query.Query;
 import org.apache.cayenne.query.SelectQuery;
+import org.apache.cayenne.query.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import unidue.rc.model.*;
@@ -31,6 +32,7 @@ import unidue.rc.system.DateConvertUtils;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class ReserveCollectionDAOImpl extends BaseDAOImpl implements ReserveCollectionDAO {
@@ -74,6 +76,23 @@ public class ReserveCollectionDAOImpl extends BaseDAOImpl implements ReserveColl
                 .andExp(ExpressionFactory.matchExp(ReserveCollection.DISSOLVE_AT_PROPERTY, null));
 
         query.setQualifier(qualifier);
+
+        return getCollections(query);
+    }
+
+    @Override
+    public List<ReserveCollection> getProlongedCollections(final int offset, final int maxResults) {
+        SelectQuery query = new SelectQuery(ReserveCollection.class);
+
+        LocalDate baseDate = LocalDate.now().minusWeeks(1);
+        Date targetDate = DateConvertUtils.asUtilDate(baseDate);
+
+        Expression qualifier = ExpressionFactory.lessExp(ReserveCollection.PROLONG_USED_PROPERTY, targetDate);
+        query.setQualifier(qualifier);
+
+        query.setFetchOffset(offset);
+        query.setFetchLimit(maxResults);
+        query.addOrdering(ReserveCollection.PROLONG_USED_PROPERTY, SortOrder.ASCENDING);
 
         return getCollections(query);
     }

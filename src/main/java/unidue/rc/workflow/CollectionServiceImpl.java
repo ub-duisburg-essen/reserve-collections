@@ -133,7 +133,7 @@ public class CollectionServiceImpl implements CollectionService {
         if (StringUtils.isNotBlank(writeKey))
             collection.setWriteKey(writeKey.trim());
 
-        collection.setProlongCode(RandomStringUtils.randomAlphanumeric(6));
+        collection.setProlongCode(generateProlongCode());
 
         collectionDAO.create(collection);
 
@@ -676,6 +676,11 @@ public class CollectionServiceImpl implements CollectionService {
         }
         collection.setNumber(collectionNumber);
         update(collection);
+    }
+
+    @Override
+    public String generateProlongCode() {
+        return RandomStringUtils.randomAlphanumeric(6);
     }
 
     private DateTime getDateTime(String key) throws ConfigurationException {

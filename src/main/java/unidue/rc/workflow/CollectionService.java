@@ -323,4 +323,11 @@ public interface CollectionService {
      * @throws CommitException thrown if the collection could not be saved or the number is in use
      */
     void setNumber(Integer number, ReserveCollection collection) throws CommitException;
+
+    /**
+     * Generates a new prolong code, that can be used inside a {@linkplain ReserveCollection}.
+     *
+     * @return  a new prolong code
+     */
+    String generateProlongCode();
 }
