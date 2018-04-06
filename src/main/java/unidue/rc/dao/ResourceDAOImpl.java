@@ -69,6 +69,7 @@ public class ResourceDAOImpl extends BaseDAOImpl implements ResourceDAO {
         resource.setCopyrightReviewStatus(CopyrightReviewStatus.NOT_REVIEWED);
         resource.setMimeType(detectMimeType(output));
         resource.setExtension(StringUtils.lowerCase(FilenameUtils.getExtension(filename)));
+        resource.setLength(output.length());
 
         return resource;
     }

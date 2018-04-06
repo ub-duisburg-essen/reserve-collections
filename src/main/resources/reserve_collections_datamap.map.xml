@@ -312,6 +312,7 @@
 		<db-attribute name="filePath" type="VARCHAR" length="512"/>
 		<db-attribute name="fullTextURL" type="VARCHAR" length="1024"/>
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="length" type="BIGINT"/>
 		<db-attribute name="mimeType" type="VARCHAR" length="128"/>
 		<db-key-generator>
 			<db-generator-type>ORACLE</db-generator-type>
@@ -584,6 +585,7 @@
 		<obj-attribute name="fileDeleted" type="java.util.Date" db-attribute-path="fileDeleted"/>
 		<obj-attribute name="filePath" type="java.lang.String" db-attribute-path="filePath"/>
 		<obj-attribute name="fullTextURL" type="java.lang.String" db-attribute-path="fullTextURL"/>
+		<obj-attribute name="length" type="java.lang.Long" db-attribute-path="length"/>
 		<obj-attribute name="mimeType" type="java.lang.String" db-attribute-path="mimeType"/>
 	</obj-entity>
 	<obj-entity name="Role" className="unidue.rc.model.Role" dbEntityName="ROLE">

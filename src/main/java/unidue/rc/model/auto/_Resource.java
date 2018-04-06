@@ -26,6 +26,7 @@ public abstract class _Resource extends CayenneDataObject {
     public static final String FILE_DELETED_PROPERTY = "fileDeleted";
     public static final String FILE_PATH_PROPERTY = "filePath";
     public static final String FULL_TEXT_URL_PROPERTY = "fullTextURL";
+    public static final String LENGTH_PROPERTY = "length";
     public static final String MIME_TYPE_PROPERTY = "mimeType";
     public static final String BOOK_PROPERTY = "book";
     public static final String BOOK_CHAPTER_PROPERTY = "bookChapter";
@@ -69,6 +70,13 @@ public abstract class _Resource extends CayenneDataObject {
     }
     public String getFullTextURL() {
         return (String)readProperty(FULL_TEXT_URL_PROPERTY);
+    }
+
+    public void setLength(Long length) {
+        writeProperty(LENGTH_PROPERTY, length);
+    }
+    public Long getLength() {
+        return (Long)readProperty(LENGTH_PROPERTY);
     }
 
     public void setMimeType(String mimeType) {
