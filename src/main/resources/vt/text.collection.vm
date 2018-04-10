@@ -1,0 +1,16 @@
+Semesterapparat
+---------------
+
+Semesterapparats-ID: $collection.Id
+Nummer: $collection.Number.Number
+Standort: $collection.LibraryLocation.Name
+#if($collectionLink)
+Semesterapparat: $collectionLink
+#end
+Titel: $collection.Title
+#if($authors)
+Autor(Innen): $authors
+#end
+#if($origin)
+Fakultät: $origin
+#end

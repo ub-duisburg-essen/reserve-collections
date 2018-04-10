@@ -1,0 +1,41 @@
+## variables
+#set($collection = $book.Entry.ReserveCollection)
+#set($entry = $book.Entry)
+
+#parse("text.collection.vm")
+#parse("text.entry.vm")
+
+Buch
+----
+
+Titel: $book.Title
+#if($book.Authors)
+Autor(Innen): $book.Authors
+#end
+#if($book.Volume)
+Band: $book.Volume
+#end
+#if($book.Edition)
+Ausgabe/Auflage: $book.Edition
+#end
+#if($book.PlaceOfPublication)
+Erscheinungsort: $book.PlaceOfPublication
+#end
+#if($book.Publisher)
+Verlag: $book.Publisher
+#end
+#if($book.YearOfPublication)
+Erscheinungsjahr: $book.YearOfPublication
+#end
+#if($book.Isbn)
+ISBN: $book.Isbn
+#end
+#if($book.Comment)
+Kommentar: $book.Comment
+#end
+#if($book.Signature)
+Signatur: $book.Signature
+Link zum Katalog: http://primo.ub.uni-due.de/primo_library/libweb/action/dlSearch.do?vid=UDE&institution=UDE&search_scope=default_scope&bulkSize=10&lang=ger&indx=1&onCampus=false&query=lsr11,contains,$book.Signature
+#end
+
+#parse("text.deleted.entry.vm")

@@ -1,0 +1,10 @@
+Eintrag
+-------
+
+#if($DateFormatter)
+    #set($created = $DateFormatter.format($entry.Created))
+#else
+    #set($created = $entry.Created)
+#end
+Datum: $created
+Link Eintrag: $entryLink

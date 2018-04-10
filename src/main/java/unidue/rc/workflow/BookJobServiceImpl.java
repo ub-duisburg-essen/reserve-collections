@@ -327,7 +327,7 @@ public class BookJobServiceImpl implements BookJobService {
 
     private void sendNotificationMail(Book book, MailSubjectCause cause) {
         VelocityContext context = new VelocityContext();
-        String templateFile = "/vt/mail.book.vm";
+        String templateFile = "/vt/text.mail.book.vm";
         ReserveCollection collection = book.getReserveCollection();
 
         // collection link
