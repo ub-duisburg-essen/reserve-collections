@@ -112,7 +112,7 @@ public class EditHTML implements SecurityContextPage {
                 headlineDAO.move(html.getEntry(), headline);
             Link viewCollectionLink = linkSource.createPageRenderLinkWithContext(ViewCollection.class,
                     collection.getId());
-            viewCollectionLink.setAnchor(headline.getId().toString());
+            viewCollectionLink.setAnchor(html.getId().toString());
 
             return viewCollectionLink;
         } catch (CommitException e) {
