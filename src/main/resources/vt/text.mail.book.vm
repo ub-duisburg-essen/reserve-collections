@@ -3,6 +3,7 @@
 #set($entry = $book.Entry)
 
 #parse("text.collection.vm")
+
 #parse("text.entry.vm")
 
 Buch
