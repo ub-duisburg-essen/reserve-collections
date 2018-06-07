@@ -151,9 +151,9 @@ public class Stats {
         dataSources = new ArrayList<HighChartsGraphDataSource>();
         breadCrumbList.getLastCrumb().setTitle(messages.get("statistic"));
         log.debug("fetching stats");
-        StatisticDataSource visitors = statisticService.getVisitors(collection.getId(), "month",
+        StatisticDataSource visitors = statisticService.getVisitors(collection.getId(),
                 prepareDateForQuery(to), prepareDateForQuery(from));
-        downloads = statisticService.getDownloads(collection.getId(), "month", prepareDateForQuery(to),prepareDateForQuery(from));
+        downloads = statisticService.getDownloads(collection.getId(), prepareDateForQuery(to),prepareDateForQuery(from));
         log.debug("visitor stats "+visitors.getGraphValues());
         visitors.setLegend(messages.get("stats.graph.label.document") + " " + collection.getId());
         downloads.setLegend(messages.get("stats.graph.label.fileentries") + " " + collection.getId());

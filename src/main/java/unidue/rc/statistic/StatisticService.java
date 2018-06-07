@@ -27,14 +27,12 @@ public interface StatisticService {
      static final int TIME_OFFSET_QUARTERHOUR = 1000*60*15;
      static final int TIME_OFFSET_MINUTE = 1000*60;
      static final int TIME_OFFSET_NONE = 0;
-     static final String INTERVAL_RANGE_MONTH = "month";
-     static final String INTERVAL_RANGE_DAY = "day";
 
      /*
      *    All dates have to be in the following format: yyyy-MM-dd
       */
-     StatisticDataSource getVisitors(int rcId, String range, String todate, String fromdate);
+     StatisticDataSource getVisitors(int rcId, String todate, String fromdate);
 
-     StatisticDataSource getDownloads(int rcId,String range, String todate, String fromdate);
+     StatisticDataSource getDownloads(int rcId, String todate, String fromdate);
 
 }

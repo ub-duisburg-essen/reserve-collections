@@ -88,7 +88,8 @@ public interface StatisticDAO extends BaseDAO {
      * @param from       start time (unix time stamp)
      * @param to         end time (unix time stamp)
      * @param actiontype type of executed action
-     * @return all calculated access objects or an empty list
+     * @return all calculated access objects sorted by resource id, 
+     *         remote host, user agent and timestamp or an empty list
      */
     List<AccessLog> getAccessLog(int rcid, long from, long to, String actiontype);
 

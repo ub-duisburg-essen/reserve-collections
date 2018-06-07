@@ -157,6 +157,7 @@ public class StatisticDAOImpl extends BaseDAOImpl implements StatisticDAO {
         );
         query.addOrdering(new Ordering(AccessLog.RESOURCE_ID_PROPERTY, SortOrder.ASCENDING));
         query.addOrdering(new Ordering(AccessLog.REMOTE_HOST_PROPERTY, SortOrder.ASCENDING));
+        query.addOrdering(new Ordering(AccessLog.USER_AGENT_PROPERTY, SortOrder.ASCENDING));
         query.addOrdering(new Ordering(AccessLog.TIMESTAMP_PROPERTY, SortOrder.ASCENDING));
 
         List<AccessLog> access = context.performQuery(query);
